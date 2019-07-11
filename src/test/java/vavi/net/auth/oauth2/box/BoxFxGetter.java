@@ -15,10 +15,11 @@ import javax.swing.SwingUtilities;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
-import vavi.net.auth.oauth2.Authenticator;
+import vavi.net.auth.oauth2.Getter;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -34,46 +35,55 @@ import javafx.scene.web.WebView;
 
 
 /**
- * BoxAuthenticator.
+ * BoxFxGetter.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2016/02/29 umjammer initial version <br>
+ * @version 0.00 2016/03/18 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class BoxAuthenticator implements Authenticator<String> {
+public class BoxFxGetter implements Getter {
 
-    /** */
     private final String email;
-    /** */
     @Property(name = "box.password.{0}")
     private transient String password;
-    /** */
-    private final String redirectUrl;
-    /** */
     private transient String code;
 
-    /** */
-    public BoxAuthenticator(String email, String redirectUrl) {
+    public BoxFxGetter(String email) {
         this.email = email;
-        this.redirectUrl = redirectUrl;
+
+        try {
+            PropsEntity.Util.bind(this, email);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
-    /** */
     private CountDownLatch latch = new CountDownLatch(1);
-    /** */
     private volatile Exception exception;
 
-    /* @see Authenticator#get(java.lang.String) */
+    /* @see Getter#get(java.lang.String) */
     @Override
-    public String authorize(String url) throws IOException {
+    public String get(String url) throws IOException {
+System.err.println(url);
 
         exception = null;
 
-        SwingUtilities.invokeLater(() -> { openUI(url); });
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                initAndShowGUI(url);
+            }
+        });
 
-        try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
+        try {
+            System.err.println("wait until sign in...");
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
 
-        closeUI();
+        frame.setVisible(false);
+        frame.dispose();
 
         if (exception != null) {
             throw new IllegalStateException(exception);
@@ -85,7 +95,7 @@ public class BoxAuthenticator implements Authenticator<String> {
     private JFrame frame;
 
     /** Create a JFrame with a JButton and a JFXPanel containing the WebView. */
-    private void openUI(String url) {
+    private void initAndShowGUI(String url) {
         // This method is invoked on Swing thread
         frame = new JFrame("Don't touch me.");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,13 +112,12 @@ public class BoxAuthenticator implements Authenticator<String> {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(() -> { initFX(fxPanel, url); });
-    }
-
-    /** */
-    private void closeUI() {
-        frame.setVisible(false);
-        frame.dispose();
+        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
+            @Override
+            public void run() {
+                initFX(fxPanel, url);
+            }
+        });
     }
 
     /** Creates a WebView and fires up */
@@ -132,35 +141,50 @@ public class BoxAuthenticator implements Authenticator<String> {
                     String location = webEngine.getLocation();
                     System.err.println("location: " + location);
 
-                    if (location.indexOf(url) > -1) {
+                    if (location.startsWith(url)) {
 
                         if (!login) {
-                            System.err.println("set email: " + email);
                             Document doc = webEngine.getDocument();
+System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
 
-                            NodeList inputs = doc.getElementsByTagName("INPUT");
+                            try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(System.err); }
 
-                            ((HTMLInputElement) inputs.item(0)).setValue(email);
+                            ((HTMLInputElement) doc.getElementById("pyxl4325")).setValue(email);
 System.err.println("set email: " + email);
-                            ((HTMLInputElement) inputs.item(1)).setValue(password);
-System.err.println("set passwd: " + password);
-                            ((Element) inputs.item(2)).setAttribute("checked", "true");
-System.err.println("set checked: " + true);
 
-                            ((HTMLInputElement) inputs.item(3)).click();
-System.err.println("submit");
+                            ((HTMLInputElement) doc.getElementById("pyxl4328")).setValue(password);
+System.err.println("set passwd: " + password);
+
+//                            ((HTMLInputElement) doc.getElementById("????")).click();
+//System.err.println("signin");
 
                             login = true;
+
                         } else {
                             exception = new IllegalArgumentException("wrong email or password");
                             latch.countDown();
                         }
-                    } else if (location.indexOf(redirectUrl) > -1) {
-                        code = location.substring(location.indexOf("code=") + 5);
+                    } else if (location.startsWith("https://www.dropbox.com/1/oauth2/authorize?")) {
+//System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
+//                        Document doc = webEngine.getDocument();
+//                        ((HTMLButtonElement) doc.getElementById("submit_approve_access")).click();
+System.err.println("accept");
+                    } else if (location.startsWith("https://www.dropbox.com/1/oauth2/authorize_submit")) {
+System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
+
+                        Document doc = webEngine.getDocument();
+                        NodeList inputs = doc.getElementsByTagName("INPUT");
+                        for (int i = 0; i < inputs.getLength(); i++) {
+                            Node input = inputs.item(i);
+System.err.println("input: " + ((Element) input).getAttribute("type")); // == text
+                        }
+                        code = ((HTMLInputElement) doc.getElementById("code")).getAttribute("data-token");
 System.err.println("code: " + code);
                         latch.countDown();
                     }
                 }
+
+System.err.println(ov + ", " + newState + ", " + oldState);
             }
         });
         webEngine.load(url);

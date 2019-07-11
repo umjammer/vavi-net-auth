@@ -10,18 +10,28 @@ import vavi.net.auth.oauth2.BasicAppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
+
+/**
+ * BoxLocalAppCredential.
+ *
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
+ * @version 0.00 2019/07/11 umjammer initial version <br>
+ */
 @PropsEntity(url = "file://${HOME}/.vavifuse/box.properties")
 public class BoxLocalAppCredential implements BasicAppCredential {
 
     @Property(name = "box.clientId")
-    public transient String clientId;
+    private transient String clientId;
 
     @Property(name = "box.clientSecret")
-    public transient String clientSecret;
+    private transient String clientSecret;
+
+    @Property(name = "box.redirectUrl")
+    private String redirectUrl;
 
     @Override
     public String getScheme() {
-        return "dropbox";
+        return "box";
     }
 
     @Override
@@ -36,7 +46,7 @@ public class BoxLocalAppCredential implements BasicAppCredential {
 
     @Override
     public String getRedirectUrl() {
-        return null;
+        return redirectUrl;
     }
 
     @Override
