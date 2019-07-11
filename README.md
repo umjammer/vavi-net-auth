@@ -5,15 +5,16 @@
 
 # Status
 
-| brand                 | authentication | autologin |
-|--------------------|----------------|-----------|
-| google             | ✅              |           |
-| microsoft          | ✅              | ✅         |
-| dropbox            | ✅              | ✅         |
-| box                | ✅              | ✅         |
+| brand                 | authentication | autologin | refresh |
+|--------------------|----------------|-----------|-----------|
+| google             | ✅              | 🚧         | ?     |
+| microsoft          | ✅              | ✅         | ✅     |
+| dropbox            | ✅              | 🚧         | -     |
+| box                | ✅              | 🚧         | 🚧     |
 
 
 # Libraries
 
  * google
  * [oauth2-essentials](https://github.com/dmfs/oauth2-essentials) 🎯
+ * [jersey](https://jersey.github.io/)
