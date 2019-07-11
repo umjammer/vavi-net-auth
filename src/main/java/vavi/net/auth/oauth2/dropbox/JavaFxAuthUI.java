@@ -19,7 +19,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
 import vavi.net.auth.oauth2.AuthUI;
-import vavi.util.properties.annotation.PropsEntity;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -33,12 +32,11 @@ import javafx.scene.web.WebView;
 
 
 /**
- * JavaFxAuthUI.
+ * DropBox JavaFxAuthUI.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/03/02 umjammer initial version <br>
  */
-@PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
 public class JavaFxAuthUI implements AuthUI<String> {
 
     /** */

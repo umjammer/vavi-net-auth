@@ -46,7 +46,7 @@ public class DropBoxLocalAppCredential implements BasicAppCredential {
 
     @Override
     public String getRedirectUrl() {
-        return "http://localhost:30000";
+        return redirectUrl;
     }
 
     @Override

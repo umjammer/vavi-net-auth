@@ -139,7 +139,6 @@ public class SeleniumAuthUI implements AuthUI<String> {
 Debug.println(Level.WARNING, e.getMessage());
                     }
                 } else if (location.indexOf(redirectUrl) > -1) {
-//                    code = location.substring(location.indexOf("code=") + "code=".length(), location.indexOf("&"));
                     code = location;
 Debug.println("code: " + code);
                     login = true;

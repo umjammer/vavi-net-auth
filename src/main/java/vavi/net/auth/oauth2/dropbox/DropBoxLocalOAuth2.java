@@ -9,51 +9,53 @@ package vavi.net.auth.oauth2.dropbox;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Stream;
 
-import org.dmfs.httpessentials.client.HttpRequestExecutor;
-import org.dmfs.httpessentials.exceptions.ProtocolError;
-import org.dmfs.httpessentials.exceptions.ProtocolException;
-import org.dmfs.httpessentials.httpurlconnection.HttpUrlConnectionExecutor;
-import org.dmfs.jems.optional.Optional;
-import org.dmfs.oauth2.client.BasicOAuth2AuthorizationProvider;
-import org.dmfs.oauth2.client.BasicOAuth2Client;
-import org.dmfs.oauth2.client.BasicOAuth2ClientCredentials;
-import org.dmfs.oauth2.client.OAuth2AccessToken;
-import org.dmfs.oauth2.client.OAuth2AuthorizationProvider;
-import org.dmfs.oauth2.client.OAuth2Client;
-import org.dmfs.oauth2.client.OAuth2ClientCredentials;
-import org.dmfs.oauth2.client.OAuth2InteractiveGrant;
-import org.dmfs.oauth2.client.OAuth2Scope;
-import org.dmfs.oauth2.client.grants.AuthorizationCodeGrant;
-import org.dmfs.oauth2.client.grants.TokenRefreshGrant;
-import org.dmfs.oauth2.client.scope.StringScope;
-import org.dmfs.rfc3986.encoding.Precoded;
-import org.dmfs.rfc3986.uris.LazyUri;
-import org.dmfs.rfc5545.DateTime;
-import org.dmfs.rfc5545.Duration;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
+
+import com.dropbox.core.DbxAppInfo;
+import com.dropbox.core.DbxAuthFinish;
+import com.dropbox.core.DbxAuthInfo;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.DbxSessionStore;
+import com.dropbox.core.DbxStandardSessionStore;
+import com.dropbox.core.DbxWebAuth;
+import com.dropbox.core.DbxWebAuth.BadRequestException;
+import com.dropbox.core.DbxWebAuth.BadStateException;
+import com.dropbox.core.DbxWebAuth.CsrfException;
+import com.dropbox.core.DbxWebAuth.NotApprovedException;
+import com.dropbox.core.DbxWebAuth.ProviderException;
+import com.dropbox.core.json.JsonReader.FileLoadException;
 
 import vavi.net.auth.oauth2.Authenticator;
 import vavi.net.auth.oauth2.BasicAppCredential;
 import vavi.net.auth.oauth2.OAuth2;
-import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.util.Debug;
 
 
 /**
- * LocalOAuth2.
+ * DropBoxLocalOAuth2.
+ *
+ * DropDBbox API doesn't have a refresh token system.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/04 umjammer initial version <br>
  */
-public class DropBoxLocalOAuth2 implements OAuth2 {
-
-    /** http client for oauth */
-    private static HttpRequestExecutor oauthExecutor = new HttpUrlConnectionExecutor();
-
-    /** */
-    private OAuth2Client oauth;
+@SuppressWarnings("deprecation")
+public class DropBoxLocalOAuth2 implements OAuth2<String> {
 
     /** */
     private BasicAppCredential appCredential;
@@ -61,70 +63,45 @@ public class DropBoxLocalOAuth2 implements OAuth2 {
     /** */
     private String authenticatorClassName;
 
-    /** */
-    private boolean startTokenRefresher;
-
-    /** */
-    private TokenRefresher refresher;
-
     /**
      * @param authenticatorClassName should be {@link Authenticator} and have a constructor with args (String, String)
      */
-    public DropBoxLocalOAuth2(BasicAppCredential appCredential, boolean startTokenRefresher, String authenticatorClassName) {
+    public DropBoxLocalOAuth2(BasicAppCredential appCredential, String authenticatorClassName) {
         this.appCredential = appCredential;
-        this.startTokenRefresher = startTokenRefresher;
         this.authenticatorClassName = authenticatorClassName;
-
-        // Create OAuth2 provider
-        OAuth2AuthorizationProvider provider = new BasicOAuth2AuthorizationProvider(
-            URI.create(appCredential.getOAuthAuthorizationUrl()),
-            URI.create(appCredential.getOAuthTokenUrl()),
-            new Duration(1, 0, 3600) /* default expiration time in case the server doesn't return any */);
-
-        // Create OAuth2 client credentials
-        OAuth2ClientCredentials credentials = new BasicOAuth2ClientCredentials(
-            appCredential.getClientId(), appCredential.getClientSecret());
-
-        // Create OAuth2 client
-        oauth = new BasicOAuth2Client(
-            provider,
-            credentials,
-            new LazyUri(new Precoded(appCredential.getRedirectUrl())));
     }
 
     /** */
     public String authorize(String id) throws IOException {
         try {
             Path file = Paths.get(System.getProperty("user.home"), ".vavifuse/" + appCredential.getScheme() + "/" + id);
-            refresher = new TokenRefresher(file, this::refresh);
 
-            OAuth2AccessToken token;
-            OAuth2AccessToken refreshToken = readRefreshToken();
-            if (!refreshToken.hasRefreshToken()) {
-Debug.println("no refreshToken: timeout? or firsttime");
-                OAuth2InteractiveGrant grant = new AuthorizationCodeGrant(oauth, new StringScope(appCredential.getScope()));
+            // Read app info file (contains app key and app secret)
+            DbxAppInfo appInfo = new DbxAppInfo(appCredential.getClientId(), appCredential.getClientSecret());
 
-                // Get the authorization URL and open it in a WebView
-                URI authorizationUrl = grant.authorizationUrl();
-
-                // Open the URL in a WebView and wait for the redirect to the redirect URL
-                // After the redirect, feed the URL to the grant to retrieve the access token
-                String redirectUrl = getAuthenticator(authorizationUrl.toString()).authorize(id);
-                token = grant.withRedirect(new LazyUri(new Precoded(redirectUrl))).accessToken(oauthExecutor);
-Debug.println("redirectUrl: " +redirectUrl);
-Debug.println("scope: " + token.scope());
-
+            if (Files.exists(file)) {
+                DbxAuthInfo authInfo = DbxAuthInfo.Reader.readFromFile(file.toFile());
+                return authInfo.getAccessToken();
             } else {
-Debug.println("use old refreshToken");
-                token = new TokenRefreshGrant(oauth, refreshToken).accessToken(oauthExecutor);
-            }
+                // Run through Dropbox API authorization process
+                String sessionKey = "dropbox-auth-csrf-token";
+                DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(dummySession, sessionKey);
+                String userLocale = Locale.getDefault().toString();
+                DbxRequestConfig requestConfig = new DbxRequestConfig("vavi-apps-fuse", userLocale);
+                DbxWebAuth webAuth = new DbxWebAuth(requestConfig, appInfo, appCredential.getRedirectUrl(), csrfTokenStore);
 
-            if (startTokenRefresher) {
-                refresher.start(token.refreshToken().toString(), token.expirationDate().getTimestamp() - System.currentTimeMillis());
-            }
+                String authorizeUrl = webAuth.start();
 
-            return token.accessToken().toString();
-        } catch (ProtocolError | ProtocolException e) {
+                String redirectUri = getAuthenticator(authorizeUrl).authorize(id);
+                DbxAuthFinish authFinish = webAuth.finish(splitQuery(new URI(redirectUri)));
+
+                // Save auth information to output file.
+                DbxAuthInfo authInfo = new DbxAuthInfo(authFinish.getAccessToken(), appInfo.getHost());
+                DbxAuthInfo.Writer.writeToFile(authInfo, file.toFile(), true);
+                return authInfo.getAccessToken();
+            }
+        } catch (URISyntaxException | DbxException | BadRequestException | BadStateException | CsrfException |
+                NotApprovedException | ProviderException | FileLoadException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -143,54 +120,95 @@ Debug.println("use old refreshToken");
     };
 
     /** */
-    private long refresh() {
-        try {
-            OAuth2AccessToken token = new TokenRefreshGrant(oauth, readRefreshToken()).accessToken(oauthExecutor);
-            refresher.writeRefreshToken(token.refreshToken().toString());
-            return token.expirationDate().getTimestamp();
-        } catch (ProtocolError | ProtocolException | IOException e) {
-            throw new IllegalStateException(e);
+    private static Map<String, String[]> splitQuery(URI uri) throws IOException {
+        final Map<String, String[]> queryPairs = new HashMap<>();
+        final String[] pairs = uri.getQuery().split("&");
+        for (String pair : pairs) {
+            final int idx = pair.indexOf("=");
+            final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
+            final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : null;
+            if (!queryPairs.containsKey(key)) {
+                queryPairs.put(key, new String[] { value });
+            } else {
+                queryPairs.put(key, Stream.concat(Arrays.stream(queryPairs.get(key)), Arrays.stream(new String[] { value })).toArray(String[]::new));
+            }
         }
+        return queryPairs;
     }
 
     /** */
-    private OAuth2AccessToken readRefreshToken() throws IOException {
-        String refreshToken = refresher.readRefreshToken();
-        return new OAuth2AccessToken() {
-            public CharSequence accessToken() throws ProtocolException {
-                throw new UnsupportedOperationException("accessToken not present");
-            }
-            @Override
-            public CharSequence tokenType() throws ProtocolException {
-                throw new UnsupportedOperationException("tokenType not present");
-            }
-            @Override
-            public boolean hasRefreshToken() {
-               return refreshToken != null;
-            }
-            @Override
-            public CharSequence refreshToken() throws ProtocolException {
-                return refreshToken;
-            }
-            @Override
-            public DateTime expirationDate() throws ProtocolException {
-                throw new UnsupportedOperationException("expirationDate not present");
-            }
-            @Override
-            public OAuth2Scope scope() throws ProtocolException {
-                return new StringScope(appCredential.getScope());
-            }
-            @Override
-            public Optional<CharSequence> extraParameter(String parameterName) {
-                return null;
-            }
-        };
-    }
-
-    /** */
-    protected void finalize() {
-        refresher.terminate();
-    }
+    private static HttpSession dummySession = new HttpSession() {
+        Map<String, Object> attrs = new HashMap<>();
+        Map<String, Object> values = new HashMap<>();
+        String id = UUID.randomUUID().toString();
+        long created = System.currentTimeMillis();
+        @Override
+        public long getCreationTime() {
+            return created;
+        }
+        @Override
+        public String getId() {
+            return id;
+        }
+        @Override
+        public long getLastAccessedTime() {
+            return created;
+        }
+        @Override
+        public ServletContext getServletContext() {
+            return null;
+        }
+        @Override
+        public void setMaxInactiveInterval(int interval) {
+        }
+        @Override
+        public int getMaxInactiveInterval() {
+            return 0;
+        }
+        @Override
+        public HttpSessionContext getSessionContext() {
+            return null;
+        }
+        @Override
+        public Object getAttribute(String name) {
+            return attrs.get(name);
+        }
+        @Override
+        public Object getValue(String name) {
+            return values.get(name);
+        }
+        @Override
+        public Enumeration getAttributeNames() {
+            return null;
+        }
+        @Override
+        public String[] getValueNames() {
+            return values.keySet().toArray(new String[values.size()]);
+        }
+        @Override
+        public void setAttribute(String name, Object value) {
+            attrs.put(name, value);
+        }
+        @Override
+        public void putValue(String name, Object value) {
+            values.put(name, value);
+        }
+        @Override
+        public void removeAttribute(String name) {
+            attrs.remove(name);
+        }
+        @Override
+        public void removeValue(String name) {
+            values.remove(name);
+        }
+        @Override
+        public void invalidate() {
+        }
+        @Override
+        public boolean isNew() {
+            return false;
+        }
+    };
 }
 
 /* */

@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.dropbox;
+package vavi.net.auth.oauth2.dropbox;
 
 import java.awt.Dimension;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
-import vavi.test.Getter;
+import vavi.net.auth.oauth2.Getter;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
