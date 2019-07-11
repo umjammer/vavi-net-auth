@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.onedrive;
+package vavi.net.auth.oauth2.onedrive;
 
 import java.awt.Dimension;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
-import vavi.test.Getter;
+import vavi.net.auth.oauth2.Getter;
 import vavi.net.http.HttpServer;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;

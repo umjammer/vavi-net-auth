@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.onedrive;
+package vavi.net.auth.oauth2.onedrive;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import org.xml.sax.SAXException;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebResponse;
 
-import vavi.test.Getter;
+import vavi.net.auth.oauth2.Getter;
 
 
 /**

@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.onedrive;
+package vavi.net.auth.oauth2.onedrive;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import vavi.test.Getter;
+import vavi.net.auth.oauth2.Getter;
 
 
 /**

@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.onedrive;
+package vavi.net.auth.oauth2.onedrive;
 
 import java.io.IOException;
 import java.net.CookieHandler;
@@ -20,7 +20,7 @@ import com.ui4j.api.interceptor.Interceptor;
 import com.ui4j.api.interceptor.Request;
 import com.ui4j.api.interceptor.Response;
 
-import vavi.test.Getter;
+import vavi.net.auth.oauth2.Getter;
 
 
 /**

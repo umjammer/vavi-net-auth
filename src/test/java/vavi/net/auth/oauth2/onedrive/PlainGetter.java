@@ -4,14 +4,14 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.onedrive;
+package vavi.net.auth.oauth2.onedrive;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import vavi.test.Getter;
+import vavi.net.auth.oauth2.Getter;
 
 
 /**
