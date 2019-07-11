@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test;
+package vavi.net.auth.oauth2;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package vavi.test.acd;
+package vavi.net.auth.oauth2.acd;
 /*
  * Copyright (c) 2016 by Naohide Sano, All rights reserved.
  *
