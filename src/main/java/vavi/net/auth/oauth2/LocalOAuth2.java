@@ -43,7 +43,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/04 umjammer initial version <br>
  */
-public class LocalOAuth2 implements OAuth2 {
+public class LocalOAuth2 implements OAuth2<String> {
 
     /** http client for oauth */
     private static HttpRequestExecutor oauthExecutor = new HttpUrlConnectionExecutor();
@@ -91,7 +91,7 @@ public class LocalOAuth2 implements OAuth2 {
     /** */
     public String authorize(String id) throws IOException {
         try {
-            Path file = Paths.get(System.getProperty("user.home"), ".vavifuse/" + appCredential.getScheme() + "/" + id);
+            Path file = Paths.get(System.getProperty("user.home"), ".vavifuse", appCredential.getScheme(), id);
             refresher = new TokenRefresher(file, this::refresh);
 
             OAuth2AccessToken token;
