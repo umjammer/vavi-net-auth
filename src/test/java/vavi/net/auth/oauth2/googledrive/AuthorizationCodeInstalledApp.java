@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.googledrive;
+package vavi.net.auth.oauth2.googledrive;
 
 import java.io.IOException;
 

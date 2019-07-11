@@ -1,4 +1,4 @@
-package vavi.test.googledrive;
+package vavi.net.auth.oauth2.googledrive;
 
 import java.io.FileInputStream;
 import java.io.IOException;

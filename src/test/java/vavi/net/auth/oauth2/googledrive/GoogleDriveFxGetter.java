@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.googledrive;
+package vavi.net.auth.oauth2.googledrive;
 
 import java.awt.Dimension;
 import java.io.IOException;
@@ -16,8 +16,8 @@ import javax.swing.SwingUtilities;
 import org.w3c.dom.Document;
 import org.w3c.dom.html.HTMLInputElement;
 
+import vavi.net.auth.oauth2.Getter;
 import vavi.net.auth.totp.PinGenerator;
-import vavi.test.Getter;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
