@@ -18,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 import com.box.sdk.BoxAPIConnection;
+import com.box.sdk.BoxAPIConnectionListener;
+import com.box.sdk.BoxAPIException;
 
 import vavi.net.auth.oauth2.Authenticator;
 import vavi.net.auth.oauth2.BasicAppCredential;
@@ -57,18 +59,32 @@ public class BoxLocalOAuth2 implements OAuth2<BoxAPIConnection> {
             Path file = Paths.get(System.getProperty("user.home"), ".vavifuse", appCredential.getScheme(), id);
 Debug.println("file: " + file);
 
-            BoxAPIConnection api;
+            boolean login = false;
+
+            BoxAPIConnection api = null;
             if (Files.exists(file)) {
                 String state = new String(Files.readAllBytes(file), Charset.forName("utf-8"));
 Debug.println("restore: " + state);
-                api = BoxAPIConnection.restore(appCredential.getClientId(), appCredential.getClientSecret(), state);
-                if (api.needsRefresh()) {
-Debug.println("refresh");
-                    // TODO doesn't work??? got 400
-                    api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret(), api.getAccessToken(), api.getRefreshToken());
+                try {
+                    api = BoxAPIConnection.restore(appCredential.getClientId(), appCredential.getClientSecret(), state);
+                    if (api.needsRefresh()) {
+Debug.println("refresh: " + api.getExpires());
+                        // TODO doesn't work??? got 400
+                        api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret(), api.getAccessToken(), api.getRefreshToken());
+                        api.setExpires(60 * 24 * 60 * 60 * 1000);
+                        api.refresh();
+                    }
+                    login = true;
+                } catch (BoxAPIException e) {
+Debug.println("restore failed, delete stored file");
+e.printStackTrace();
+                    Files.delete(file);
                 }
-            } else {
+            }
+
+            if (!login) {
                 api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret());
+                api.setExpires(60 * 24 * 60 * 60 * 1000);
                 String state = RandomString.make(16);
                 URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), new URI(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
 
@@ -77,10 +93,21 @@ Debug.println("refresh");
                 api.setAutoRefresh(true);
             }
 
-            api.setLastRefresh(System.currentTimeMillis());
             String save = api.save();
 Debug.println("save: " + save);
             Files.write(file, save.getBytes(Charset.forName("utf-8")));
+
+            api.addListener(new BoxAPIConnectionListener() {
+                @Override
+                public void onRefresh(BoxAPIConnection api) {
+Debug.println("refresh tocken" + api.getRefreshToken());
+                }
+                @Override
+                public void onError(BoxAPIConnection api, BoxAPIException error) {
+Debug.println("box api exception:");
+                    error.printStackTrace();
+                }
+            });
 
             return api;
         } catch (URISyntaxException e) {
