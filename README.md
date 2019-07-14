@@ -12,6 +12,9 @@ Java OAuth2 and auto login
 | microsoft          | ✅              | ✅         | ✅     | [oauth2-essentials](https://github.com/dmfs/oauth2-essentials) |
 | dropbox            | ✅              | 🚧         | -     | [dropbox-core-sdk](https://github.com/dropbox/dropbox-sdk-java) |
 | box                | ✅              | 🚧         | 🚧     | [box-java-sdk](https://github.com/box/box-java-sdk) |
+| amazon             |               |          |      | []() |
+| flickr             |               |          |      | []() |
+| facebook           |               |          |      | []() |
 
 
 # Libraries

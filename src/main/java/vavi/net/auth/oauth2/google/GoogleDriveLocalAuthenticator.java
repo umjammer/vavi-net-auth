@@ -36,8 +36,12 @@ import vavi.util.properties.annotation.PropsEntity;
 /**
  * GoogleDriveLocalAuthenticator.
  *
+ * <li> app credential properties file "~/.vavifuse/googledrive.json" </li>
+ * <li> user credentials properties file "~/.vavifuse/credentials.properties" </li>
+ *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/03/04 umjammer initial version <br>
+ * @see "https://console.developers.google.com/apis/credentials?project=vavi-apps-fuse"
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
 public class GoogleDriveLocalAuthenticator implements Authenticator<Credential> {

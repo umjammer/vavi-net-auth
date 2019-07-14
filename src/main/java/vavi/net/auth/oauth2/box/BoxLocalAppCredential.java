@@ -14,8 +14,11 @@ import vavi.util.properties.annotation.PropsEntity;
 /**
  * BoxLocalAppCredential.
  *
+ * properties file "~/.vavifuse/box.properties"
+ *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/11 umjammer initial version <br>
+ * @see "https://app.box.com/developers/console"
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/box.properties")
 public class BoxLocalAppCredential implements BasicAppCredential {

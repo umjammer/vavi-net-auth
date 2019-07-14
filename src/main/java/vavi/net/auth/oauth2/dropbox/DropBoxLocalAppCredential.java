@@ -14,10 +14,11 @@ import vavi.util.properties.annotation.PropsEntity;
 /**
  * DropBoxLocalAppCredential.
  *
- * properties file "dropbox.properties"
+ * properties file "~/.vavifuse/dropbox.properties"
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/06/19 umjammer initial version <br>
+ * @see "https://www.dropbox.com/developers/apps?_tk=pilot_lp&_ad=topbar4&_camp=myapps"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/dropbox.properties")
 public class DropBoxLocalAppCredential implements BasicAppCredential {

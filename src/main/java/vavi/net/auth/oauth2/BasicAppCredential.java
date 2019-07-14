@@ -7,14 +7,14 @@
 package vavi.net.auth.oauth2;
 
 /**
- * MicrosoftCredential.
+ * BasicAppCredential.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/06/19 umjammer initial version <br>
  */
 public interface BasicAppCredential extends Credential {
 
-    /** */
+    /** The application unique name */
     String getScheme();
 
     /** */
@@ -29,7 +29,7 @@ public interface BasicAppCredential extends Credential {
     /** */
     String getOAuthAuthorizationUrl();
 
-    /** */
+    /** TODO multiply */
     String getOAuthTokenUrl();
 
     /** */

@@ -54,7 +54,7 @@ public class LocalOAuth2 implements OAuth2<String> {
     /** */
     private BasicAppCredential appCredential;
 
-    /** */
+    /** should be {@link Authenticator} and have a constructor with args (String, String) */
     private String authenticatorClassName;
 
     /** */
@@ -88,7 +88,9 @@ public class LocalOAuth2 implements OAuth2<String> {
             new LazyUri(new Precoded(appCredential.getRedirectUrl())));
     }
 
-    /** */
+    /**
+     * @return access token
+     */
     public String authorize(String id) throws IOException {
         try {
             Path file = Paths.get(System.getProperty("user.home"), ".vavifuse", appCredential.getScheme(), id);
@@ -126,7 +128,7 @@ Debug.println("use old refreshToken");
     }
 
     /**
-     * @return redirect url include code parameter
+     * @return redirect url include code and state parameters
      */
     private Authenticator<String> getAuthenticator(String authorizationUrl) {
         try {
@@ -138,7 +140,7 @@ Debug.println("use old refreshToken");
         }
     };
 
-    /** */
+    /** called by {@link TokenRefresher} */
     private long refresh() {
         try {
             OAuth2AccessToken token = new TokenRefreshGrant(oauth, readRefreshToken()).accessToken(oauthExecutor);
@@ -149,7 +151,7 @@ Debug.println("use old refreshToken");
         }
     }
 
-    /** */
+    /** Creates a dummy token including refresh token. */
     private OAuth2AccessToken readRefreshToken() throws IOException {
         String refreshToken = refresher.readRefreshToken();
         return new OAuth2AccessToken() {
