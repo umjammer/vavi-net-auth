@@ -39,6 +39,7 @@ import com.dropbox.core.DbxWebAuth.BadStateException;
 import com.dropbox.core.DbxWebAuth.CsrfException;
 import com.dropbox.core.DbxWebAuth.NotApprovedException;
 import com.dropbox.core.DbxWebAuth.ProviderException;
+import com.dropbox.core.DbxWebAuth.Request;
 import com.dropbox.core.json.JsonReader.FileLoadException;
 
 import vavi.net.auth.oauth2.Authenticator;
@@ -86,14 +87,15 @@ public class DropBoxLocalOAuth2 implements OAuth2<String> {
                 // Run through Dropbox API authorization process
                 String sessionKey = "dropbox-auth-csrf-token";
                 DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(dummySession, sessionKey);
-                String userLocale = Locale.getDefault().toString();
-                DbxRequestConfig requestConfig = new DbxRequestConfig("vavi-apps-fuse", userLocale);
-                DbxWebAuth webAuth = new DbxWebAuth(requestConfig, appInfo, appCredential.getRedirectUrl(), csrfTokenStore);
+                Locale userLocale = Locale.getDefault();
+                DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("vavi-apps-fuse").withUserLocaleFrom(userLocale).build();
+                DbxWebAuth webAuth = new DbxWebAuth(requestConfig, appInfo);
+                Request request = Request.newBuilder().withRedirectUri(appCredential.getRedirectUrl(), csrfTokenStore).build();
 
-                String authorizeUrl = webAuth.start();
+                String authorizeUrl = webAuth.authorize(request);
 
                 String redirectUri = getAuthenticator(authorizeUrl).authorize(id);
-                DbxAuthFinish authFinish = webAuth.finish(splitQuery(new URI(redirectUri)));
+                DbxAuthFinish authFinish = webAuth.finishFromRedirect(appCredential.getRedirectUrl(), csrfTokenStore, splitQuery(new URI(redirectUri)));
 
                 // Save auth information to output file.
                 DbxAuthInfo authInfo = new DbxAuthInfo(authFinish.getAccessToken(), appInfo.getHost());
