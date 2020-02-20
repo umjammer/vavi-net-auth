@@ -1,15 +1,16 @@
-package vavi.net.auth.oauth2.acd;
 /*
  * Copyright (c) 2016 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
+package vavi.net.auth.oauth2.acd;
+
 import java.io.IOException;
 
-import vavi.net.auth.oauth2.amazon.AmazonAuthenticator;
-import vavi.util.properties.annotation.Property;
-import vavi.util.properties.annotation.PropsEntity;
+import org.openqa.selenium.WebDriver;
+
+import vavi.net.auth.oauth2.amazon.AmazonLocalAuthenticator;
 
 
 /**
@@ -18,13 +19,8 @@ import vavi.util.properties.annotation.PropsEntity;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/08/08 umjammer initial version <br>
  */
-@PropsEntity(url = "file://${HOME}/.vavifuse/acd.properties")
 public class TestAmazon {
 
-    @Property(name = "acd.clientId")
-    private String clientId;
-    @Property(name = "acd.clientSecret")
-    private String clientSecret;
     private String email;
 
     /**
@@ -33,16 +29,12 @@ public class TestAmazon {
     public static void main(String[] args) throws Exception {
         TestAmazon app = new TestAmazon();
         app.email = args[0];
-        PropsEntity.Util.bind(app);
         app.process();
     }
 
     void process() throws IOException {
-        String url = " https://www.amazon.com/ap/oa?client_id=%s&scope=%s&response_type=code&redirect_uri=%s";
-        String scope = "clouddrive:read_all"; //  clouddrive:write
-        String redirectUrl = "http://localhost:3300";
-        String token = new AmazonAuthenticator(email, clientId, scope, redirectUrl).authorize(url);
-        System.err.println("token: " + token);
+        String url = "https://www.amazon.co.jp/ap/signin?openid.return_to=https%3A%2F%2Fwww.amazon.co.jp%2Fref%3Dgw_sgn_ib%2F358-4710901-2880702&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=jpflex&openid.mode=checkid_setup&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0";
+        WebDriver driver = new AmazonLocalAuthenticator(url).authorize(email);
     }
 }
 

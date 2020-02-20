@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2018 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
@@ -7,10 +7,6 @@
 package vavi.net.auth.oauth2.amazon;
 
 import java.awt.Dimension;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
@@ -21,10 +17,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
-import vavi.net.auth.oauth2.Authenticator;
-import vavi.net.http.HttpServer;
-import vavi.util.properties.annotation.Property;
-import vavi.util.properties.annotation.PropsEntity;
+import vavi.net.auth.oauth2.AuthUI;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -38,35 +31,24 @@ import javafx.scene.web.WebView;
 
 
 /**
- * AmazonAuthenticator.
+ * JavaFxAuthUI.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2016/08/08 umjammer initial version <br>
+ * @version 0.00 2018/11/23 umjammer initial version <br>
  */
-@PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class AmazonAuthenticator implements Authenticator {
+public class JavaFxAuthUI implements AuthUI<String> {
+
+    private String email;
+    private String password;
+    private String url;
+    private String redirectUrl;
 
     /** */
-    private final String email;
-    @Property(name = "amazon.password.{0}")
-    private transient String password;
-    /** */
-    private final String clientId;
-    /** */
-    private final String scope;
-    /** */
-    private final String redirectUrl;
-    /** */
-    private transient String code;
-
-    /** */
-    public AmazonAuthenticator(String email, String clientId, String scope, String redirectUrl) throws IOException {
+    public JavaFxAuthUI(String email, String password, String url, String redirectUrl) {
         this.email = email;
-        this.clientId = clientId;
-        this.scope = scope;
+        this.password = password;
+        this.url = url;
         this.redirectUrl = redirectUrl;
-
-        PropsEntity.Util.bind(this, email);
     }
 
     /** */
@@ -74,17 +56,10 @@ public class AmazonAuthenticator implements Authenticator {
     /** */
     private volatile Exception exception;
 
-    /* @see Authenticator#get(java.lang.String) */
+    /* @see vavi.net.auth.oauth2.AuthUI#auth() */
     @Override
-    public String authorize(String url) throws IOException {
-
+    public void auth() {
         exception = null;
-
-        URL redirectUrl = new URL(this.redirectUrl);
-        String host = redirectUrl.getHost();
-        int port = redirectUrl.getPort();
-        HttpServer httpServer = new HttpServer(host, port);
-        httpServer.start();
 
         SwingUtilities.invokeLater(() -> { openUI(url); });
 
@@ -92,15 +67,24 @@ public class AmazonAuthenticator implements Authenticator {
 
         closeUI();
 
-        httpServer.stop();
-
         if (exception != null) {
             throw new IllegalStateException(exception);
         }
-
-        return code;
     }
 
+    /* @see vavi.net.auth.oauth2.AuthUI#getResult() */
+    @Override
+    public String getResult() {
+        return null;
+    }
+
+    /* @see vavi.net.auth.oauth2.AuthUI#getException() */
+    @Override
+    public Exception getException() {
+        return exception;
+    }
+
+    /** */
     private JFrame frame;
 
     /** Create a JFrame with a JButton and a JFXPanel containing the WebView. */
@@ -121,7 +105,12 @@ public class AmazonAuthenticator implements Authenticator {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(() -> { initFX(fxPanel, url); });
+        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
+            @Override
+            public void run() {
+                initFX(fxPanel, url);
+            }
+        });
     }
 
     /** */
@@ -174,22 +163,13 @@ System.err.println("submit");
                             latch.countDown();
                         }
                     } else if (location.indexOf(redirectUrl) > -1) {
-                        if (location.indexOf("code=") > 0) {
-                            code = location.substring(location.indexOf("code=") + 5);
-System.err.println("code: " + code);
-                        } else {
-                            exception = new IllegalArgumentException(location.substring(location.indexOf("error_description=") + 18));
-                        }
+System.err.println("done");
                         latch.countDown();
                     }
                 }
             }
         });
-        try {
-            webEngine.load(String.format(url, clientId, URLEncoder.encode(scope, "UTF-8"), URLEncoder.encode(redirectUrl, "UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            assert false;
-        }
+        webEngine.load(url);
     }
 }
 

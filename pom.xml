@@ -3,7 +3,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
 
   <build>
     <plugins>
@@ -33,6 +33,7 @@
     </dependency>
 
     <dependency>
+      <!-- tiny http server for oauth -->
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons-net</artifactId>
       <version>1.0.4</version>
@@ -66,6 +67,12 @@
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-drive</artifactId>
       <version>v3-rev12-1.21.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava-jdk5</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.google.oauth-client</groupId>
