@@ -14,12 +14,6 @@ package vavi.net.auth.oauth2;
  */
 public interface BasicAppCredential extends Credential {
 
-    /** The application unique name */
-    String getScheme();
-
-    /** */
-    String getClientId();
-
     /** */
     String getClientSecret();
 

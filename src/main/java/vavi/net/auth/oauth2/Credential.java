@@ -15,6 +15,11 @@ package vavi.net.auth.oauth2;
  */
 public interface Credential {
 
+    /** The application unique name */
+    String getScheme();
+
+    /** */
+    String getClientId();
 }
 
 /* */
