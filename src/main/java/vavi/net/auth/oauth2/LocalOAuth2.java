@@ -144,6 +144,7 @@ Debug.println("use old refreshToken");
     private long refresh() {
         try {
             OAuth2AccessToken token = new TokenRefreshGrant(oauth, readRefreshToken()).accessToken(oauthExecutor);
+Debug.println("refresh");
             refresher.writeRefreshToken(token.refreshToken().toString());
             return token.expirationDate().getTimestamp();
         } catch (ProtocolError | ProtocolException | IOException e) {

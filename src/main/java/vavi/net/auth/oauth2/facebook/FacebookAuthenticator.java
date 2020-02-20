@@ -42,7 +42,7 @@ import javafx.scene.web.WebView;
  * @version 0.00 2016/08/07 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class FacebookAuthenticator implements Authenticator {
+public class FacebookAuthenticator implements Authenticator<String> {
 
     /** */
     private final String email;

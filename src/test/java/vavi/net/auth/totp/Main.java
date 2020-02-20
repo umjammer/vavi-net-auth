@@ -6,8 +6,8 @@ package vavi.net.auth.totp;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.xml.bind.DatatypeConverter;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -71,7 +71,9 @@ public class Main {
     @Test
     void test01() throws Exception {
         byte[] keyBytes = Base32String.decode("N2STNZ6WB6V6DKMXWP6WYIAGNTRSDH2M");
-        String secret = DatatypeConverter.printHexBinary(keyBytes).toLowerCase();
+        String secret = IntStream.range(0, keyBytes.length)
+                .mapToObj(i -> String.format("%02x", keyBytes[i]))
+                .collect(Collectors.joining());
 System.err.println(secret);
         assertEquals("6ea536e7d60fabe1a997b3fd6c20066ce3219f4c", secret);
     }

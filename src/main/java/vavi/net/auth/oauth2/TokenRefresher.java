@@ -74,7 +74,7 @@ Debug.println(Level.WARNING, "failed to refresh session - attempting recovery");
                             try {
                                 refresh.get();
                             } catch (Exception e1) {
-Debug.println("failed to refresh session - attempting retrying");
+Debug.println(Level.WARNING, "failed to refresh session - attempting retrying");
                                 try { Thread.sleep(500); } catch (InterruptedException e2) {}
                             }
                         }
