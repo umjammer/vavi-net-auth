@@ -27,7 +27,6 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.DriveScopes;
 
 import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.Authenticator;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -44,7 +43,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://console.developers.google.com/apis/credentials?project=vavi-apps-fuse"
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class GoogleDriveLocalAuthenticator implements Authenticator<Credential> {
+public class GoogleDriveLocalAuthenticator implements GoogleAuthenticator<Credential> {
 
     @Property(name = "google.password.{0}")
     private transient String password;
@@ -60,10 +59,10 @@ public class GoogleDriveLocalAuthenticator implements Authenticator<Credential> 
     private static FileDataStoreFactory DATA_STORE_FACTORY;
 
     /** Global instance of the JSON factory. */
-    public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     /** Global instance of the HTTP transport. */
-    public static HttpTransport HTTP_TRANSPORT;
+    private static HttpTransport HTTP_TRANSPORT;
 
     /**
      * Global instance of the scopes required by this quickstart.
@@ -110,17 +109,30 @@ public class GoogleDriveLocalAuthenticator implements Authenticator<Credential> 
             protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
                 PropsEntity.Util.bind(GoogleDriveLocalAuthenticator.this, userId);
 
-                AuthUI<?> ui = new SeleniumAuthUI(userId, password, authorizationUrl.build(), authorizationUrl.getRedirectUri(), totpSecret);
+                String url = authorizationUrl.build();
+Debug.println("authorizationUrl: " + url);
+                AuthUI<?> ui = new SeleniumAuthUI(userId, password, url, authorizationUrl.getRedirectUri(), totpSecret);
                 ui.auth();
             }
         };
     }
 
+    @Override
     public Credential authorize(String email) throws IOException {
         // Trigger user authorization request.
         Credential credential = app.authorize(email);
-Debug.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
+Debug.println("refreshToken: " + (credential.getRefreshToken() != null) + ", expiresInSeconds: " + credential.getExpiresInSeconds());
         return credential;
+    }
+
+    @Override
+    public HttpTransport getHttpTransport() {
+        return HTTP_TRANSPORT;
+    }
+
+    @Override
+    public JsonFactory getJsonFactory() {
+        return JSON_FACTORY;
     }
 }
 
