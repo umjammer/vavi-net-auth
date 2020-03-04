@@ -8,10 +8,7 @@ package vavi.net.auth.oauth2.amazon;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
-
-import javax.swing.SwingUtilities;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -30,6 +27,8 @@ import vavi.util.Debug;
 /**
  * SeleniumAuthUI.
  *
+ * TODO use SeleniumUtil
+ *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/06/27 umjammer initial version <br>
  */
@@ -47,17 +46,12 @@ public class SeleniumAuthUI implements AuthUI<WebDriver> {
     }
 
     /** */
-    private CountDownLatch latch = new CountDownLatch(1);
-
-    /** */
     private volatile Exception exception;
 
     /* @see vavi.net.auth.oauth2.AuthUI#auth() */
     @Override
     public void auth() {
-        SwingUtilities.invokeLater(() -> { openUI(url); });
-
-        try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
+        openUI(url);
     }
 
     private WebDriver driver;
@@ -147,8 +141,6 @@ e.printStackTrace();
                 }
             }
         }
-
-        latch.countDown();
     }
 
     /** */

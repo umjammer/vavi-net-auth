@@ -3,7 +3,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
 
   <build>
     <plugins>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.0.10</version>
+      <version>1.0.14</version>
     </dependency>
 
     <dependency>
