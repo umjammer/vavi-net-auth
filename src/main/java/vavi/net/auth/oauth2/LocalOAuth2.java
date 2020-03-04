@@ -94,7 +94,7 @@ public class LocalOAuth2 implements OAuth2<String> {
     public String authorize(String id) throws IOException {
         try {
             Path file = Paths.get(System.getProperty("user.home"), ".vavifuse", appCredential.getScheme(), id);
-            refresher = new TokenRefresher(file, this::refresh);
+            refresher = new LocalTokenRefresher(file, this::refresh);
 
             OAuth2AccessToken token;
             OAuth2AccessToken refreshToken = readRefreshToken();
