@@ -3,7 +3,20 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>0.0.5</version>
+  <version>0.0.6</version>
+
+  <name>vavi-net-auth</name>
+  <url>https://github.com/umjammer/vavi-net-auth</url>
+  <scm>
+    <url>https://github.com/umjammer/vavi-net-auth</url>
+  </scm>
+  <issueManagement>
+    <url>https://github.com/umjammer/vavi-net-auth/issues</url>
+  </issueManagement>
+  <description>0.0.6
+
+    refactor token refresher
+    update amazon auth with selenium</description>
 
   <build>
     <plugins>
@@ -29,7 +42,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.0.14</version>
+      <version>1.0.15</version>
     </dependency>
 
     <dependency>
@@ -136,6 +149,11 @@
       <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <version>1.5.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

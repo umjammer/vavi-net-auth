@@ -2,9 +2,9 @@
 
 # vavi-net-auth
 
-Java OAuth2 and auto login
+Java OAuth2 and auto login and totp
 
-# Status
+## Status
 
 | brand                 | authorize | auto-login | refresh | library |
 |--------------------|----------------|-----------|-----------|---------|
@@ -17,8 +17,23 @@ Java OAuth2 and auto login
 | flickr             |               |          |      | []() |
 | facebook           |               |          |      | []() |
 
+## Installation
 
-# Libraries
+### jars
+
+https://jitpack.io/#umjammer/vavi-net_auth
+
+### selenium chrome driver
+
+Download the [chromedriver executable](https://chromedriver.chromium.org/downloads) and locate it into some directory.
+
+Don't forget to run jvm with the jvm argument `-Dwebdriver.chrome.driver=/usr/local/bin/chromedriver`.
+
+### each authenticator installation
+
+[instruction wiki](https://github.com/umjammer/vavi-apps-fuse/wiki/Home#installation)
+
+## Libraries
 
  * google
  * [oauth2-essentials](https://github.com/dmfs/oauth2-essentials) 🎯
