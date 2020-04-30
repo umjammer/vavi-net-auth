@@ -1,4 +1,4 @@
-[![Release](https://jitpack.io/v/umjammer/vavi-net-auth.svg)](https://jitpack.io/#umjammer/vavi-net-auth)
+[![Release](https://jitpack.io/v/umjammer/vavi-net-auth.svg)](https://jitpack.io/#umjammer/vavi-net-auth) [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
 # vavi-net-auth
 
