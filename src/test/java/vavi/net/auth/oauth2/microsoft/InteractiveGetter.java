@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.onedrive;
+package vavi.net.auth.oauth2.microsoft;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;

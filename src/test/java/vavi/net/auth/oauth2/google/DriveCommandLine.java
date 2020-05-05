@@ -1,4 +1,4 @@
-package vavi.net.auth.oauth2.googledrive;
+package vavi.net.auth.oauth2.google;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,28 +12,15 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
-import vavi.net.auth.oauth2.microsoft.SeleniumAuthUI;
-import vavi.util.properties.annotation.Property;
-import vavi.util.properties.annotation.PropsEntity;
+import vavi.net.auth.oauth2.WithTotpUserCredential;
+
+import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
 
 
-@PropsEntity(url = "file://${user.home}/.vavifuse/googledrive.properties")
 public class DriveCommandLine {
-
-    @Property(name = "googledrive.clientId")
-    private String clientId;
-    @Property(name = "googledrive.clientSecret")
-    private String clientSecret;
-
-    @Property(name = "googledrive.redirectUrl")
-    private String redirectUrl;
-
-    String password;
-    String totpSecret;
 
     /**
      * @param args 0: email
@@ -42,29 +29,29 @@ public class DriveCommandLine {
 
         String email = args[0];
 
-        DriveCommandLine app = new DriveCommandLine();
-        PropsEntity.Util.bind(app, email);
-
         HttpTransport httpTransport = new NetHttpTransport();
         JsonFactory jsonFactory = new JacksonFactory();
+
+        GoogleAppCredential appCredential = new GoogleLocalAppCredential();
+        WithTotpUserCredential userCredential = new GoogleLocalUserCredential(email);
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 httpTransport,
                 jsonFactory,
-                app.clientId,
-                app.clientSecret,
-                Arrays.asList(DriveScopes.DRIVE)
+                appCredential.getClientId(),
+                appCredential.getClientSecret(),
+                Arrays.asList(appCredential.getScope())
                 ).setAccessType("online").setApprovalPrompt("auto").build();
 
-        String url = flow.newAuthorizationUrl().setRedirectUri(app.redirectUrl).build();
+        String url = flow.newAuthorizationUrl().setRedirectUri(appCredential.getRedirectUrl()).build();
 
-        String code = new SeleniumAuthUI(email, app.password, app.totpSecret, url, app.redirectUrl).getResult();
+        String code = new SeleniumAuthUI(wrap(appCredential, url, appCredential.getRedirectUrl()), userCredential).getResult();
 
-        GoogleTokenResponse response = flow.newTokenRequest(code).setRedirectUri(app.redirectUrl).execute();
+        GoogleTokenResponse response = flow.newTokenRequest(code).setRedirectUri(appCredential.getRedirectUrl()).execute();
         GoogleCredential credential = new GoogleCredential().setFromTokenResponse(response);
 
         // 新規認証APIクライアントを作成
-        Drive service = new Drive.Builder(httpTransport, jsonFactory, credential).setApplicationName("vavifuse").build();
+        Drive service = new Drive.Builder(httpTransport, jsonFactory, credential).setApplicationName(appCredential.getApplicationName()).build();
 
         //
         FileList result = service.files().list()

@@ -15,14 +15,13 @@ import java.io.IOException;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/02/11 umjammer initial version <br>
  */
-public interface Authenticator<T> {
+public interface Authenticator<I, O> {
 
     /**
-     * @param id
-     * @return accessToken
+     * @param credential
      * @throws IOException
      */
-    T authorize(String id) throws IOException;
+    O authorize(I credential) throws IOException;
 }
 
 /* */

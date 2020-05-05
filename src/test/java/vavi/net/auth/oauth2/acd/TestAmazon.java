@@ -10,7 +10,9 @@ import java.io.IOException;
 
 import org.openqa.selenium.WebDriver;
 
+import vavi.net.auth.oauth2.UserCredential;
 import vavi.net.auth.oauth2.amazon.AmazonLocalAuthenticator;
+import vavi.net.auth.oauth2.amazon.AmazonLocalUserCredential;
 
 
 /**
@@ -34,7 +36,8 @@ public class TestAmazon {
 
     void process() throws IOException {
         String url = "https://www.amazon.co.jp/ap/signin?openid.return_to=https%3A%2F%2Fwww.amazon.co.jp%2Fref%3Dgw_sgn_ib%2F358-4710901-2880702&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=jpflex&openid.mode=checkid_setup&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0";
-        WebDriver driver = new AmazonLocalAuthenticator(url).authorize(email);
+        UserCredential credential = new AmazonLocalUserCredential(email);
+        WebDriver driver = new AmazonLocalAuthenticator(url).authorize(credential);
     }
 }
 

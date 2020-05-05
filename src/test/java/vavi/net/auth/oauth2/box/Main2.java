@@ -19,13 +19,14 @@ import com.box.sdk.BoxFolder;
 import com.box.sdk.BoxItem;
 
 import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.box.BoxLocalAppCredential;
-import vavi.net.auth.oauth2.box.BoxLocalAuthenticator;
+import vavi.net.auth.oauth2.UserCredential;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
 import net.bytebuddy.utility.RandomString; // TODO this is a sibling of selenium
+
+import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
 
 
 /**
@@ -81,7 +82,8 @@ Debug.println("restore: " + save);
                 String state = RandomString.make(16);
                 URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), new URI(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
 
-                String accessToken = new BoxLocalAuthenticator(authorizationUrl.toString(), appCredential.getRedirectUrl()).authorize(email);
+                UserCredential credential = new BoxLocalUserCredential(email);
+                String accessToken = new BoxLocalAuthenticator(wrap(appCredential, authorizationUrl.toString())).authorize(credential);
                 api.authenticate(accessToken);
                 api.setAutoRefresh(true);
             }

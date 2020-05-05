@@ -20,9 +20,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
-import vavi.net.auth.oauth2.Authenticator;
-import vavi.util.properties.annotation.Property;
-import vavi.util.properties.annotation.PropsEntity;
+import vavi.net.auth.oauth2.AuthUI;
+import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.UserCredential;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -41,13 +41,12 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/08/07 umjammer initial version <br>
  */
-@PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class FacebookAuthenticator implements Authenticator<String> {
+public class JavaFxAuthUI implements AuthUI<String> {
 
+    private String email;
+    private String password;
     /** */
-    private final String email;
-    @Property(name = "facebook.password.{0}")
-    private transient String password;
+    private final String url;
     /** */
     private final String clientId;
     /** */
@@ -56,12 +55,12 @@ public class FacebookAuthenticator implements Authenticator<String> {
     private transient String code;
 
     /** */
-    public FacebookAuthenticator(String email, String clientId, String redirectUrl) throws IOException {
-        this.email = email;
-        this.clientId = clientId;
-        this.redirectUrl = redirectUrl;
-
-        PropsEntity.Util.bind(this, email);
+    public JavaFxAuthUI(BasicAppCredential appCredential, UserCredential userCredential) throws IOException {
+        this.email = userCredential.getId();
+        this.password = userCredential.getPassword();
+        this.url = appCredential.getOAuthAuthorizationUrl();
+        this.clientId = appCredential.getClientId();
+        this.redirectUrl = appCredential.getRedirectUrl();
     }
 
     /** */
@@ -71,7 +70,7 @@ public class FacebookAuthenticator implements Authenticator<String> {
 
     /* @see Authenticator#get(java.lang.String) */
     @Override
-    public String authorize(String url) throws IOException {
+    public void auth() {
 
         exception = null;
 
@@ -92,8 +91,16 @@ public class FacebookAuthenticator implements Authenticator<String> {
         if (exception != null) {
             throw new IllegalStateException(exception);
         }
+    }
 
-        return code;
+    @Override
+    public String getResult() {
+        return null;
+    }
+
+    @Override
+    public Exception getException() {
+        return exception;
     }
 
     private JFrame frame;

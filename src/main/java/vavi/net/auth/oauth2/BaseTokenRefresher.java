@@ -21,7 +21,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/03/05 umjammer initial version <br>
  */
-public abstract class BaseTokenRefresher implements TokenRefresher {
+public abstract class BaseTokenRefresher<T> implements TokenRefresher<T> {
 
     /** */
     private ExecutorService refreshThread;
@@ -33,14 +33,14 @@ public abstract class BaseTokenRefresher implements TokenRefresher {
     private Supplier<Long> refresh;
 
     /**
-     * @param refresh you should call {@link #writeRefreshToken(String)} and return new refresh delay.
+     * @param refresh you should call {@link #writeRefreshToken(Object)} and return new refresh delay.
      */
     public BaseTokenRefresher(Supplier<Long> refresh) {
         this.refresh = refresh;
     }
 
     /* @see vavi.net.auth.oauth2.TokenRefresher#start(java.lang.String, long) */
-    public void start(String refreshToken, long refreshDelay) throws IOException {
+    public void start(T refreshToken, long refreshDelay) throws IOException {
         writeRefreshToken(refreshToken);
         keepRefreshing = true;
         startRefreshThread(refreshDelay);
@@ -90,11 +90,11 @@ Debug.println("stopping refresh thread");
         }
     }
 
-    /* @see vavi.net.auth.oauth2.TokenRefresher#writeRefreshToken(java.lang.String) */
-    public abstract void writeRefreshToken(String refreshToken) throws IOException;
+    /* */
+    public abstract void writeRefreshToken(T refreshToken) throws IOException;
 
-    /* @see vavi.net.auth.oauth2.TokenRefresher#readRefreshToken() */
-    public abstract String readRefreshToken() throws IOException;
+    /* */
+    public abstract T readRefreshToken() throws IOException;
 }
 
 /* */

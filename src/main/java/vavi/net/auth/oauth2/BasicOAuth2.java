@@ -7,10 +7,7 @@
 package vavi.net.auth.oauth2;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.dmfs.httpessentials.client.HttpRequestExecutor;
 import org.dmfs.httpessentials.exceptions.ProtocolError;
@@ -36,14 +33,16 @@ import org.dmfs.rfc5545.Duration;
 
 import vavi.util.Debug;
 
+import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+
 
 /**
- * LocalOAuth2.
+ * BasicOAuth2.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/04 umjammer initial version <br>
  */
-public class LocalOAuth2 implements OAuth2<String> {
+public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C, String> {
 
     /** http client for oauth */
     private static HttpRequestExecutor oauthExecutor = new HttpUrlConnectionExecutor();
@@ -55,21 +54,21 @@ public class LocalOAuth2 implements OAuth2<String> {
     private BasicAppCredential appCredential;
 
     /** should be {@link Authenticator} and have a constructor with args (String, String) */
-    private String authenticatorClassName;
+    protected abstract String getAuthenticatorClassName();
 
     /** */
     private boolean startTokenRefresher;
 
     /** */
-    private TokenRefresher refresher;
+    private TokenRefresher<String> refresher;
 
-    /**
-     * @param authenticatorClassName should be {@link Authenticator} and have a constructor with args (String, String)
-     */
-    public LocalOAuth2(BasicAppCredential appCredential, boolean startTokenRefresher, String authenticatorClassName) {
+    /** */
+    protected abstract TokenRefresher<String> getTokenRefresher(AppCredential appCredential, String id);
+
+    /** */
+    public BasicOAuth2(BasicAppCredential appCredential, boolean startTokenRefresher) {
         this.appCredential = appCredential;
         this.startTokenRefresher = startTokenRefresher;
-        this.authenticatorClassName = authenticatorClassName;
 
         // Create OAuth2 provider
         OAuth2AuthorizationProvider provider = new BasicOAuth2AuthorizationProvider(
@@ -91,10 +90,11 @@ public class LocalOAuth2 implements OAuth2<String> {
     /**
      * @return access token
      */
-    public String authorize(String id) throws IOException {
+    public String authorize(UserCredential userCredential) throws IOException {
         try {
-            Path file = Paths.get(System.getProperty("user.home"), ".vavifuse", appCredential.getScheme(), id);
-            refresher = new LocalTokenRefresher(file, this::refresh);
+            if (startTokenRefresher) {
+                refresher = getTokenRefresher(appCredential, userCredential.getId());
+            }
 
             OAuth2AccessToken token;
             OAuth2AccessToken refreshToken = readRefreshToken();
@@ -107,7 +107,8 @@ Debug.println("no refreshToken: timeout? or firsttime");
 
                 // Open the URL in a WebView and wait for the redirect to the redirect URL
                 // After the redirect, feed the URL to the grant to retrieve the access token
-                String redirectUrl = getAuthenticator(authorizationUrl.toString()).authorize(id);
+                // redirect url include code and state parameters
+                String redirectUrl = String.class.cast(OAuth2.getAuthenticator(getAuthenticatorClassName(), BasicAppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
                 token = grant.withRedirect(new LazyUri(new Precoded(redirectUrl))).accessToken(oauthExecutor);
 Debug.println("redirectUrl: " +redirectUrl);
 Debug.println("scope: " + token.scope());
@@ -127,21 +128,8 @@ Debug.println("use old refreshToken");
         }
     }
 
-    /**
-     * @return redirect url include code and state parameters
-     */
-    private Authenticator<String> getAuthenticator(String authorizationUrl) {
-        try {
-            return Authenticator.class.cast(Class.forName(authenticatorClassName)
-                .getDeclaredConstructor(String.class, String.class).newInstance(authorizationUrl, appCredential.getRedirectUrl()));
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
-                 InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-            throw new IllegalStateException(e);
-        }
-    };
-
     /** called by {@link TokenRefresher} */
-    private long refresh() {
+    protected long refresh() {
         try {
             OAuth2AccessToken token = new TokenRefreshGrant(oauth, readRefreshToken()).accessToken(oauthExecutor);
 Debug.println("refresh");

@@ -12,52 +12,40 @@ import java.util.logging.Level;
 
 import vavi.net.auth.oauth2.AuthUI;
 import vavi.net.auth.oauth2.Authenticator;
+import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.UserCredential;
 import vavi.net.http.HttpServer;
 import vavi.util.Debug;
-import vavi.util.properties.annotation.Property;
-import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * BoxAuthenticator.
- *
- * properties file "~/vavifuse/credentials.properties"
+ * BoxLocalAuthenticator.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/02/29 umjammer initial version <br>
  */
-@PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class BoxLocalAuthenticator implements Authenticator<String> {
+public class BoxLocalAuthenticator implements Authenticator<UserCredential, String> {
 
     /** */
-    private final String authorizationUrl;
-    /** */
-    private final String redirectUrl;
-    /** */
-    @Property(name = "box.password.{0}")
-    private transient String password;
+    private final BasicAppCredential appCredential;
 
     /** */
-    public BoxLocalAuthenticator(String authorizationUrl, String redirectUrl) {
-        this.authorizationUrl = authorizationUrl;
-        this.redirectUrl = redirectUrl;
+    public BoxLocalAuthenticator(BasicAppCredential appCredential) {
+        this.appCredential = appCredential;
     }
 
     /* @see Authenticator#get(java.lang.String) */
     @Override
-    public String authorize(String email) throws IOException {
+    public String authorize(UserCredential userCredential) throws IOException {
 
-        PropsEntity.Util.bind(this, email);
-//System.err.println("password for " + email + ": " + password);
-
-        URL redirectUrl = new URL(this.redirectUrl);
+        URL redirectUrl = new URL(this.appCredential.getRedirectUrl());
         String host = redirectUrl.getHost();
         int port = redirectUrl.getPort();
 
         HttpServer httpServer = new HttpServer(host, port);
         httpServer.start();
 
-        AuthUI<String> ui = new SeleniumAuthUI(email, password, this.authorizationUrl, this.redirectUrl);
+        AuthUI<String> ui = new SeleniumAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         httpServer.stop();

@@ -24,7 +24,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.totp.PinGenerator;
+import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.WithTotpUserCredential;
 import vavi.util.Debug;
 
 
@@ -43,12 +44,12 @@ public class SeleniumAuthUI implements AuthUI<String> {
     private String totpSecret;
 
     /** */
-    SeleniumAuthUI(String email, String password, String url, String redirectUrl, String totpSecret) {
-        this.email = email;
-        this.password = password;
-        this.url = url;
-        this.redirectUrl = redirectUrl;
-        this.totpSecret = totpSecret;
+    public SeleniumAuthUI(BasicAppCredential appCredential, WithTotpUserCredential userCredential) {
+        this.email = userCredential.getId();
+        this.password = userCredential.getPassword();
+        this.url = appCredential.getOAuthAuthorizationUrl();
+        this.redirectUrl = appCredential.getRedirectUrl();
+        this.totpSecret = userCredential.getTotpSecret();
 Debug.println("totpSecret: " + totpSecret);
     }
 

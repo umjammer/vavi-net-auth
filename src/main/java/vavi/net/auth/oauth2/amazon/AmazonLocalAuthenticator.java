@@ -12,8 +12,7 @@ import org.openqa.selenium.WebDriver;
 
 import vavi.net.auth.oauth2.AuthUI;
 import vavi.net.auth.oauth2.Authenticator;
-import vavi.util.properties.annotation.Property;
-import vavi.util.properties.annotation.PropsEntity;
+import vavi.net.auth.oauth2.UserCredential;
 
 
 /**
@@ -22,13 +21,10 @@ import vavi.util.properties.annotation.PropsEntity;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/08/08 umjammer initial version <br>
  */
-@PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class AmazonLocalAuthenticator implements Authenticator<WebDriver> {
+public class AmazonLocalAuthenticator implements Authenticator<UserCredential, WebDriver> {
 
     /** */
     private final String authorizationUrl;
-    @Property(name = "amazon.password.{0}")
-    private transient String password;
 
     /** */
     public AmazonLocalAuthenticator(String authorizationUrl) throws IOException {
@@ -37,11 +33,9 @@ public class AmazonLocalAuthenticator implements Authenticator<WebDriver> {
 
     /* @see Authenticator#get(java.lang.String) */
     @Override
-    public WebDriver authorize(String email) throws IOException {
+    public WebDriver authorize(UserCredential credential) throws IOException {
 
-        PropsEntity.Util.bind(this, email);
-
-        AuthUI<WebDriver> ui = new SeleniumAuthUI(email, password, this.authorizationUrl);
+        AuthUI<WebDriver> ui = new SeleniumAuthUI(credential.getId(), credential.getPassword(), this.authorizationUrl);
         ui.auth();
 
         if (ui.getException() != null) {

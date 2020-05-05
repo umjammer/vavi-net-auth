@@ -9,18 +9,19 @@ package vavi.net.auth.oauth2;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.function.Supplier;
 
 import vavi.util.Debug;
 
 
 /**
- * LocalTokenRefresher.
+ * BasicLocalTokenRefresher.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/03 umjammer initial version <br>
  */
-public class LocalTokenRefresher extends BaseTokenRefresher {
+public class BasicLocalTokenRefresher extends BaseTokenRefresher<String> {
 
     /** for refreshToken */
     private Path file;
@@ -28,12 +29,12 @@ public class LocalTokenRefresher extends BaseTokenRefresher {
     /**
      * @param refresh you should call {@link #writeRefreshToken(String)} and return new refresh delay.
      */
-    public LocalTokenRefresher(Path file, Supplier<Long> refresh) {
+    public BasicLocalTokenRefresher(AppCredential appCredential, String id, Supplier<Long> refresh) {
         super(refresh);
-        this.file = file;
+        this.file = Paths.get(System.getProperty("user.home"), ".vavifuse", appCredential.getScheme(), id);
     }
 
-    /* @see vavi.net.auth.oauth2.TokenRefresher#writeRefreshToken(java.lang.String) */
+    @Override
     public void writeRefreshToken(String refreshToken) throws IOException {
         if (!Files.exists(file.getParent())) {
             Files.createDirectories(file.getParent());
@@ -42,11 +43,16 @@ public class LocalTokenRefresher extends BaseTokenRefresher {
 Debug.println("refreshToken: " + refreshToken);
     }
 
-    /* @see vavi.net.auth.oauth2.TokenRefresher#readRefreshToken() */
+    @Override
     public String readRefreshToken() throws IOException {
 Debug.println("refreshToken: exists: " + Files.exists(file) + ", " + file);
         String refreshToken = Files.exists(file) ? new String(Files.readAllBytes(file)) : null;
         return refreshToken;
+    }
+
+    @Override
+    public void dispose() throws IOException {
+        Files.delete(file);
     }
 }
 

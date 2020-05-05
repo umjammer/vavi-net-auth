@@ -8,9 +8,14 @@ package vavi.net.auth.oauth2.acd;
 
 import java.io.IOException;
 
+import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.oauth2.amazon.ACDLocalAppCredential;
 import vavi.net.auth.oauth2.amazon.ACDLocalAuthenticator;
-import vavi.util.properties.annotation.Property;
+import vavi.net.auth.oauth2.amazon.AmazonLocalUserCredential;
 import vavi.util.properties.annotation.PropsEntity;
+
+import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
 
 
 /**
@@ -19,13 +24,8 @@ import vavi.util.properties.annotation.PropsEntity;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/08/08 umjammer initial version <br>
  */
-@PropsEntity(url = "file://${HOME}/.vavifuse/acd.properties")
 public class TestACD {
 
-    @Property(name = "acd.clientId")
-    private String clientId;
-    @Property(name = "acd.clientSecret")
-    private String clientSecret;
     private String email;
 
     /**
@@ -34,15 +34,14 @@ public class TestACD {
     public static void main(String[] args) throws Exception {
         TestACD app = new TestACD();
         app.email = args[0];
-        PropsEntity.Util.bind(app);
         app.process();
     }
 
     void process() throws IOException {
-        String url = " https://www.amazon.com/ap/oa?client_id=%s&scope=%s&response_type=code&redirect_uri=%s";
-        String scope = "clouddrive:read_all"; //  clouddrive:write
-        String redirectUrl = "http://localhost:3300";
-        String code = new ACDLocalAuthenticator(url, redirectUrl).authorize(email);
+        BasicAppCredential appCredential = new ACDLocalAppCredential();
+        PropsEntity.Util.bind(appCredential);
+        UserCredential credential = new AmazonLocalUserCredential(email);
+        String code = new ACDLocalAuthenticator(wrap(appCredential, appCredential.getOAuthAuthorizationUrl(), "http://localhost:3300")).authorize(credential);
 System.err.println("code: " + code);
     }
 }

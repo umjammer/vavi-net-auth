@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.flickr;
+package vavi.net.auth.oauth2.amazon;
 
 import vavi.net.auth.oauth2.BasicAppCredential;
 import vavi.util.properties.annotation.Property;
@@ -12,24 +12,29 @@ import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * FlickrLocalAppCredential.
+ * ACDLocalAppCredential.
+ *
+ * properties file "~/.vavifuse/acd.properties"
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2019/06/19 umjammer initial version <br>
+ * @version 0.00 2019/07/11 umjammer initial version <br>
+ * @see "https://app.box.com/developers/console"
  */
-@PropsEntity(url = "file://${user.home}/.vavifuse/flickr.properties")
-public class FlickrLocalAppCredential implements BasicAppCredential {
+@PropsEntity(url = "file://${HOME}/.vavifuse/acd.properties")
+public class ACDLocalAppCredential implements BasicAppCredential {
 
-    @Property(name = "flickr.clientId")
-    private String clientId;
-    @Property(name = "flickr.clientSecret")
+    @Property(name = "acd.clientId")
+    private transient String clientId;
+
+    @Property(name = "acd.clientSecret")
     private transient String clientSecret;
-    @Property(name = "flickr.redirectUrl")
+
+    @Property(name = "acd.redirectUrl")
     private String redirectUrl;
 
     @Override
     public String getScheme() {
-        return "flickr";
+        return "acd";
     }
 
     @Override
@@ -49,7 +54,7 @@ public class FlickrLocalAppCredential implements BasicAppCredential {
 
     @Override
     public String getOAuthAuthorizationUrl() {
-        return null;
+        return "https://www.amazon.com/ap/oa?client_id=%s&scope=%s&response_type=code&redirect_uri=%s";
     }
 
     @Override
@@ -59,7 +64,7 @@ public class FlickrLocalAppCredential implements BasicAppCredential {
 
     @Override
     public String getScope() {
-        return null;
+        return "clouddrive:read_all"; //  clouddrive:write
     }
 }
 

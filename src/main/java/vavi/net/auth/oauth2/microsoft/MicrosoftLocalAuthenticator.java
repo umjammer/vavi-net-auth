@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.dropbox;
+package vavi.net.auth.oauth2.microsoft;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,24 +13,24 @@ import java.util.logging.Level;
 import vavi.net.auth.oauth2.AuthUI;
 import vavi.net.auth.oauth2.Authenticator;
 import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.oauth2.WithTotpUserCredential;
 import vavi.net.http.HttpServer;
 import vavi.util.Debug;
 
 
 /**
- * DropBoxAuthenticator.
+ * MicrosoftLocalAuthenticator.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2016/03/02 umjammer initial version <br>
+ * @version 0.00 2016/02/16 umjammer initial version <br>
  */
-public class DropBoxLocalAuthenticator implements Authenticator<UserCredential, String> {
+public class MicrosoftLocalAuthenticator implements Authenticator<WithTotpUserCredential, String> {
 
     /** */
     private final BasicAppCredential appCredential;
 
     /** */
-    public DropBoxLocalAuthenticator(BasicAppCredential appCredential) {
+    public MicrosoftLocalAuthenticator(BasicAppCredential appCredential) {
         this.appCredential = appCredential;
     }
 
@@ -38,16 +38,16 @@ public class DropBoxLocalAuthenticator implements Authenticator<UserCredential, 
      * @return *URL* the code query parameter included.
      */
     @Override
-    public String authorize(UserCredential useCredential) throws IOException {
+    public String authorize(WithTotpUserCredential userCredential) throws IOException {
 
-        URL redirectUrl = new URL(appCredential.getRedirectUrl());
+        URL redirectUrl = new URL(this.appCredential.getRedirectUrl());
         String host = redirectUrl.getHost();
         int port = redirectUrl.getPort();
 
         HttpServer httpServer = new HttpServer(host, port);
         httpServer.start();
 
-        AuthUI<String> ui = new SeleniumAuthUI(useCredential, this.appCredential);
+        AuthUI<String> ui = new SeleniumAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         httpServer.stop();

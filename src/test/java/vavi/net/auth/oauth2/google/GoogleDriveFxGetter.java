@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.googledrive;
+package vavi.net.auth.oauth2.google;
 
 import java.awt.Dimension;
 import java.io.IOException;

@@ -16,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.html.HTMLInputElement;
 
 import vavi.net.auth.oauth2.AuthUI;
+import vavi.net.auth.oauth2.WithTotpUserCredential;
 import vavi.net.auth.totp.PinGenerator;
 
 import javafx.application.Platform;
@@ -44,9 +45,9 @@ public class JavaFxAuthUI implements AuthUI<Void> {
     private String redirectUrl;
 
     /** */
-    public JavaFxAuthUI(String userId, String password, String totpSecret, String url, String redirectUrl) {
-        this.userId = userId;
-        this.password = password;
+    public JavaFxAuthUI(WithTotpUserCredential credential, String url, String redirectUrl) {
+        this.userId = credential.getId();
+        this.password = credential.getPassword();
         this.url = url;
         this.redirectUrl = redirectUrl;
     }

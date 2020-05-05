@@ -18,6 +18,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
 import vavi.net.auth.oauth2.AuthUI;
+import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.UserCredential;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -44,11 +46,11 @@ public class JavaFxAuthUI implements AuthUI<String> {
     private String redirectUrl;
 
     /** */
-    public JavaFxAuthUI(String email, String password, String url, String redirectUrl) {
-        this.email = email;
-        this.password = password;
-        this.url = url;
-        this.redirectUrl = redirectUrl;
+    public JavaFxAuthUI(BasicAppCredential appCredential, UserCredential userCredential) {
+        this.email = userCredential.getId();
+        this.password = userCredential.getPassword();
+        this.url = appCredential.getOAuthAuthorizationUrl();
+        this.redirectUrl = appCredential.getRedirectUrl();
     }
 
     /** */
@@ -56,7 +58,6 @@ public class JavaFxAuthUI implements AuthUI<String> {
     /** */
     private volatile Exception exception;
 
-    /* @see vavi.net.auth.oauth2.AuthUI#auth() */
     @Override
     public void auth() {
         exception = null;
@@ -72,13 +73,11 @@ public class JavaFxAuthUI implements AuthUI<String> {
         }
     }
 
-    /* @see vavi.net.auth.oauth2.AuthUI#getResult() */
     @Override
     public String getResult() {
         return null;
     }
 
-    /* @see vavi.net.auth.oauth2.AuthUI#getException() */
     @Override
     public Exception getException() {
         return exception;

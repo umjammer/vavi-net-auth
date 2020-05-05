@@ -15,21 +15,24 @@ import java.io.IOException;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/03/03 umjammer initial version <br>
  */
-public interface TokenRefresher {
+public interface TokenRefresher<T> {
 
     /** */
-    void start(String refreshToken, long refreshDelay) throws IOException;
+    void start(T refreshToken, long refreshDelay) throws IOException;
 
     /** */
     void terminate();
 
     /** */
-    void writeRefreshToken(String refreshToken) throws IOException;
+    void dispose() throws IOException;
+
+    /** */
+    void writeRefreshToken(T refreshToken) throws IOException;
 
     /**
      * @return null when the data does not exist.
      */
-    String readRefreshToken() throws IOException;
+    T readRefreshToken() throws IOException;
 }
 
 /* */
