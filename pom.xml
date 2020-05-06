@@ -27,6 +27,25 @@
     refactor token refresher
     update amazon auth with selenium</description>
 
+  <profiles>
+    <profile>
+      <id>github workflow</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_WORKFLOW</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-controls</artifactId>
+          <version>14.0.1</version>
+          <classifier>linux</classifier>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+
   <build>
     <plugins>
       <plugin>
