@@ -47,7 +47,7 @@ public class DropBoxLocalAuthenticator implements Authenticator<UserCredential, 
         HttpServer httpServer = new HttpServer(host, port);
         httpServer.start();
 
-        AuthUI<String> ui = new SeleniumAuthUI(useCredential, this.appCredential);
+        AuthUI<String> ui = new DropBoxSeleniumAuthUI(useCredential, this.appCredential);
         ui.auth();
 
         httpServer.stop();

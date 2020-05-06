@@ -61,7 +61,7 @@ public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCrede
             protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
                 String url = authorizationUrl.build();
 Debug.println("authorizationUrl: " + url);
-                AuthUI<?> ui = new SeleniumAuthUI(wrap(appCredential, url, authorizationUrl.getRedirectUri()), userCredential);
+                AuthUI<?> ui = new GoogleSeleniumAuthUI(wrap(appCredential, url, authorizationUrl.getRedirectUri()), userCredential);
                 ui.auth();
             }
         };

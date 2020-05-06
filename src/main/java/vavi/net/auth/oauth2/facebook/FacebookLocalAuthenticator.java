@@ -34,7 +34,7 @@ public class FacebookLocalAuthenticator implements Authenticator<UserCredential,
     @Override
     public String authorize(UserCredential userCredential) throws IOException {
 
-        AuthUI<String> ui = new JavaFxAuthUI(this.appCredential, userCredential);
+        AuthUI<String> ui = new FacebookJavaFxAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         if (ui.getException() != null) {

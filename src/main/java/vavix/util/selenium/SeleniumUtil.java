@@ -6,6 +6,8 @@
 
 package vavix.util.selenium;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -13,6 +15,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import vavi.util.Debug;
@@ -21,15 +24,30 @@ import vavi.util.Debug;
 /**
  * SeleniumUtil.
  *
+ * system properties
+ * <ul>
+ * <li> "webdriver.chrome.driver" default: $PWD + "/bin/chromedriver"</li>
+ * <li> "webdriver.chrome.verboseLogging" defalut: false</li>
+ * <li> "com.google.chrome.app" default: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"</li>
+ * </ul>
+ *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/03/03 umjammer initial version <br>
  */
 public class SeleniumUtil {
 
     /** */
-    private static void setEnv() {
-        String pwd = System.getProperty("user.dir");
+    private WebDriver driver;
+
+    /** */
+    public WebDriver getWebDriver() {
+        return driver;
+    }
+
+    /** */
+    private void setEnv() {
         if (System.getProperty("webdriver.chrome.driver") == null) {
+            String pwd = System.getProperty("user.dir");
             System.setProperty("webdriver.chrome.driver", pwd + "/bin/chromedriver");
         }
 Debug.println("webdriver.chrome.driver: " + System.getProperty("webdriver.chrome.driver"));
@@ -41,7 +59,7 @@ Debug.println("webdriver.chrome.verboseLogging: " + System.getProperty("webdrive
     }
 
     /** headless */
-    public static WebDriver getDriver() {
+    public SeleniumUtil() {
         setEnv();
 
         ChromeOptions chromeOptions = new ChromeOptions();
@@ -54,11 +72,11 @@ Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> driver.quit()));
 
-        return driver;
+        this.driver = driver;
     }
 
     /** windowed */
-    public static WebDriver getDriver(int width, int height) {
+    public SeleniumUtil(int width, int height) {
         setEnv();
 
         ChromeOptions chromeOptions = new ChromeOptions();
@@ -71,18 +89,16 @@ Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> driver.quit()));
 
-        return driver;
+        this.driver = driver;
     }
 
     /** */
-    public static void waitFor(WebDriver driver) {
-        new WebDriverWait(driver, 10).until(
-            d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        try { Thread.sleep(300); } catch (InterruptedException e) {}
+    public void waitFor() {
+        waitFor(10);
     }
 
     /** */
-    public static void waitFor(WebDriver driver, int delay) {
+    public void waitFor(int delay) {
         new WebDriverWait(driver, delay).until(d -> {
             if (d == null) {
                 throw new IllegalStateException("browser maight be closed");
@@ -94,30 +110,62 @@ Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.
     }
 
     /** */
-    public static void setAttribute(WebDriver driver, WebElement element, String name, String value) {
+    public void setAttribute(WebElement element, String name, String value) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);", element, name, value);
     }
 
     /** */
-    static int c;
-
-    /** */
-    public static void showStats(WebDriver driver) {
+    public void showStats(WebDriver driver) {
         System.err.println("----------------------------");
         System.err.println(driver.getCurrentUrl());
-        c = 0;
-        driver.getWindowHandles().forEach(h -> { System.err.println(c++ + ": " + h); });
+        AtomicInteger c = new AtomicInteger();
+        driver.getWindowHandles().forEach(h -> { System.err.println(c.incrementAndGet() + ": " + h); });
         System.err.println("----------------------------");
     }
 
     /** */
-    public static WebElement findElement(WebDriver driver, By by) {
+    public WebElement findElement(By by) {
         try {
             return driver.findElement(by);
         } catch (org.openqa.selenium.NoSuchElementException e) {
 Debug.println("not found: " + by);
             return null;
         }
+    }
+
+    /** */
+    public WebElement findElement(By by, int index) {
+        try {
+            return driver.findElements(by).get(index);
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+Debug.println("not found: " + by);
+            return null;
+        }
+    }
+
+    /** */
+    public void click(WebElement element) {
+        new Actions(driver).moveToElement(element).click().build().perform();
+    }
+
+    /** */
+    public void get(String url) {
+        driver.get(url);
+    }
+
+    /** */
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
+
+    /** */
+    public void quit() {
+        driver.quit();
+    }
+
+    /** */
+    public void sleep(long miliseconds) {
+        try { Thread.sleep(miliseconds); } catch (InterruptedException e) {}
     }
 }
 

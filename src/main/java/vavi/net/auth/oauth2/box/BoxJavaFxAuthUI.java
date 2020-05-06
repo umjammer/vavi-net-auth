@@ -39,7 +39,7 @@ import javafx.scene.web.WebView;
  * @version 0.00 2016/03/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class JavaFxAuthUI implements AuthUI<String> {
+public class BoxJavaFxAuthUI implements AuthUI<String> {
 
     /** */
     private final String email;
@@ -48,7 +48,7 @@ public class JavaFxAuthUI implements AuthUI<String> {
     private String redirectUrl;
 
     /** */
-    public JavaFxAuthUI(String email, String password, String url, String redirectUrl) {
+    public BoxJavaFxAuthUI(String email, String password, String url, String redirectUrl) {
         this.email = email;
         this.password = password;
         this.url = url;

@@ -37,7 +37,7 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/03/02 umjammer initial version <br>
  */
-public class JavaFxAuthUI implements AuthUI<String> {
+public class DropBoxJavaFxAuthUI implements AuthUI<String> {
 
     /** */
     private final String email;
@@ -46,7 +46,7 @@ public class JavaFxAuthUI implements AuthUI<String> {
     private String redirectUrl;
 
     /** */
-    public JavaFxAuthUI(String email, String password, String url, String redirectUrl) {
+    public DropBoxJavaFxAuthUI(String email, String password, String url, String redirectUrl) {
         this.email = email;
         this.password = password;
         this.url = url;

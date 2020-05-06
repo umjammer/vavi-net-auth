@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.amazon;
+package vavi.net.auth.oauth2.google;
 
 import java.awt.Dimension;
 import java.util.concurrent.CountDownLatch;
@@ -13,13 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
 import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.oauth2.WithTotpUserCredential;
+import vavi.net.auth.totp.PinGenerator;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -38,19 +36,20 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2018/11/23 umjammer initial version <br>
  */
-public class JavaFxAuthUI implements AuthUI<String> {
+public class GoogleJavaFxAuthUI implements AuthUI<Void> {
 
-    private String email;
+    private String userId;
     private String password;
+    private String totpSecret;
     private String url;
     private String redirectUrl;
 
     /** */
-    public JavaFxAuthUI(BasicAppCredential appCredential, UserCredential userCredential) {
-        this.email = userCredential.getId();
-        this.password = userCredential.getPassword();
-        this.url = appCredential.getOAuthAuthorizationUrl();
-        this.redirectUrl = appCredential.getRedirectUrl();
+    public GoogleJavaFxAuthUI(WithTotpUserCredential credential, String url, String redirectUrl) {
+        this.userId = credential.getId();
+        this.password = credential.getPassword();
+        this.url = url;
+        this.redirectUrl = redirectUrl;
     }
 
     /** */
@@ -58,6 +57,7 @@ public class JavaFxAuthUI implements AuthUI<String> {
     /** */
     private volatile Exception exception;
 
+    /* @see vavi.net.auth.oauth2.AuthUI#auth() */
     @Override
     public void auth() {
         exception = null;
@@ -73,11 +73,13 @@ public class JavaFxAuthUI implements AuthUI<String> {
         }
     }
 
+    /* @see vavi.net.auth.oauth2.AuthUI#getResult() */
     @Override
-    public String getResult() {
+    public Void getResult() {
         return null;
     }
 
+    /* @see vavi.net.auth.oauth2.AuthUI#getException() */
     @Override
     public Exception getException() {
         return exception;
@@ -139,33 +141,63 @@ public class JavaFxAuthUI implements AuthUI<String> {
                     String location = webEngine.getLocation();
 System.err.println("location: " + location);
 
-                    if (location.indexOf(url) > -1) {
+                    if (location.startsWith("https://accounts.google.com/ServiceLogin")) {
 
                         if (!login) {
                             Document doc = webEngine.getDocument();
 
-                            NodeList inputs = doc.getElementsByTagName("INPUT");
+                            try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(System.err); }
 
-                            ((HTMLInputElement) inputs.item(0)).setValue(email);
-System.err.println("set email: " + email);
-                            ((HTMLInputElement) inputs.item(1)).setValue(password);
-System.err.println("set passwd: " + password);
-                            ((Element) inputs.item(2)).setAttribute("checked", "true");
-System.err.println("set checked: " + true);
+                            ((HTMLInputElement) doc.getElementById("Email")).setValue(userId);
+System.err.println("set email: " + userId);
 
-                            ((HTMLInputElement) inputs.item(3)).click();
-System.err.println("submit");
+                            try { Thread.sleep(50); } catch (InterruptedException e) { e.printStackTrace(System.err); }
+
+                            ((HTMLInputElement) doc.getElementById("next")).click();
+System.err.println("next");
+
+                            try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(System.err); }
+
+System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
+
+//                            ((HTMLInputElement) doc.getElementById("password")).setValue(password);
+//System.err.println("set passwd: " + password);
+
+//                            ((HTMLInputElement) doc.getElementById("signIn")).click();
+//System.err.println("signin");
 
                             login = true;
+
                         } else {
                             exception = new IllegalArgumentException("wrong email or password");
                             latch.countDown();
                         }
-                    } else if (location.indexOf(redirectUrl) > -1) {
-System.err.println("done");
+                    } else if (location.startsWith("https://accounts.google.com/signin/challenge/totp")) {
+                        //
+                        if (totpSecret != null && !totpSecret.isEmpty()) {
+                            String pin = PinGenerator.computePin(totpSecret, null);
+                            Document doc = webEngine.getDocument();
+
+                            try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(System.err); }
+
+                            ((HTMLInputElement) doc.getElementById("totpPin")).setValue(pin);
+System.err.println("pin: " + pin);
+
+                            try { Thread.sleep(50); } catch (InterruptedException e) { e.printStackTrace(System.err); }
+
+                            ((HTMLInputElement) doc.getElementById("submit")).click();
+System.err.println("2 step authentication");
+                        } else {
+System.err.println("no totp secret, enter by yourself");
+                        }
+
+                    } else if (location.startsWith(redirectUrl)) {
+System.err.println("redirected");
                         latch.countDown();
                     }
                 }
+
+System.err.println(ov + ", " + newState + ", " + oldState);
             }
         });
         webEngine.load(url);

@@ -36,7 +36,7 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2018/11/23 umjammer initial version <br>
  */
-public class JavaFxAuthUI implements AuthUI<String> {
+public class MicrosoftJavaFxAuthUI implements AuthUI<String> {
 
     private String email;
     private String password;
@@ -44,7 +44,7 @@ public class JavaFxAuthUI implements AuthUI<String> {
     private String redirectUrl;
 
     /** */
-    JavaFxAuthUI(String email, String password, String url, String redirectUrl) {
+    MicrosoftJavaFxAuthUI(String email, String password, String url, String redirectUrl) {
         this.email = email;
         this.password = password;
         this.url = url;

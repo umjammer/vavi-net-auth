@@ -16,7 +16,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 
 import vavi.net.auth.oauth2.AuthUI;
 import vavi.net.auth.oauth2.google.GoogleLocalUserCredential;
-import vavi.net.auth.oauth2.google.JavaFxAuthUI;
+import vavi.net.auth.oauth2.google.GoogleJavaFxAuthUI;
 import vavi.util.properties.annotation.PropsEntity;
 
 
@@ -50,7 +50,7 @@ public class AuthorizationCodeInstalledApp
         PropsEntity.Util.bind(this, userId);
 
         GoogleLocalUserCredential credential = new GoogleLocalUserCredential(userId);
-        AuthUI<?> ui = new JavaFxAuthUI(credential, authorizationUrl.build(), authorizationUrl.getRedirectUri());
+        AuthUI<?> ui = new GoogleJavaFxAuthUI(credential, authorizationUrl.build(), authorizationUrl.getRedirectUri());
         ui.auth();
     }
 }

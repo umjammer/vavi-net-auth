@@ -1,15 +1,12 @@
 /*
- * Copyright (c) 2016 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2018 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.facebook;
+package vavi.net.auth.oauth2.amazon;
 
 import java.awt.Dimension;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
@@ -36,30 +33,23 @@ import javafx.scene.web.WebView;
 
 
 /**
- * FacebookAuthenticator.
+ * JavaFxAuthUI.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2016/08/07 umjammer initial version <br>
+ * @version 0.00 2018/11/23 umjammer initial version <br>
  */
-public class JavaFxAuthUI implements AuthUI<String> {
+public class AmazonJavaFxAuthUI implements AuthUI<String> {
 
     private String email;
     private String password;
-    /** */
-    private final String url;
-    /** */
-    private final String clientId;
-    /** */
-    private final String redirectUrl;
-    /** */
-    private transient String code;
+    private String url;
+    private String redirectUrl;
 
     /** */
-    public JavaFxAuthUI(BasicAppCredential appCredential, UserCredential userCredential) throws IOException {
+    public AmazonJavaFxAuthUI(BasicAppCredential appCredential, UserCredential userCredential) {
         this.email = userCredential.getId();
         this.password = userCredential.getPassword();
         this.url = appCredential.getOAuthAuthorizationUrl();
-        this.clientId = appCredential.getClientId();
         this.redirectUrl = appCredential.getRedirectUrl();
     }
 
@@ -68,25 +58,15 @@ public class JavaFxAuthUI implements AuthUI<String> {
     /** */
     private volatile Exception exception;
 
-    /* @see Authenticator#get(java.lang.String) */
     @Override
     public void auth() {
-
         exception = null;
-
-//        URL redirectUrl = new URL(this.redirectUrl);
-//        String host = redirectUrl.getHost();
-//        int port = redirectUrl.getPort();
-//        HttpServer httpServer = new HttpServer(host, port);
-//        httpServer.start();
 
         SwingUtilities.invokeLater(() -> { openUI(url); });
 
         try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
 
         closeUI();
-
-//        httpServer.stop();
 
         if (exception != null) {
             throw new IllegalStateException(exception);
@@ -103,6 +83,7 @@ public class JavaFxAuthUI implements AuthUI<String> {
         return exception;
     }
 
+    /** */
     private JFrame frame;
 
     /** Create a JFrame with a JButton and a JFXPanel containing the WebView. */
@@ -123,7 +104,12 @@ public class JavaFxAuthUI implements AuthUI<String> {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(() -> { initFX(fxPanel, url); });
+        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
+            @Override
+            public void run() {
+                initFX(fxPanel, url);
+            }
+        });
     }
 
     /** */
@@ -176,18 +162,13 @@ System.err.println("submit");
                             latch.countDown();
                         }
                     } else if (location.indexOf(redirectUrl) > -1) {
-                        code = location.substring(location.indexOf("code=") + 5);
-System.err.println("code: " + code);
+System.err.println("done");
                         latch.countDown();
                     }
                 }
             }
         });
-        try {
-            webEngine.load(String.format(url, clientId, URLEncoder.encode(redirectUrl, "UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            assert false;
-        }
+        webEngine.load(url);
     }
 }
 

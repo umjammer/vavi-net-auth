@@ -35,7 +35,7 @@ public class AmazonLocalAuthenticator implements Authenticator<UserCredential, W
     @Override
     public WebDriver authorize(UserCredential credential) throws IOException {
 
-        AuthUI<WebDriver> ui = new SeleniumAuthUI(credential.getId(), credential.getPassword(), this.authorizationUrl);
+        AuthUI<WebDriver> ui = new AmazonSeleniumAuthUI(credential.getId(), credential.getPassword(), this.authorizationUrl);
         ui.auth();
 
         if (ui.getException() != null) {

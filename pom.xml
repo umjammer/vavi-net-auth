@@ -3,7 +3,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>0.0.7</version>
+  <version>0.0.8</version>
 
   <name>vavi-net-auth</name>
   <url>https://github.com/umjammer/vavi-net-auth</url>
@@ -13,7 +13,12 @@
   <issueManagement>
     <url>https://github.com/umjammer/vavi-net-auth/issues</url>
   </issueManagement>
-  <description>0.0.7
+  <description>0.0.8
+
+    update SeleniumUtil
+    catch up dependents
+
+0.0.7
 
     separate user credential
 
@@ -53,7 +58,7 @@
       <!-- tiny http server for oauth -->
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons-net</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.6</version>
     </dependency>
 
     <dependency>

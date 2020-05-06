@@ -45,7 +45,7 @@ public class DriveCommandLine {
 
         String url = flow.newAuthorizationUrl().setRedirectUri(appCredential.getRedirectUrl()).build();
 
-        String code = new SeleniumAuthUI(wrap(appCredential, url, appCredential.getRedirectUrl()), userCredential).getResult();
+        String code = new GoogleSeleniumAuthUI(wrap(appCredential, url, appCredential.getRedirectUrl()), userCredential).getResult();
 
         GoogleTokenResponse response = flow.newTokenRequest(code).setRedirectUri(appCredential.getRedirectUrl()).execute();
         GoogleCredential credential = new GoogleCredential().setFromTokenResponse(response);

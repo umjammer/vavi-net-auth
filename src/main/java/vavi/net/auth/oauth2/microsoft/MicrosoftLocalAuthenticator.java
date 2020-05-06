@@ -47,7 +47,7 @@ public class MicrosoftLocalAuthenticator implements Authenticator<WithTotpUserCr
         HttpServer httpServer = new HttpServer(host, port);
         httpServer.start();
 
-        AuthUI<String> ui = new SeleniumAuthUI(this.appCredential, userCredential);
+        AuthUI<String> ui = new MicrosoftSeleniumAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         httpServer.stop();

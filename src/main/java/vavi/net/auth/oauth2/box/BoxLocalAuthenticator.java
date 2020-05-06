@@ -45,7 +45,7 @@ public class BoxLocalAuthenticator implements Authenticator<UserCredential, Stri
         HttpServer httpServer = new HttpServer(host, port);
         httpServer.start();
 
-        AuthUI<String> ui = new SeleniumAuthUI(this.appCredential, userCredential);
+        AuthUI<String> ui = new BoxSeleniumAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         httpServer.stop();

@@ -1,23 +1,28 @@
 /*
- * Copyright (c) 2018 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2016 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.google;
+package vavi.net.auth.oauth2.facebook;
 
 import java.awt.Dimension;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
 import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.WithTotpUserCredential;
-import vavi.net.auth.totp.PinGenerator;
+import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.UserCredential;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -31,25 +36,31 @@ import javafx.scene.web.WebView;
 
 
 /**
- * JavaFxAuthUI.
+ * FacebookAuthenticator.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2018/11/23 umjammer initial version <br>
+ * @version 0.00 2016/08/07 umjammer initial version <br>
  */
-public class JavaFxAuthUI implements AuthUI<Void> {
+public class FacebookJavaFxAuthUI implements AuthUI<String> {
 
-    private String userId;
+    private String email;
     private String password;
-    private String totpSecret;
-    private String url;
-    private String redirectUrl;
+    /** */
+    private final String url;
+    /** */
+    private final String clientId;
+    /** */
+    private final String redirectUrl;
+    /** */
+    private transient String code;
 
     /** */
-    public JavaFxAuthUI(WithTotpUserCredential credential, String url, String redirectUrl) {
-        this.userId = credential.getId();
-        this.password = credential.getPassword();
-        this.url = url;
-        this.redirectUrl = redirectUrl;
+    public FacebookJavaFxAuthUI(BasicAppCredential appCredential, UserCredential userCredential) throws IOException {
+        this.email = userCredential.getId();
+        this.password = userCredential.getPassword();
+        this.url = appCredential.getOAuthAuthorizationUrl();
+        this.clientId = appCredential.getClientId();
+        this.redirectUrl = appCredential.getRedirectUrl();
     }
 
     /** */
@@ -57,10 +68,17 @@ public class JavaFxAuthUI implements AuthUI<Void> {
     /** */
     private volatile Exception exception;
 
-    /* @see vavi.net.auth.oauth2.AuthUI#auth() */
+    /* @see Authenticator#get(java.lang.String) */
     @Override
     public void auth() {
+
         exception = null;
+
+//        URL redirectUrl = new URL(this.redirectUrl);
+//        String host = redirectUrl.getHost();
+//        int port = redirectUrl.getPort();
+//        HttpServer httpServer = new HttpServer(host, port);
+//        httpServer.start();
 
         SwingUtilities.invokeLater(() -> { openUI(url); });
 
@@ -68,24 +86,23 @@ public class JavaFxAuthUI implements AuthUI<Void> {
 
         closeUI();
 
+//        httpServer.stop();
+
         if (exception != null) {
             throw new IllegalStateException(exception);
         }
     }
 
-    /* @see vavi.net.auth.oauth2.AuthUI#getResult() */
     @Override
-    public Void getResult() {
+    public String getResult() {
         return null;
     }
 
-    /* @see vavi.net.auth.oauth2.AuthUI#getException() */
     @Override
     public Exception getException() {
         return exception;
     }
 
-    /** */
     private JFrame frame;
 
     /** Create a JFrame with a JButton and a JFXPanel containing the WebView. */
@@ -106,12 +123,7 @@ public class JavaFxAuthUI implements AuthUI<Void> {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
-            @Override
-            public void run() {
-                initFX(fxPanel, url);
-            }
-        });
+        Platform.runLater(() -> { initFX(fxPanel, url); });
     }
 
     /** */
@@ -141,66 +153,41 @@ public class JavaFxAuthUI implements AuthUI<Void> {
                     String location = webEngine.getLocation();
 System.err.println("location: " + location);
 
-                    if (location.startsWith("https://accounts.google.com/ServiceLogin")) {
+                    if (location.indexOf(url) > -1) {
 
                         if (!login) {
                             Document doc = webEngine.getDocument();
 
-                            try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(System.err); }
+                            NodeList inputs = doc.getElementsByTagName("INPUT");
 
-                            ((HTMLInputElement) doc.getElementById("Email")).setValue(userId);
-System.err.println("set email: " + userId);
+                            ((HTMLInputElement) inputs.item(0)).setValue(email);
+System.err.println("set email: " + email);
+                            ((HTMLInputElement) inputs.item(1)).setValue(password);
+System.err.println("set passwd: " + password);
+                            ((Element) inputs.item(2)).setAttribute("checked", "true");
+System.err.println("set checked: " + true);
 
-                            try { Thread.sleep(50); } catch (InterruptedException e) { e.printStackTrace(System.err); }
-
-                            ((HTMLInputElement) doc.getElementById("next")).click();
-System.err.println("next");
-
-                            try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(System.err); }
-
-System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
-
-//                            ((HTMLInputElement) doc.getElementById("password")).setValue(password);
-//System.err.println("set passwd: " + password);
-
-//                            ((HTMLInputElement) doc.getElementById("signIn")).click();
-//System.err.println("signin");
+                            ((HTMLInputElement) inputs.item(3)).click();
+System.err.println("submit");
 
                             login = true;
-
                         } else {
                             exception = new IllegalArgumentException("wrong email or password");
                             latch.countDown();
                         }
-                    } else if (location.startsWith("https://accounts.google.com/signin/challenge/totp")) {
-                        //
-                        if (totpSecret != null && !totpSecret.isEmpty()) {
-                            String pin = PinGenerator.computePin(totpSecret, null);
-                            Document doc = webEngine.getDocument();
-
-                            try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(System.err); }
-
-                            ((HTMLInputElement) doc.getElementById("totpPin")).setValue(pin);
-System.err.println("pin: " + pin);
-
-                            try { Thread.sleep(50); } catch (InterruptedException e) { e.printStackTrace(System.err); }
-
-                            ((HTMLInputElement) doc.getElementById("submit")).click();
-System.err.println("2 step authentication");
-                        } else {
-System.err.println("no totp secret, enter by yourself");
-                        }
-
-                    } else if (location.startsWith(redirectUrl)) {
-System.err.println("redirected");
+                    } else if (location.indexOf(redirectUrl) > -1) {
+                        code = location.substring(location.indexOf("code=") + 5);
+System.err.println("code: " + code);
                         latch.countDown();
                     }
                 }
-
-System.err.println(ov + ", " + newState + ", " + oldState);
             }
         });
-        webEngine.load(url);
+        try {
+            webEngine.load(String.format(url, clientId, URLEncoder.encode(redirectUrl, "UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+            assert false;
+        }
     }
 }
 

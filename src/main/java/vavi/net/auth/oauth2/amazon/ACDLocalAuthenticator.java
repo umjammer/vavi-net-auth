@@ -46,7 +46,7 @@ public class ACDLocalAuthenticator implements Authenticator<UserCredential, Stri
         HttpServer httpServer = new HttpServer(host, port);
         httpServer.start();
 
-        AuthUI<String> ui = new JavaFxAuthUI(this.appCredential, userCredential);
+        AuthUI<String> ui = new AmazonJavaFxAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         httpServer.stop();
