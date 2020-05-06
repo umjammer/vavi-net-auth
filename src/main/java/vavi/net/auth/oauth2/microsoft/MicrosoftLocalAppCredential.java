@@ -6,6 +6,7 @@
 
 package vavi.net.auth.oauth2.microsoft;
 
+import vavi.net.auth.oauth2.BaseLocalAppCredential;
 import vavi.net.auth.oauth2.BasicAppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -13,15 +14,20 @@ import vavi.util.properties.annotation.PropsEntity;
 
 /**
  * MicrosoftLocalAppCredential.
- *
+ * <p>
  * properties file "~/.vavifuse/onedrive.properties"
+ * <ul>
+ * <li> onedrive.clientId
+ * <li> onedrive.clientSecret
+ * <li> onedrive.redirectUrl
+ * </ul>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/06/19 umjammer initial version <br>
  * @see "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/onedrive.properties")
-public class MicrosoftLocalAppCredential implements BasicAppCredential {
+public class MicrosoftLocalAppCredential extends BaseLocalAppCredential implements BasicAppCredential {
 
     @Property(name = "onedrive.clientId")
     private String clientId;
@@ -29,6 +35,11 @@ public class MicrosoftLocalAppCredential implements BasicAppCredential {
     private transient String clientSecret;
     @Property(name = "onedrive.redirectUrl")
     private String redirectUrl;
+
+    @Override
+    public String getApplicationName() {
+        return "vavi-apps-fuse";
+    }
 
     @Override
     public String getScheme() {

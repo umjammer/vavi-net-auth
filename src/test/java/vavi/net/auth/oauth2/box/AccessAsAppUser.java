@@ -16,7 +16,6 @@ import com.box.sdk.InMemoryLRUAccessTokenCache;
 import com.box.sdk.JWTEncryptionPreferences;
 
 import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.box.BoxLocalAppCredential;
 import vavi.util.properties.annotation.PropsEntity;
 
 

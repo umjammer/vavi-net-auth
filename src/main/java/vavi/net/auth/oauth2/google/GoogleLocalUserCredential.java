@@ -6,7 +6,7 @@
 
 package vavi.net.auth.oauth2.google;
 
-import vavi.net.auth.oauth2.BasicLocalUserCredential;
+import vavi.net.auth.oauth2.BaseLocalUserCredential;
 import vavi.net.auth.oauth2.WithTotpUserCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -21,7 +21,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class GoogleLocalUserCredential extends BasicLocalUserCredential implements WithTotpUserCredential {
+public class GoogleLocalUserCredential extends BaseLocalUserCredential implements WithTotpUserCredential {
 
     /** */
     @Property(name = "google.password.{0}")

@@ -6,7 +6,7 @@
 
 package vavi.net.auth.oauth2.flickr;
 
-import vavi.net.auth.oauth2.BasicLocalUserCredential;
+import vavi.net.auth.oauth2.BaseLocalUserCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -20,7 +20,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class FlickrLocalUserCredential extends BasicLocalUserCredential {
+public class FlickrLocalUserCredential extends BaseLocalUserCredential {
 
     /** */
     @Property(name = "flickr.password.{0}")

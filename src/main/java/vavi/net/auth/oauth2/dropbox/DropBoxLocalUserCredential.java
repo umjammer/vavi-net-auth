@@ -6,7 +6,7 @@
 
 package vavi.net.auth.oauth2.dropbox;
 
-import vavi.net.auth.oauth2.BasicLocalUserCredential;
+import vavi.net.auth.oauth2.BaseLocalUserCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -20,7 +20,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class DropBoxLocalUserCredential extends BasicLocalUserCredential {
+public class DropBoxLocalUserCredential extends BaseLocalUserCredential {
 
     /** */
     @Property(name = "dropbox.password.{0}")

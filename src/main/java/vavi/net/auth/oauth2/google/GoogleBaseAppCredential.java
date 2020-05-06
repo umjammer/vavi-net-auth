@@ -22,7 +22,7 @@ public abstract class GoogleBaseAppCredential implements GoogleAppCredential {
     /** */
     protected GoogleClientSecrets clientSecrets;
 
-    /** filter redirect urls */
+    /** filter for redirect urls */
     protected abstract Predicate<? super String> getFilter();
 
     @Override

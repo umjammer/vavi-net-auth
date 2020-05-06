@@ -34,20 +34,6 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "classpath:googledrive.properties")
 public class GoogleOAuth2 implements OAuth2<WithTotpUserCredential, Drive> {
 
-    /** Global instance of the JSON factory. */
-    public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
-    /** Global instance of the HTTP transport. */
-    public static HttpTransport HTTP_TRANSPORT;
-
-    static {
-        try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
     /** should have a constructor with args (GoogleAppCledential) */
     @Property(value = "vavi.net.auth.oauth2.google.GoogleLocalAuthenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.google.GoogleLocalAuthenticator";
@@ -60,6 +46,20 @@ public class GoogleOAuth2 implements OAuth2<WithTotpUserCredential, Drive> {
 Debug.println(Level.WARNING, "no onedrive.properties in classpath, use defaut");
         }
 Debug.println("authenticatorClassName: " + authenticatorClassName);
+    }
+
+    /** Global instance of the JSON factory. */
+    public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+
+    /** Global instance of the HTTP transport. */
+    public static HttpTransport HTTP_TRANSPORT;
+
+    static {
+        try {
+            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /** */

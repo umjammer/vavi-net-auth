@@ -12,8 +12,6 @@ import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.logging.Level;
 
-import javax.servlet.http.HttpSession;
-
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxAuthInfo;
@@ -52,9 +50,6 @@ import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
 @PropsEntity(url = "classpath:dropbox.properties")
 public class DropBoxOAuth2 implements OAuth2<UserCredential, String> {
 
-    /** */
-    private BasicAppCredential appCredential;
-
     /** should be {@link vavi.net.auth.oauth2.Authenticator} and have a constructor with args (String, String) */
     @Property(value = "vavi.net.auth.oauth2.dropbox.DropBoxLocalAuthenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.dropbox.DropBoxLocalAuthenticator";
@@ -75,6 +70,9 @@ Debug.println("authenticatorClassName: " + authenticatorClassName);
 Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
+    /** */
+    private BasicAppCredential appCredential;
+
     /** never start refresh thread */
     private TokenRefresher<DbxAuthInfo> tokenRefresher;
 
@@ -82,8 +80,6 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
     public DropBoxOAuth2(BasicAppCredential appCredential) {
         this.appCredential = appCredential;
     }
-
-    private static HttpSession dummySession = new HttpUtil.DummyHttpSession();
 
     /** */
     public String authorize(UserCredential userCredential) throws IOException {
@@ -98,10 +94,10 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
                 return refreshToken.getAccessToken();
             } else {
                 // Run through Dropbox API authorization process
-                String sessionKey = "dropbox-auth-csrf-token";
-                DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(dummySession, sessionKey);
+                final String sessionKey = "dropbox-auth-csrf-token";
+                DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(new HttpUtil.DummyHttpSession(), sessionKey);
                 Locale userLocale = Locale.getDefault();
-                DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("vavi-apps-fuse").withUserLocaleFrom(userLocale).build();
+                DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder(appCredential.getApplicationName()).withUserLocaleFrom(userLocale).build();
                 DbxWebAuth webAuth = new DbxWebAuth(requestConfig, appInfo);
                 Request request = Request.newBuilder().withRedirectUri(appCredential.getRedirectUrl(), csrfTokenStore).build();
 

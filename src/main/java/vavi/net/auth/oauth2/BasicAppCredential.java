@@ -57,6 +57,9 @@ public interface BasicAppCredential extends AppCredential {
             public String getScope() {
                 return appCredential.getScope();
             }
+            public String getApplicationName() {
+                return appCredential.getApplicationName();
+            }
         };
     }
 
@@ -87,6 +90,9 @@ public interface BasicAppCredential extends AppCredential {
             }
             public String getScope() {
                 return appCredential.getScope();
+            }
+            public String getApplicationName() {
+                return appCredential.getApplicationName();
             }
         };
     }

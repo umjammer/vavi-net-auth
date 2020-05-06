@@ -6,6 +6,7 @@
 
 package vavi.net.auth.oauth2.amazon;
 
+import vavi.net.auth.oauth2.BaseLocalAppCredential;
 import vavi.net.auth.oauth2.BasicAppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -13,15 +14,20 @@ import vavi.util.properties.annotation.PropsEntity;
 
 /**
  * ACDLocalAppCredential.
- *
+ * <p>
  * properties file "~/.vavifuse/acd.properties"
+ * <ul>
+ * <li> acd.clientId
+ * <li> acd.clientSecret
+ * <li> acd.redirectUrl
+ * </ul>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/11 umjammer initial version <br>
  * @see "https://app.box.com/developers/console"
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/acd.properties")
-public class ACDLocalAppCredential implements BasicAppCredential {
+public class ACDLocalAppCredential extends BaseLocalAppCredential implements BasicAppCredential {
 
     @Property(name = "acd.clientId")
     private transient String clientId;
@@ -31,6 +37,11 @@ public class ACDLocalAppCredential implements BasicAppCredential {
 
     @Property(name = "acd.redirectUrl")
     private String redirectUrl;
+
+    @Override
+    public String getApplicationName() {
+        return "vavi-apps-fuse";
+    }
 
     @Override
     public String getScheme() {

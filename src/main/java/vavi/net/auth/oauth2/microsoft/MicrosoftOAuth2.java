@@ -20,7 +20,7 @@ import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * OneDriveOAuth2.
+ * MicrosoftOAuth2.
  * <p>
  * set "authenticatorClassName" in "classpath:onedrive.properties"
  * set "tokenRefresherClassName" in "classpath:onedrive.properties"
@@ -30,7 +30,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "classpath:onedrive.properties")
-public class OneDriveOAuth2 implements OAuth2<WithTotpUserCredential, String> {
+public class MicrosoftOAuth2 implements OAuth2<WithTotpUserCredential, String> {
 
     /** should be {@link vavi.net.auth.oauth2.Authenticator} and have a constructor with args (String, String) */
     @Property(value = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator")
@@ -59,9 +59,11 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
     private BasicAppCredential appCredential;
 
     /**
-     * @param appCredential
+     * @param id needs to create {@link #tokenRefresher} before calling
+     *            {@link #readRefreshToken()} or
+     *            {@link #writeRefreshToken(Supplier)}
      */
-    public OneDriveOAuth2(BasicAppCredential appCredential, String id) {
+    public MicrosoftOAuth2(BasicAppCredential appCredential, String id) {
         this.appCredential = appCredential;
         tokenRefresher = OAuth2.getTokenRefresher(tokenRefresherClassName, appCredential, id, null);
     }

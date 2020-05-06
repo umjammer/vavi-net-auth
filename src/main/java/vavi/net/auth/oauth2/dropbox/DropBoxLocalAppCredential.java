@@ -6,6 +6,7 @@
 
 package vavi.net.auth.oauth2.dropbox;
 
+import vavi.net.auth.oauth2.BaseLocalAppCredential;
 import vavi.net.auth.oauth2.BasicAppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -13,15 +14,20 @@ import vavi.util.properties.annotation.PropsEntity;
 
 /**
  * DropBoxLocalAppCredential.
- *
+ * <p>
  * properties file "~/.vavifuse/dropbox.properties"
+ * <ul>
+ * <li> dropbox.clientId
+ * <li> dropbox.clientSecret
+ * <li> dropbox.redirectUrl
+ * </ul>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/06/19 umjammer initial version <br>
  * @see "https://www.dropbox.com/developers/apps?_tk=pilot_lp&_ad=topbar4&_camp=myapps"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/dropbox.properties")
-public class DropBoxLocalAppCredential implements BasicAppCredential {
+public class DropBoxLocalAppCredential extends BaseLocalAppCredential implements BasicAppCredential {
 
     @Property(name = "dropbox.clientId")
     private String clientId;
@@ -29,6 +35,11 @@ public class DropBoxLocalAppCredential implements BasicAppCredential {
     private transient String clientSecret;
     @Property(name = "dropbox.redirectUrl")
     private String redirectUrl;
+
+    @Override
+    public String getApplicationName() {
+        return "vavi-apps-fuse";
+    }
 
     @Override
     public String getScheme() {

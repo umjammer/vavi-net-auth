@@ -3,7 +3,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>0.0.6</version>
+  <version>0.0.7</version>
 
   <name>vavi-net-auth</name>
   <url>https://github.com/umjammer/vavi-net-auth</url>
@@ -13,7 +13,11 @@
   <issueManagement>
     <url>https://github.com/umjammer/vavi-net-auth/issues</url>
   </issueManagement>
-  <description>0.0.6
+  <description>0.0.7
+
+    separate user credential
+
+0.0.6
 
     refactor token refresher
     update amazon auth with selenium</description>
@@ -42,14 +46,14 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.0.15</version>
+      <version>1.0.16</version>
     </dependency>
 
     <dependency>
       <!-- tiny http server for oauth -->
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons-net</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5</version>
     </dependency>
 
     <dependency>

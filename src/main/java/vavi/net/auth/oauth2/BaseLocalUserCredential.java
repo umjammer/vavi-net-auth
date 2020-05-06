@@ -12,22 +12,23 @@ import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * BasicUserCredential.
+ * BaseLocalUserCredential.
  * <p>
  * bind automatically by {@link PropsEntity}
  * </p?
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
-public abstract class BasicLocalUserCredential implements UserCredential {
+public abstract class BaseLocalUserCredential implements UserCredential {
 
     /** */
     protected String id;
 
     /**
      * bind automatically by {@link PropsEntity}
+     * @throw IllegalStateException when binding properties
      */
-    public BasicLocalUserCredential(String id) {
+    public BaseLocalUserCredential(String id) {
         this.id = id;
 
         try {
@@ -41,9 +42,6 @@ public abstract class BasicLocalUserCredential implements UserCredential {
     public String getId() {
         return id;
     }
-
-    /** */
-    public abstract String getPassword();
 }
 
 /* */

@@ -6,16 +6,16 @@ Java OAuth2 and auto login and totp
 
 ## Status
 
-| brand                 | authorize | auto-login | refresh | library |
-|--------------------|----------------|-----------|-----------|---------|
-| google             | ✅              | 🚧         | ?     | [google-api-java-client](https://developers.google.com/api-client-library/java/) |
-| microsoft          | ✅              | ✅         | ✅     | [oauth2-essentials](https://github.com/dmfs/oauth2-essentials) |
-| dropbox            | ✅              | 🚧         | -     | [dropbox-core-sdk](https://github.com/dropbox/dropbox-sdk-java) |
-| box                | ✅              | 🚧         | 🚧     | [box-java-sdk](https://github.com/box/box-java-sdk) |
-| amazon (acd)       |               |          |      | []() |
-| amazon (web)       | -            | ✅       | -    | []() |
-| flickr             |               |          |      | []() |
-| facebook           |               |          |      | []() |
+| brand              | authorize | auto-login | totp | refresh | library |
+|--------------------|-----------|------------|------|---------|---------|
+| google             | ✅        | 🚧        |      | ?       | [google-api-java-client](https://developers.google.com/api-client-library/java/) |
+| microsoft          | ✅        | ✅        |      | ✅      | [oauth2-essentials](https://github.com/dmfs/oauth2-essentials) |
+| dropbox            | ✅        | 🚧        |      | -       | [dropbox-core-sdk](https://github.com/dropbox/dropbox-sdk-java) |
+| box                | ✅        | 🚧        |      | 🚧      | [box-java-sdk](https://github.com/box/box-java-sdk) |
+| amazon (acd)       |           |            |      |         | []() |
+| amazon (web)       | -         | ✅         |      | -       | []() |
+| flickr             |           |            |      |         | []() |
+| facebook           |           |            |      |         | []() |
 
 ## Installation
 

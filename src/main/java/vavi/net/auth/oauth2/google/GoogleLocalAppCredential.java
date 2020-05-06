@@ -25,6 +25,7 @@ import com.google.api.services.drive.DriveScopes;
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/05/03 umjammer initial version <br>
+ * @see "https://console.developers.google.com/apis/credentials?project=vavi-apps-fuse"
  */
 public class GoogleLocalAppCredential extends GoogleBaseAppCredential {
 
