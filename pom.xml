@@ -41,7 +41,6 @@
           <artifactId>javafx</artifactId>
           <version>11.0.2</version>
           <type>pom</type>
-          <classifier>linux</classifier>
         </dependency>
       </dependencies>
     </profile>
