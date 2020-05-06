@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 import com.dropbox.core.DbxAuthInfo;
 import com.dropbox.core.json.JsonReader.FileLoadException;
@@ -41,7 +42,7 @@ public class DropBoxLocalTokenRefresher implements TokenRefresher<DbxAuthInfo> {
     /* @see vavi.net.auth.oauth2.TokenRefresher#writeRefreshToken(java.lang.Object) */
     public void writeRefreshToken(DbxAuthInfo authInfo) throws IOException {
         DbxAuthInfo.Writer.writeToFile(authInfo, file.toFile(), true);
-Debug.println("refreshToken: " + authInfo.getAccessToken());
+Debug.println(Level.FINE, "refreshToken: " + authInfo.getAccessToken());
     }
 
     /**

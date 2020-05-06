@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 import vavi.net.auth.oauth2.AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
@@ -40,7 +41,7 @@ Debug.println("file: " + file);
     /* @see vavi.net.auth.oauth2.TokenRefresher#writeRefreshToken(String) */
     public void writeRefreshToken(String save) throws IOException {
         Files.write(file, save.getBytes(Charset.forName("utf-8")));
-Debug.println("refreshToken: " + save);
+Debug.println(Level.FINE, "refreshToken: " + save);
     }
 
     /**
@@ -49,7 +50,7 @@ Debug.println("refreshToken: " + save);
     public String readRefreshToken() throws IOException {
         if (Files.exists(file)) {
             String state = new String(Files.readAllBytes(file), Charset.forName("utf-8"));
-Debug.println("restore: " + state);
+Debug.println(Level.FINE, "restore: " + state);
             return state;
         } else {
             return null;

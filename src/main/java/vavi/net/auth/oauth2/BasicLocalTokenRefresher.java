@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 import vavi.util.Debug;
 
@@ -40,7 +41,7 @@ public class BasicLocalTokenRefresher extends BaseTokenRefresher<String> {
             Files.createDirectories(file.getParent());
         }
         Files.write(file, refreshToken.getBytes());
-Debug.println("refreshToken: " + refreshToken);
+Debug.println(Level.FINE, "refreshToken: " + refreshToken);
     }
 
     @Override
