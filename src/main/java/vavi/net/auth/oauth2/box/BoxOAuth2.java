@@ -8,7 +8,6 @@ package vavi.net.auth.oauth2.box;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -70,64 +69,62 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
         this.appCredential = appCredential;
     }
 
-    /** */
+    /**
+     * @throws NullPointerException URI$Parser.parse redirect url is not set correctly in your {@link BasicAppCredential}
+     */
     public BoxAPIConnection authorize(UserCredential userCredential) throws IOException {
-        try {
-            tokenRefresher = OAuth2.getTokenRefresher(tokenRefresherClassName, appCredential, userCredential.getId(), null);
+        tokenRefresher = OAuth2.getTokenRefresher(tokenRefresherClassName, appCredential, userCredential.getId(), null);
 
-            boolean login = false;
+        boolean login = false;
 
-            BoxAPIConnection api = null;
+        BoxAPIConnection api = null;
 
-            String refreshToken = tokenRefresher.readRefreshToken();
-            if (refreshToken != null) {
-                try {
-                    api = BoxAPIConnection.restore(appCredential.getClientId(), appCredential.getClientSecret(), refreshToken);
-                    if (api.needsRefresh()) {
+        String refreshToken = tokenRefresher.readRefreshToken();
+        if (refreshToken != null) {
+            try {
+                api = BoxAPIConnection.restore(appCredential.getClientId(), appCredential.getClientSecret(), refreshToken);
+                if (api.needsRefresh()) {
 Debug.println("refresh: " + api.getExpires());
-                        // TODO doesn't work??? got 400
-                        api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret(), api.getAccessToken(), api.getRefreshToken());
-                        api.setExpires(60 * 24 * 60 * 60 * 1000);
-                        api.refresh();
-                    }
-                    login = true;
-                } catch (BoxAPIException e) {
+                    // TODO doesn't work??? got 400
+                    api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret(), api.getAccessToken(), api.getRefreshToken());
+                    api.setExpires(60 * 24 * 60 * 60 * 1000);
+                    api.refresh();
+                }
+                login = true;
+            } catch (BoxAPIException e) {
 Debug.println("restore failed, delete stored file");
 e.printStackTrace();
-                    tokenRefresher.dispose();
-                }
+                tokenRefresher.dispose();
             }
-
-            if (!login) {
-                api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret());
-                api.setExpires(60 * 24 * 60 * 60 * 1000);
-                String state = RandomString.make(16);
-                URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), new URI(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
-
-                String accessToken = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, BasicAppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
-                api.authenticate(accessToken);
-                api.setAutoRefresh(true);
-            }
-
-            String save = api.save();
-            tokenRefresher.writeRefreshToken(save);
-
-            api.addListener(new BoxAPIConnectionListener() {
-                @Override
-                public void onRefresh(BoxAPIConnection api) {
-Debug.println("refresh tocken" + api.getRefreshToken());
-                }
-                @Override
-                public void onError(BoxAPIConnection api, BoxAPIException error) {
-Debug.println("box api exception:");
-                    error.printStackTrace();
-                }
-            });
-
-            return api;
-        } catch (URISyntaxException e) {
-            throw new IllegalStateException(e);
         }
+
+        if (!login) {
+            api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret());
+            api.setExpires(60 * 24 * 60 * 60 * 1000);
+            String state = RandomString.make(16);
+            URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
+
+            String accessToken = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, BasicAppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
+            api.authenticate(accessToken);
+            api.setAutoRefresh(true);
+        }
+
+        String save = api.save();
+        tokenRefresher.writeRefreshToken(save);
+
+        api.addListener(new BoxAPIConnectionListener() {
+            @Override
+            public void onRefresh(BoxAPIConnection api) {
+Debug.println("refresh tocken" + api.getRefreshToken());
+            }
+            @Override
+            public void onError(BoxAPIConnection api, BoxAPIException error) {
+Debug.println("box api exception:");
+                error.printStackTrace();
+            }
+        });
+
+        return api;
     }
 }
 

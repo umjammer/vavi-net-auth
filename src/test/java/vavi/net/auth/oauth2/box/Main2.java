@@ -80,7 +80,7 @@ Debug.println("restore: " + save);
             } else {
                 api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret());
                 String state = RandomString.make(16);
-                URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), new URI(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
+                URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
 
                 UserCredential credential = new BoxLocalUserCredential(email);
                 String accessToken = new BoxLocalAuthenticator(wrap(appCredential, authorizationUrl.toString())).authorize(credential);

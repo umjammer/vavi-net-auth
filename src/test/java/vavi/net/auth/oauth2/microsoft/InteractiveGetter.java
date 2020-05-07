@@ -11,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import vavi.net.auth.oauth2.Getter;
 
@@ -30,11 +29,7 @@ public class InteractiveGetter implements Getter {
         // TODO use processbuilder(chrome)
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-            try {
-                desktop.browse(new URI(url));
-            } catch (URISyntaxException e) {
-                new IOException(e);
-            }
+            desktop.browse(URI.create(url));
         }
 
         System.out.println("Please open the following URL in your browser then type the autorization code:");

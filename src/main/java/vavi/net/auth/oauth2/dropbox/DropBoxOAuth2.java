@@ -8,7 +8,6 @@ package vavi.net.auth.oauth2.dropbox;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.logging.Level;
 
@@ -105,14 +104,14 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
 
                 // redirect url include code parameter
                 String redirectUri = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, BasicAppCredential.class, wrap(appCredential, authorizeUrl)).authorize(userCredential));
-                DbxAuthFinish authFinish = webAuth.finishFromRedirect(appCredential.getRedirectUrl(), csrfTokenStore, HttpUtil.splitQuery(new URI(redirectUri)));
+                DbxAuthFinish authFinish = webAuth.finishFromRedirect(appCredential.getRedirectUrl(), csrfTokenStore, HttpUtil.splitQuery(URI.create(redirectUri)));
 
                 // Save auth information to output file.
                 DbxAuthInfo authInfo = new DbxAuthInfo(authFinish.getAccessToken(), appInfo.getHost());
                 tokenRefresher.writeRefreshToken(authInfo);
                 return authInfo.getAccessToken();
             }
-        } catch (URISyntaxException | DbxException | BadRequestException | BadStateException | CsrfException |
+        } catch (DbxException | BadRequestException | BadStateException | CsrfException |
                 NotApprovedException | ProviderException e) {
             throw new IllegalStateException(e);
         }
