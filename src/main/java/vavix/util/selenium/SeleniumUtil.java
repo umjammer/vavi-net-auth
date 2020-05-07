@@ -6,12 +6,15 @@
 
 package vavix.util.selenium;
 
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -99,6 +102,16 @@ Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.
 
     /** */
     public void waitFor(int delay) {
+        waitFor(driver, delay);
+    }
+
+    /** */
+    public static void waitFor(WebDriver driver) {
+        waitFor(driver, 10);
+    }
+
+    /** */
+    public static void waitFor(WebDriver driver, int delay) {
         new WebDriverWait(driver, delay).until(d -> {
             if (d == null) {
                 throw new IllegalStateException("browser maight be closed");
@@ -115,7 +128,7 @@ Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.
     }
 
     /** */
-    public void showStats(WebDriver driver) {
+    public void showStats() {
         System.err.println("----------------------------");
         System.err.println(driver.getCurrentUrl());
         AtomicInteger c = new AtomicInteger();
@@ -144,6 +157,16 @@ Debug.println("not found: " + by);
     }
 
     /** */
+    public List<WebElement> findElements(By by) {
+        try {
+            return driver.findElements(by);
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+Debug.println("not found: " + by);
+            return null;
+        }
+    }
+
+    /** */
     public void click(WebElement element) {
         new Actions(driver).moveToElement(element).click().build().perform();
     }
@@ -154,8 +177,28 @@ Debug.println("not found: " + by);
     }
 
     /** */
+    public void navigateTo(String url) {
+        driver.navigate().to(url);
+    }
+
+    /** */
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
+    }
+
+    /** */
+    public String getPageSource() {
+        return driver.getPageSource();
+    }
+
+    /** */
+    public Set<String> getWindowHandles() {
+        return driver.getWindowHandles();
+    }
+
+    /** */
+    public TargetLocator switchTo() {
+        return driver.switchTo();
     }
 
     /** */
