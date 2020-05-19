@@ -4,15 +4,15 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.box;
+package vavi.net.auth.web.flickr;
 
-import vavi.net.auth.oauth2.BaseLocalUserCredential;
+import vavi.net.auth.BaseLocalUserCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * BoxLocalUserCredencial.
+ * FlickrLocalUserCredencial.
  *
  * properties file "~/vavifuse/credentials.properties"
  *
@@ -20,16 +20,16 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class BoxLocalUserCredential extends BaseLocalUserCredential {
+public class FlickrLocalUserCredential extends BaseLocalUserCredential {
 
     /** */
-    @Property(name = "box.password.{0}")
+    @Property(name = "flickr.password.{0}")
     private transient String password;
 
     /**
      * @param email
      */
-    public BoxLocalUserCredential(String email) {
+    public FlickrLocalUserCredential(String email) {
         super(email);
 //System.err.println("password for " + id + ": " + password);
     }

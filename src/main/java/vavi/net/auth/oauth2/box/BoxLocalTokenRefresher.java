@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
-import vavi.net.auth.oauth2.AppCredential;
+import vavi.net.auth.AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
 import vavi.util.Debug;
 

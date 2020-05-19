@@ -6,8 +6,8 @@
 
 package vavi.net.auth.oauth2.dropbox;
 
-import vavi.net.auth.oauth2.BaseLocalAppCredential;
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.BaseLocalAppCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -27,7 +27,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://www.dropbox.com/developers/apps?_tk=pilot_lp&_ad=topbar4&_camp=myapps"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/dropbox.properties")
-public class DropBoxLocalAppCredential extends BaseLocalAppCredential implements BasicAppCredential {
+public class DropBoxLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "dropbox.clientId")
     private String clientId;

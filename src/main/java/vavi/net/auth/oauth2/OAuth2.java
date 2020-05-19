@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Supplier;
 
+import vavi.net.auth.AppCredential;
+import vavi.net.auth.Authenticator;
+
 
 /**
  * OAuth2.
@@ -48,8 +51,8 @@ public interface OAuth2<I, O> {
      * @param authenticatorClassName class name which has a constructor (? extends BasicAppCredential)
      */
     static <I, O> Authenticator<I, O> getAuthenticator(String authenticatorClassName,
-                                                       Class<? extends BasicAppCredential> clazz,
-                                                       BasicAppCredential appCredential) {
+                                                       Class<? extends OAuth2AppCredential> clazz,
+                                                       OAuth2AppCredential appCredential) {
         try {
             return Authenticator.class.cast(Class.forName(authenticatorClassName)
                                             .getDeclaredConstructor(clazz).newInstance(appCredential));

@@ -26,16 +26,16 @@ import com.dropbox.core.DbxWebAuth.NotApprovedException;
 import com.dropbox.core.DbxWebAuth.ProviderException;
 import com.dropbox.core.DbxWebAuth.Request;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.OAuth2;
 import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.net.auth.oauth2.UserCredential;
 import vavi.net.http.HttpUtil;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
-import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**
@@ -49,7 +49,7 @@ import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
 @PropsEntity(url = "classpath:dropbox.properties")
 public class DropBoxOAuth2 implements OAuth2<UserCredential, String> {
 
-    /** should be {@link vavi.net.auth.oauth2.Authenticator} and have a constructor with args (String, String) */
+    /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value = "vavi.net.auth.oauth2.dropbox.DropBoxLocalAuthenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.dropbox.DropBoxLocalAuthenticator";
 
@@ -70,13 +70,13 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
     /** */
-    private BasicAppCredential appCredential;
+    private OAuth2AppCredential appCredential;
 
     /** never start refresh thread */
     private TokenRefresher<DbxAuthInfo> tokenRefresher;
 
     /** */
-    public DropBoxOAuth2(BasicAppCredential appCredential) {
+    public DropBoxOAuth2(OAuth2AppCredential appCredential) {
         this.appCredential = appCredential;
     }
 
@@ -103,7 +103,7 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
                 String authorizeUrl = webAuth.authorize(request);
 
                 // redirect url include code parameter
-                String redirectUri = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, BasicAppCredential.class, wrap(appCredential, authorizeUrl)).authorize(userCredential));
+                String redirectUri = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, wrap(appCredential, authorizeUrl)).authorize(userCredential));
                 DbxAuthFinish authFinish = webAuth.finishFromRedirect(appCredential.getRedirectUrl(), csrfTokenStore, HttpUtil.splitQuery(URI.create(redirectUri)));
 
                 // Save auth information to output file.

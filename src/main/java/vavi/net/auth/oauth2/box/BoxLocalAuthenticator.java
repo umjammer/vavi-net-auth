@@ -10,10 +10,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.Authenticator;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.Authenticator;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.net.auth.web.box.BoxSeleniumAuthUI;
 import vavi.net.http.HttpServer;
 import vavi.util.Debug;
 
@@ -27,10 +28,10 @@ import vavi.util.Debug;
 public class BoxLocalAuthenticator implements Authenticator<UserCredential, String> {
 
     /** */
-    private final BasicAppCredential appCredential;
+    private final OAuth2AppCredential appCredential;
 
     /** */
-    public BoxLocalAuthenticator(BasicAppCredential appCredential) {
+    public BoxLocalAuthenticator(OAuth2AppCredential appCredential) {
         this.appCredential = appCredential;
     }
 

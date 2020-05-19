@@ -4,15 +4,15 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.amazon;
+package vavi.net.auth.web.amazon;
 
 import java.io.IOException;
 
 import org.openqa.selenium.WebDriver;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.Authenticator;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.Authenticator;
+import vavi.net.auth.UserCredential;
 
 
 /**

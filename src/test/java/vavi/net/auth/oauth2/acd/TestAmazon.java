@@ -10,9 +10,9 @@ import java.io.IOException;
 
 import org.openqa.selenium.WebDriver;
 
-import vavi.net.auth.oauth2.UserCredential;
-import vavi.net.auth.oauth2.amazon.AmazonLocalAuthenticator;
-import vavi.net.auth.oauth2.amazon.AmazonLocalUserCredential;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.web.amazon.AmazonLocalAuthenticator;
+import vavi.net.auth.web.amazon.AmazonLocalUserCredential;
 
 
 /**

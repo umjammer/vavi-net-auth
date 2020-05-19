@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2016 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.amazon;
+package vavi.net.auth.web.dropbox;
 
 import java.awt.Dimension;
 import java.util.concurrent.CountDownLatch;
@@ -14,12 +14,11 @@ import javax.swing.SwingUtilities;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AuthUI;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -33,57 +32,45 @@ import javafx.scene.web.WebView;
 
 
 /**
- * JavaFxAuthUI.
+ * DropBox JavaFxAuthUI.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2018/11/23 umjammer initial version <br>
+ * @version 0.00 2016/03/02 umjammer initial version <br>
  */
-public class AmazonJavaFxAuthUI implements AuthUI<String> {
+public class DropBoxJavaFxAuthUI implements AuthUI<String> {
 
-    private String email;
+    /** */
+    private final String email;
     private String password;
     private String url;
     private String redirectUrl;
 
     /** */
-    public AmazonJavaFxAuthUI(BasicAppCredential appCredential, UserCredential userCredential) {
-        this.email = userCredential.getId();
-        this.password = userCredential.getPassword();
-        this.url = appCredential.getOAuthAuthorizationUrl();
-        this.redirectUrl = appCredential.getRedirectUrl();
+    public DropBoxJavaFxAuthUI(String email, String password, String url, String redirectUrl) {
+        this.email = email;
+        this.password = password;
+        this.url = url;
+        this.redirectUrl = redirectUrl;
     }
 
     /** */
     private CountDownLatch latch = new CountDownLatch(1);
+
+    /** */
+    private transient String code;
     /** */
     private volatile Exception exception;
 
+    /* @see Authenticator#get(java.lang.String) */
     @Override
     public void auth() {
-        exception = null;
-
         SwingUtilities.invokeLater(() -> { openUI(url); });
 
         try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
 
         closeUI();
-
-        if (exception != null) {
-            throw new IllegalStateException(exception);
-        }
     }
 
-    @Override
-    public String getResult() {
-        return null;
-    }
-
-    @Override
-    public Exception getException() {
-        return exception;
-    }
-
-    /** */
     private JFrame frame;
 
     /** Create a JFrame with a JButton and a JFXPanel containing the WebView. */
@@ -104,12 +91,7 @@ public class AmazonJavaFxAuthUI implements AuthUI<String> {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
-            @Override
-            public void run() {
-                initFX(fxPanel, url);
-            }
-        });
+        Platform.runLater(() -> { initFX(fxPanel, url); });
     }
 
     /** */
@@ -137,11 +119,12 @@ public class AmazonJavaFxAuthUI implements AuthUI<String> {
             public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
                 if (newState == State.SUCCEEDED) {
                     String location = webEngine.getLocation();
-System.err.println("location: " + location);
+                    System.err.println("location: " + location);
 
                     if (location.indexOf(url) > -1) {
 
                         if (!login) {
+                            System.err.println("set email: " + email);
                             Document doc = webEngine.getDocument();
 
                             NodeList inputs = doc.getElementsByTagName("INPUT");
@@ -161,14 +144,40 @@ System.err.println("submit");
                             exception = new IllegalArgumentException("wrong email or password");
                             latch.countDown();
                         }
-                    } else if (location.indexOf(redirectUrl) > -1) {
-System.err.println("done");
+                    } else if (location.startsWith("https://www.dropbox.com/1/oauth2/authorize?")) {
+//System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
+//                        Document doc = webEngine.getDocument();
+//                        ((HTMLButtonElement) doc.getElementById("submit_approve_access")).click();
+System.err.println("accept");
+                    } else if (location.startsWith("https://www.dropbox.com/1/oauth2/authorize_submit")) {
+System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
+
+                        Document doc = webEngine.getDocument();
+                        NodeList inputs = doc.getElementsByTagName("INPUT");
+                        for (int i = 0; i < inputs.getLength(); i++) {
+                            Node input = inputs.item(i);
+System.err.println("input: " + ((Element) input).getAttribute("type")); // == text
+                        }
+                        code = ((HTMLInputElement) doc.getElementById("code")).getAttribute("data-token");
+System.err.println("code: " + code);
                         latch.countDown();
                     }
                 }
             }
         });
         webEngine.load(url);
+    }
+
+    /* @see vavi.net.auth.oauth2.AuthUI#getResult() */
+    @Override
+    public String getResult() {
+        return code;
+    }
+
+    /* @see vavi.net.auth.oauth2.AuthUI#getException() */
+    @Override
+    public Exception getException() {
+        return exception;
     }
 }
 

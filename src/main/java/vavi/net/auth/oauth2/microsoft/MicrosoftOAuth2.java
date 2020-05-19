@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.WithTotpUserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.OAuth2;
 import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.net.auth.oauth2.WithTotpUserCredential;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -32,7 +32,7 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "classpath:onedrive.properties")
 public class MicrosoftOAuth2 implements OAuth2<WithTotpUserCredential, String> {
 
-    /** should be {@link vavi.net.auth.oauth2.Authenticator} and have a constructor with args (String, String) */
+    /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator";
 
@@ -56,21 +56,21 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
     private TokenRefresher<String> tokenRefresher;
 
     /** application credential */
-    private BasicAppCredential appCredential;
+    private OAuth2AppCredential appCredential;
 
     /**
      * @param id needs to create {@link #tokenRefresher} before calling
      *            {@link #readRefreshToken()} or
      *            {@link #writeRefreshToken(Supplier)}
      */
-    public MicrosoftOAuth2(BasicAppCredential appCredential, String id) {
+    public MicrosoftOAuth2(OAuth2AppCredential appCredential, String id) {
         this.appCredential = appCredential;
         tokenRefresher = OAuth2.getTokenRefresher(tokenRefresherClassName, appCredential, id, null);
     }
 
     @Override
     public String authorize(WithTotpUserCredential userCredential) throws IOException {
-        String code = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, BasicAppCredential.class, appCredential).authorize(userCredential));
+        String code = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, appCredential).authorize(userCredential));
         return code.substring(code.indexOf("code=") + "code=".length());
     }
 

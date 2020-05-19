@@ -7,11 +7,12 @@ package vavi.net.auth.oauth2.facebook;
 
 import java.io.IOException;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.net.auth.web.facebook.FacebookLocalUserCredential;
 import vavi.util.properties.annotation.PropsEntity;
 
-import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**
@@ -31,7 +32,7 @@ public class TestFacebook {
     }
 
     void process(String group) throws IOException {
-        BasicAppCredential appCredential = new FacebookLocalAppCredential();
+        OAuth2AppCredential appCredential = new FacebookLocalAppCredential();
         PropsEntity.Util.bind(appCredential, group);
         String url = "https://www.facebook.com/dialog/oauth?client_id=%s&redirect_uri=%s&response_type=token";
         String redirectUrl = "https://www.facebook.com/connect/login_success.html";

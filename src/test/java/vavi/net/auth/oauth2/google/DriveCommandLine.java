@@ -15,9 +15,11 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
-import vavi.net.auth.oauth2.WithTotpUserCredential;
+import vavi.net.auth.WithTotpUserCredential;
+import vavi.net.auth.web.google.GoogleLocalUserCredential;
+import vavi.net.auth.web.google.GoogleSeleniumAuthUI;
 
-import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 public class DriveCommandLine {

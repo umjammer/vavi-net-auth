@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.box;
+package vavi.net.auth.web.google;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -13,40 +13,37 @@ import java.util.logging.Level;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.WithTotpUserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.util.Debug;
 
 import vavix.util.selenium.SeleniumUtil;
 
 
 /**
- * Box Selenium AuthUI.
- * <p>
- * <ol>
- * <li> username, password in the same form
- * <li> sms authentication TODO
- * <li> confirm application grants
- * </ol>
- * </p>
+ * GoogleSeleniumAuthUI.
+ *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/06/27 umjammer initial version <br>
  * @see SeleniumUtil
  */
-public class BoxSeleniumAuthUI implements AuthUI<String> {
+public class GoogleSeleniumAuthUI implements AuthUI<String> {
 
     private String email;
     private String password;
     private String url;
     private String redirectUrl;
+    private String totpSecret;
 
     /** */
-    public BoxSeleniumAuthUI(BasicAppCredential appCredential, UserCredential userCredential) {
+    public GoogleSeleniumAuthUI(OAuth2AppCredential appCredential, WithTotpUserCredential userCredential) {
         this.email = userCredential.getId();
         this.password = userCredential.getPassword();
         this.url = appCredential.getOAuthAuthorizationUrl();
         this.redirectUrl = appCredential.getRedirectUrl();
+        this.totpSecret = userCredential.getTotpSecret();
+Debug.println(Level.FINER, "totpSecret: " + totpSecret);
     }
 
     /** */
@@ -80,45 +77,47 @@ public class BoxSeleniumAuthUI implements AuthUI<String> {
                 su.sleep(300);
                 su.waitFor();
                 String location = su.getCurrentUrl();
-//Debug.println("location: " + location);
-                if (location.indexOf("account.box.com") > -1) {
+Debug.println("location: " + location);
+                if (location.indexOf("accounts.google.com") > -1) {
                     try {
                         WebElement element = null;
-                        if (!tasks.contains("email") && (element = su.findElement(By.name("login"), 0)) != null) {
+//Debug.println("element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
+                        if (!tasks.contains("email") && (element = su.findElement(By.id("identifierId"))) != null) {
                             element.sendKeys(email);
                             tasks.add("email");
+                            su.click(su.findElement(By.id("identifierNext")));
 Debug.println("set " + tasks.peekLast());
                             su.sleep(300);
-                        }
-                        if (!tasks.contains("password") && (element = su.findElement(By.name("password"))) != null) {
+                        } else if (!tasks.contains("password") && (element = su.findElement(By.name("password"))) != null) {
                             if (password != null) {
                                 element.sendKeys(password);
                                 tasks.add("password");
+                                su.click(su.findElement(By.id("passwordNext")));
 Debug.println("set " + tasks.peekLast());
                                 su.sleep(300);
                             } else {
 Debug.println("no password");
                                 continue;
                             }
-                        }
-                        if (tasks.contains("email") && tasks.contains("password") && !tasks.contains("login") && (element = su.findElement(By.className("login_submit"))) != null) {
-                            su.click(element);
-                            tasks.add("login");
-Debug.println("set " + tasks.peekLast());
-                            su.sleep(300);
+//                        } else if (!tasks.contains("totp") && (element = su.findElement(By.name("Email"))) != null) {
+//                            if (totpSecret != null) {
+//Debug.println("here");
+//                                String pin = PinGenerator.computePin(totpSecret, null);
+//Debug.println("pin: " + pin);
+//                                element.sendKeys(pin);
+//                                tasks.add("totp");
+//                            } else {
+//Debug.println("no pin");
+//                                continue;
+//                            }
+                        } else {
+                            continue;
                         }
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
 Debug.println(Level.WARNING, e.getMessage());
                     }
-                } else if (location.indexOf("app.box.com") > -1) {
-                    WebElement element = null;
-                    if (!tasks.contains("consent") && (element = su.findElement(By.name("consent_accept"))) != null) {
-                        su.click(element);
-                        tasks.add("consent");
-Debug.println("set " + tasks.peekLast());
-                        su.sleep(300);
-                    }
                 } else if (location.indexOf(redirectUrl) > -1) {
+//                    code = location.substring(location.indexOf("code=") + "code=".length(), location.indexOf("&"));
                     code = location;
 Debug.println(Level.FINE, "code: " + code);
                     login = true;

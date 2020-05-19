@@ -6,8 +6,8 @@
 
 package vavi.net.auth.oauth2.amazon;
 
-import vavi.net.auth.oauth2.BaseLocalAppCredential;
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.BaseLocalAppCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -27,7 +27,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://app.box.com/developers/console"
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/acd.properties")
-public class ACDLocalAppCredential extends BaseLocalAppCredential implements BasicAppCredential {
+public class ACDLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "acd.clientId")
     private transient String clientId;

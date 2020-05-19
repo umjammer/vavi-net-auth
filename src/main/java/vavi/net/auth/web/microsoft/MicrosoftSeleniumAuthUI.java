@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.microsoft;
+package vavi.net.auth.web.microsoft;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -13,9 +13,9 @@ import java.util.logging.Level;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.WithTotpUserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.WithTotpUserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.totp.PinGenerator;
 import vavi.util.Debug;
 
@@ -38,7 +38,7 @@ public class MicrosoftSeleniumAuthUI implements AuthUI<String> {
     private String totpSecret;
 
     /** */
-    public MicrosoftSeleniumAuthUI(BasicAppCredential appCredential, WithTotpUserCredential userCredential) {
+    public MicrosoftSeleniumAuthUI(OAuth2AppCredential appCredential, WithTotpUserCredential userCredential) {
         this.email = userCredential.getId();
         this.password = userCredential.getPassword();
         this.url = appCredential.getOAuthAuthorizationUrl();

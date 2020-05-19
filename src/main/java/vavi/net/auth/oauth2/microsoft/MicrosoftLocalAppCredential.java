@@ -6,8 +6,8 @@
 
 package vavi.net.auth.oauth2.microsoft;
 
-import vavi.net.auth.oauth2.BaseLocalAppCredential;
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.BaseLocalAppCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -27,7 +27,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/onedrive.properties")
-public class MicrosoftLocalAppCredential extends BaseLocalAppCredential implements BasicAppCredential {
+public class MicrosoftLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "onedrive.clientId")
     private String clientId;

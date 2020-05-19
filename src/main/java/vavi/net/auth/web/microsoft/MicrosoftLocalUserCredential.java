@@ -4,15 +4,16 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.facebook;
+package vavi.net.auth.web.microsoft;
 
-import vavi.net.auth.oauth2.BaseLocalUserCredential;
+import vavi.net.auth.BaseLocalUserCredential;
+import vavi.net.auth.WithTotpUserCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * FacebookLocalUserCredencial.
+ * MicrosoftLocalUserCredencial.
  *
  * properties file "~/vavifuse/credentials.properties"
  *
@@ -20,16 +21,18 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class FacebookLocalUserCredential extends BaseLocalUserCredential {
+public class MicrosoftLocalUserCredential extends BaseLocalUserCredential implements WithTotpUserCredential {
 
     /** */
-    @Property(name = "facebook.password.{0}")
+    @Property(name = "microsoft.password.{0}")
     private transient String password;
+    @Property(name = "microsoft.totpSecret.{0}")
+    private String totpSecret;
 
     /**
      * @param email
      */
-    public FacebookLocalUserCredential(String email) {
+    public MicrosoftLocalUserCredential(String email) {
         super(email);
 //System.err.println("password for " + id + ": " + password);
     }
@@ -37,6 +40,11 @@ public class FacebookLocalUserCredential extends BaseLocalUserCredential {
     /* */
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getTotpSecret() {
+        return totpSecret;
     }
 }
 

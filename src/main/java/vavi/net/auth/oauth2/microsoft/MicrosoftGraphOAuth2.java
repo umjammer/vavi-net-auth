@@ -8,12 +8,12 @@ package vavi.net.auth.oauth2.microsoft;
 
 import java.util.logging.Level;
 
-import vavi.net.auth.oauth2.AppCredential;
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.AppCredential;
+import vavi.net.auth.WithTotpUserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.BasicOAuth2;
 import vavi.net.auth.oauth2.OAuth2;
 import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.net.auth.oauth2.WithTotpUserCredential;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -32,7 +32,7 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "classpath:onedrive.properties")
 public class MicrosoftGraphOAuth2 extends BasicOAuth2<WithTotpUserCredential> {
 
-    /** should be {@link vavi.net.auth.oauth2.Authenticator} and have a constructor with args (String, String) */
+    /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator";
 
@@ -61,7 +61,7 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
      * @param appCredential
      * @param startTokenRefresher
      */
-    public MicrosoftGraphOAuth2(BasicAppCredential appCredential, boolean startTokenRefresher) {
+    public MicrosoftGraphOAuth2(OAuth2AppCredential appCredential, boolean startTokenRefresher) {
         super(appCredential, startTokenRefresher);
     }
 

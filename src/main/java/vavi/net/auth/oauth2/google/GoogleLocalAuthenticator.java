@@ -15,12 +15,13 @@ import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInsta
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.Authenticator;
-import vavi.net.auth.oauth2.WithTotpUserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.Authenticator;
+import vavi.net.auth.WithTotpUserCredential;
+import vavi.net.auth.web.google.GoogleSeleniumAuthUI;
 import vavi.util.Debug;
 
-import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**

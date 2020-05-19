@@ -31,9 +31,12 @@ import org.dmfs.rfc3986.uris.LazyUri;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 
+import vavi.net.auth.AppCredential;
+import vavi.net.auth.Authenticator;
+import vavi.net.auth.UserCredential;
 import vavi.util.Debug;
 
-import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**
@@ -51,7 +54,7 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
     private OAuth2Client oauth;
 
     /** */
-    private BasicAppCredential appCredential;
+    private OAuth2AppCredential appCredential;
 
     /** should be {@link Authenticator} and have a constructor with args (String, String) */
     protected abstract String getAuthenticatorClassName();
@@ -66,7 +69,7 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
     protected abstract TokenRefresher<String> getTokenRefresher(AppCredential appCredential, String id);
 
     /** */
-    public BasicOAuth2(BasicAppCredential appCredential, boolean startTokenRefresher) {
+    public BasicOAuth2(OAuth2AppCredential appCredential, boolean startTokenRefresher) {
         this.appCredential = appCredential;
         this.startTokenRefresher = startTokenRefresher;
 
@@ -90,7 +93,7 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
     /**
      * @return access token
      */
-    public String authorize(UserCredential userCredential) throws IOException {
+    public String authorize(C userCredential) throws IOException {
         try {
             if (startTokenRefresher) {
                 refresher = getTokenRefresher(appCredential, userCredential.getId());
@@ -108,7 +111,7 @@ Debug.println("no refreshToken: timeout? or firsttime");
                 // Open the URL in a WebView and wait for the redirect to the redirect URL
                 // After the redirect, feed the URL to the grant to retrieve the access token
                 // redirect url include code and state parameters
-                String redirectUrl = String.class.cast(OAuth2.getAuthenticator(getAuthenticatorClassName(), BasicAppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
+                String redirectUrl = String.class.cast(OAuth2.getAuthenticator(getAuthenticatorClassName(), OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
                 token = grant.withRedirect(new LazyUri(new Precoded(redirectUrl))).accessToken(oauthExecutor);
 Debug.println("redirectUrl: " +redirectUrl);
 Debug.println("scope: " + token.scope());

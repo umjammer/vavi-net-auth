@@ -15,7 +15,7 @@ import com.box.sdk.IAccessTokenCache;
 import com.box.sdk.InMemoryLRUAccessTokenCache;
 import com.box.sdk.JWTEncryptionPreferences;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.util.properties.annotation.PropsEntity;
 
 
@@ -37,7 +37,7 @@ public final class AccessAsAppUser {
 
         USER_ID = args[0];
 
-        BasicAppCredential appCredential = new BoxLocalAppCredential();
+        OAuth2AppCredential appCredential = new BoxLocalAppCredential();
         PropsEntity.Util.bind(appCredential);
 
         // Turn off logging to prevent polluting the output.

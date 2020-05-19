@@ -6,8 +6,8 @@
 
 package vavi.net.auth.oauth2.flickr;
 
-import vavi.net.auth.oauth2.BaseLocalAppCredential;
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.BaseLocalAppCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -26,7 +26,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2019/06/19 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/flickr.properties")
-public class FlickrLocalAppCredential extends BaseLocalAppCredential implements BasicAppCredential {
+public class FlickrLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "flickr.clientId")
     private String clientId;

@@ -6,6 +6,7 @@
 
 package vavi.net.auth.oauth2;
 
+import vavi.net.auth.AppCredential;
 
 /**
  * BasicAppCredential.
@@ -13,7 +14,7 @@ package vavi.net.auth.oauth2;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/06/19 umjammer initial version <br>
  */
-public interface BasicAppCredential extends AppCredential {
+public interface OAuth2AppCredential extends AppCredential {
 
     /** */
     String getClientSecret();
@@ -32,10 +33,10 @@ public interface BasicAppCredential extends AppCredential {
 
     /**
      * override
-     * {@link BasicAppCredential#getOAuthAuthorizationUrl()}
+     * {@link OAuth2AppCredential#getOAuthAuthorizationUrl()}
      */
-    static BasicAppCredential wrap(BasicAppCredential appCredential, String newOAuthAuthorizationUrl) {
-        return new BasicAppCredential() {
+    static OAuth2AppCredential wrap(OAuth2AppCredential appCredential, String newOAuthAuthorizationUrl) {
+        return new OAuth2AppCredential() {
             public String getScheme() {
                 return appCredential.getScheme();
             }
@@ -65,11 +66,11 @@ public interface BasicAppCredential extends AppCredential {
 
     /**
      * override
-     * <li> {@link BasicAppCredential#getOAuthAuthorizationUrl()} </li>
-     * <li> {@link BasicAppCredential#getRedirectUrl()} </li>
+     * <li> {@link OAuth2AppCredential#getOAuthAuthorizationUrl()} </li>
+     * <li> {@link OAuth2AppCredential#getRedirectUrl()} </li>
      */
-    static BasicAppCredential wrap(BasicAppCredential appCredential, String newOAuthAuthorizationUrl, String newRedirectUrl) {
-        return new BasicAppCredential() {
+    static OAuth2AppCredential wrap(OAuth2AppCredential appCredential, String newOAuthAuthorizationUrl, String newRedirectUrl) {
+        return new OAuth2AppCredential() {
             public String getScheme() {
                 return appCredential.getScheme();
             }

@@ -4,12 +4,9 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.facebook;
+package vavi.net.auth.web.box;
 
 import java.awt.Dimension;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
@@ -17,12 +14,12 @@ import javax.swing.SwingUtilities;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.util.properties.annotation.PropsEntity;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -36,71 +33,44 @@ import javafx.scene.web.WebView;
 
 
 /**
- * FacebookAuthenticator.
+ * DropBoxAuthenticator.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2016/08/07 umjammer initial version <br>
+ * @version 0.00 2016/03/02 umjammer initial version <br>
  */
-public class FacebookJavaFxAuthUI implements AuthUI<String> {
+@PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
+public class BoxJavaFxAuthUI implements AuthUI<String> {
 
-    private String email;
+    /** */
+    private final String email;
     private String password;
-    /** */
-    private final String url;
-    /** */
-    private final String clientId;
-    /** */
-    private final String redirectUrl;
-    /** */
-    private transient String code;
+    private String url;
+    private String redirectUrl;
 
     /** */
-    public FacebookJavaFxAuthUI(BasicAppCredential appCredential, UserCredential userCredential) throws IOException {
-        this.email = userCredential.getId();
-        this.password = userCredential.getPassword();
-        this.url = appCredential.getOAuthAuthorizationUrl();
-        this.clientId = appCredential.getClientId();
-        this.redirectUrl = appCredential.getRedirectUrl();
+    public BoxJavaFxAuthUI(String email, String password, String url, String redirectUrl) {
+        this.email = email;
+        this.password = password;
+        this.url = url;
+        this.redirectUrl = redirectUrl;
     }
 
     /** */
     private CountDownLatch latch = new CountDownLatch(1);
+
+    /** */
+    private transient String code;
     /** */
     private volatile Exception exception;
 
     /* @see Authenticator#get(java.lang.String) */
     @Override
     public void auth() {
-
-        exception = null;
-
-//        URL redirectUrl = new URL(this.redirectUrl);
-//        String host = redirectUrl.getHost();
-//        int port = redirectUrl.getPort();
-//        HttpServer httpServer = new HttpServer(host, port);
-//        httpServer.start();
-
         SwingUtilities.invokeLater(() -> { openUI(url); });
 
         try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
 
         closeUI();
-
-//        httpServer.stop();
-
-        if (exception != null) {
-            throw new IllegalStateException(exception);
-        }
-    }
-
-    @Override
-    public String getResult() {
-        return null;
-    }
-
-    @Override
-    public Exception getException() {
-        return exception;
     }
 
     private JFrame frame;
@@ -151,11 +121,12 @@ public class FacebookJavaFxAuthUI implements AuthUI<String> {
             public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
                 if (newState == State.SUCCEEDED) {
                     String location = webEngine.getLocation();
-System.err.println("location: " + location);
+                    System.err.println("location: " + location);
 
                     if (location.indexOf(url) > -1) {
 
                         if (!login) {
+                            System.err.println("set email: " + email);
                             Document doc = webEngine.getDocument();
 
                             NodeList inputs = doc.getElementsByTagName("INPUT");
@@ -175,19 +146,40 @@ System.err.println("submit");
                             exception = new IllegalArgumentException("wrong email or password");
                             latch.countDown();
                         }
-                    } else if (location.indexOf(redirectUrl) > -1) {
-                        code = location.substring(location.indexOf("code=") + 5);
+                    } else if (location.startsWith("https://www.dropbox.com/1/oauth2/authorize?")) {
+//System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
+//                        Document doc = webEngine.getDocument();
+//                        ((HTMLButtonElement) doc.getElementById("submit_approve_access")).click();
+System.err.println("accept");
+                    } else if (location.startsWith("https://www.dropbox.com/1/oauth2/authorize_submit")) {
+System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
+
+                        Document doc = webEngine.getDocument();
+                        NodeList inputs = doc.getElementsByTagName("INPUT");
+                        for (int i = 0; i < inputs.getLength(); i++) {
+                            Node input = inputs.item(i);
+System.err.println("input: " + ((Element) input).getAttribute("type")); // == text
+                        }
+                        code = ((HTMLInputElement) doc.getElementById("code")).getAttribute("data-token");
 System.err.println("code: " + code);
                         latch.countDown();
                     }
                 }
             }
         });
-        try {
-            webEngine.load(String.format(url, clientId, URLEncoder.encode(redirectUrl, "UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            assert false;
-        }
+        webEngine.load(url);
+    }
+
+    /* @see vavi.net.auth.oauth2.AuthUI#getResult() */
+    @Override
+    public String getResult() {
+        return code;
+    }
+
+    /* @see vavi.net.auth.oauth2.AuthUI#getException() */
+    @Override
+    public Exception getException() {
+        return exception;
     }
 }
 

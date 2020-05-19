@@ -4,22 +4,19 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2;
+package vavi.net.auth;
 
 
 /**
- * UserCredential.
+ * WithTotpUserCredential.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
-public interface UserCredential {
+public interface WithTotpUserCredential extends UserCredential {
 
     /** */
-    String getId();
-
-    /** */
-    String getPassword();
+    String getTotpSecret();
 }
 
 /* */

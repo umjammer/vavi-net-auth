@@ -11,7 +11,7 @@ import java.io.IOException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.util.store.DataStoreFactory;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 
 
 /**
@@ -20,7 +20,7 @@ import vavi.net.auth.oauth2.BasicAppCredential;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/05/03 umjammer initial version <br>
  */
-public interface GoogleAppCredential extends BasicAppCredential {
+public interface GoogleAppCredential extends OAuth2AppCredential {
 
     String getScheme();
 

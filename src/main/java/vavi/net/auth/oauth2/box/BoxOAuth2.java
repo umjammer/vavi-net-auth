@@ -16,15 +16,15 @@ import com.box.sdk.BoxAPIConnection;
 import com.box.sdk.BoxAPIConnectionListener;
 import com.box.sdk.BoxAPIException;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.OAuth2;
 import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.net.auth.oauth2.UserCredential;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
-import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 import net.bytebuddy.utility.RandomString; // TODO this is an sibling of selenium
 
@@ -39,9 +39,9 @@ import net.bytebuddy.utility.RandomString; // TODO this is an sibling of seleniu
 public class BoxOAuth2 implements OAuth2<UserCredential, BoxAPIConnection> {
 
     /** */
-    private BasicAppCredential appCredential;
+    private OAuth2AppCredential appCredential;
 
-    /** should be {@link vavi.net.auth.oauth2.Authenticator} and have a constructor with args (String, String) */
+    /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value =  "vavi.net.auth.oauth2.box.BoxLocalAuthenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.box.BoxLocalAuthenticator";
 
@@ -65,12 +65,12 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
     private TokenRefresher<String> tokenRefresher;
 
     /** */
-    public BoxOAuth2(BasicAppCredential appCredential) {
+    public BoxOAuth2(OAuth2AppCredential appCredential) {
         this.appCredential = appCredential;
     }
 
     /**
-     * @throws NullPointerException URI$Parser.parse redirect url is not set correctly in your {@link BasicAppCredential}
+     * @throws NullPointerException URI$Parser.parse redirect url is not set correctly in your {@link OAuth2AppCredential}
      */
     public BoxAPIConnection authorize(UserCredential userCredential) throws IOException {
         tokenRefresher = OAuth2.getTokenRefresher(tokenRefresherClassName, appCredential, userCredential.getId(), null);
@@ -104,7 +104,7 @@ e.printStackTrace();
             String state = RandomString.make(16);
             URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
 
-            String accessToken = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, BasicAppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
+            String accessToken = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
             api.authenticate(accessToken);
             api.setAutoRefresh(true);
         }

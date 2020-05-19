@@ -9,10 +9,11 @@ package vavi.net.auth.oauth2.amazon;
 import java.io.IOException;
 import java.net.URL;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.Authenticator;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.Authenticator;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.net.auth.web.amazon.AmazonJavaFxAuthUI;
 import vavi.net.http.HttpServer;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -26,10 +27,10 @@ import vavi.util.properties.annotation.PropsEntity;
 public class ACDLocalAuthenticator implements Authenticator<UserCredential, String> {
 
     /** */
-    private final BasicAppCredential appCredential;
+    private final OAuth2AppCredential appCredential;
 
     /** */
-    public ACDLocalAuthenticator(BasicAppCredential appCredential) throws IOException {
+    public ACDLocalAuthenticator(OAuth2AppCredential appCredential) throws IOException {
         this.appCredential = appCredential;
     }
 

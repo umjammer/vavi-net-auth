@@ -18,8 +18,8 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 
+import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2;
-import vavi.net.auth.oauth2.WithTotpUserCredential;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;

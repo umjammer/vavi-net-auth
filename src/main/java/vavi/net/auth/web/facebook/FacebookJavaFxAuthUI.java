@@ -1,12 +1,15 @@
 /*
- * Copyright (c) 2018 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2016 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.microsoft;
+package vavi.net.auth.web.facebook;
 
 import java.awt.Dimension;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
@@ -17,7 +20,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 
-import vavi.net.auth.oauth2.AuthUI;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -31,42 +36,71 @@ import javafx.scene.web.WebView;
 
 
 /**
- * JavaFxAuthUI.
+ * FacebookAuthenticator.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2018/11/23 umjammer initial version <br>
+ * @version 0.00 2016/08/07 umjammer initial version <br>
  */
-public class MicrosoftJavaFxAuthUI implements AuthUI<String> {
+public class FacebookJavaFxAuthUI implements AuthUI<String> {
 
     private String email;
     private String password;
-    private String url;
-    private String redirectUrl;
+    /** */
+    private final String url;
+    /** */
+    private final String clientId;
+    /** */
+    private final String redirectUrl;
+    /** */
+    private transient String code;
 
     /** */
-    MicrosoftJavaFxAuthUI(String email, String password, String url, String redirectUrl) {
-        this.email = email;
-        this.password = password;
-        this.url = url;
-        this.redirectUrl = redirectUrl;
+    public FacebookJavaFxAuthUI(OAuth2AppCredential appCredential, UserCredential userCredential) throws IOException {
+        this.email = userCredential.getId();
+        this.password = userCredential.getPassword();
+        this.url = appCredential.getOAuthAuthorizationUrl();
+        this.clientId = appCredential.getClientId();
+        this.redirectUrl = appCredential.getRedirectUrl();
     }
 
     /** */
     private CountDownLatch latch = new CountDownLatch(1);
-
-    /** */
-    private transient String code;
     /** */
     private volatile Exception exception;
 
-    /* @see vavi.net.auth.oauth2.AuthUI#auth() */
+    /* @see Authenticator#get(java.lang.String) */
     @Override
     public void auth() {
+
+        exception = null;
+
+//        URL redirectUrl = new URL(this.redirectUrl);
+//        String host = redirectUrl.getHost();
+//        int port = redirectUrl.getPort();
+//        HttpServer httpServer = new HttpServer(host, port);
+//        httpServer.start();
+
         SwingUtilities.invokeLater(() -> { openUI(url); });
 
         try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
 
         closeUI();
+
+//        httpServer.stop();
+
+        if (exception != null) {
+            throw new IllegalStateException(exception);
+        }
+    }
+
+    @Override
+    public String getResult() {
+        return null;
+    }
+
+    @Override
+    public Exception getException() {
+        return exception;
     }
 
     private JFrame frame;
@@ -142,26 +176,18 @@ System.err.println("submit");
                             latch.countDown();
                         }
                     } else if (location.indexOf(redirectUrl) > -1) {
-                        code = location.substring(location.indexOf("code=") + "code=".length());
+                        code = location.substring(location.indexOf("code=") + 5);
 System.err.println("code: " + code);
                         latch.countDown();
                     }
                 }
             }
         });
-        webEngine.load(url);
-    }
-
-    /* @see vavi.net.auth.oauth2.AuthUI#getResult() */
-    @Override
-    public String getResult() {
-        return code;
-    }
-
-    /* @see vavi.net.auth.oauth2.AuthUI#getException() */
-    @Override
-    public Exception getException() {
-        return exception;
+        try {
+            webEngine.load(String.format(url, clientId, URLEncoder.encode(redirectUrl, "UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+            assert false;
+        }
     }
 }
 

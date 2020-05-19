@@ -8,10 +8,11 @@ package vavi.net.auth.oauth2.facebook;
 
 import java.io.IOException;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.Authenticator;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.Authenticator;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.net.auth.web.facebook.FacebookJavaFxAuthUI;
 
 
 /**
@@ -23,10 +24,10 @@ import vavi.net.auth.oauth2.UserCredential;
 public class FacebookLocalAuthenticator implements Authenticator<UserCredential, String> {
 
     /** */
-    private final BasicAppCredential appCredential;
+    private final OAuth2AppCredential appCredential;
 
     /** */
-    public FacebookLocalAuthenticator(BasicAppCredential appCredential) throws IOException {
+    public FacebookLocalAuthenticator(OAuth2AppCredential appCredential) throws IOException {
         this.appCredential = appCredential;
     }
 

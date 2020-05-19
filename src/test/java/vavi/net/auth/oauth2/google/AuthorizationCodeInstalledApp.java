@@ -14,9 +14,9 @@ import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiv
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.google.GoogleLocalUserCredential;
-import vavi.net.auth.oauth2.google.GoogleJavaFxAuthUI;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.web.google.GoogleJavaFxAuthUI;
+import vavi.net.auth.web.google.GoogleLocalUserCredential;
 import vavi.util.properties.annotation.PropsEntity;
 
 

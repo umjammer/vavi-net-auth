@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.dropbox;
+package vavi.net.auth.web.dropbox;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -12,9 +12,9 @@ import java.util.logging.Level;
 
 import org.openqa.selenium.WebElement;
 
-import vavi.net.auth.oauth2.AuthUI;
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AuthUI;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.util.Debug;
 
 import vavix.util.selenium.SeleniumUtil;
@@ -35,7 +35,7 @@ public class DropBoxSeleniumAuthUI implements AuthUI<String> {
     private String redirectUrl;
 
     /** */
-    public DropBoxSeleniumAuthUI(UserCredential userCredential, BasicAppCredential appCredential) {
+    public DropBoxSeleniumAuthUI(UserCredential userCredential, OAuth2AppCredential appCredential) {
         this.email = userCredential.getId();
         this.password = userCredential.getPassword();
         this.url = appCredential.getOAuthAuthorizationUrl();

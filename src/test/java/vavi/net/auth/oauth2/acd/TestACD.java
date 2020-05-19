@@ -8,14 +8,14 @@ package vavi.net.auth.oauth2.acd;
 
 import java.io.IOException;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.amazon.ACDLocalAppCredential;
 import vavi.net.auth.oauth2.amazon.ACDLocalAuthenticator;
-import vavi.net.auth.oauth2.amazon.AmazonLocalUserCredential;
+import vavi.net.auth.web.amazon.AmazonLocalUserCredential;
 import vavi.util.properties.annotation.PropsEntity;
 
-import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**
@@ -38,7 +38,7 @@ public class TestACD {
     }
 
     void process() throws IOException {
-        BasicAppCredential appCredential = new ACDLocalAppCredential();
+        OAuth2AppCredential appCredential = new ACDLocalAppCredential();
         PropsEntity.Util.bind(appCredential);
         UserCredential credential = new AmazonLocalUserCredential(email);
         String code = new ACDLocalAuthenticator(wrap(appCredential, appCredential.getOAuthAuthorizationUrl(), "http://localhost:3300")).authorize(credential);

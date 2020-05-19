@@ -6,7 +6,7 @@
 
 package vavi.net.auth.oauth2.facebook;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -22,7 +22,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2019/06/19 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavi_apps_fb.properties")
-public class FacebookLocalAppCredential implements BasicAppCredential {
+public class FacebookLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "{0}.clientId")
     private String clientId;

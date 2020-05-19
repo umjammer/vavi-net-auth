@@ -4,15 +4,15 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.dropbox;
+package vavi.net.auth.web.amazon;
 
-import vavi.net.auth.oauth2.BaseLocalUserCredential;
+import vavi.net.auth.BaseLocalUserCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * DropBoxUserCredencial.
+ * AmazonLocalUserCredencial.
  *
  * properties file "~/vavifuse/credentials.properties"
  *
@@ -20,16 +20,16 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class DropBoxLocalUserCredential extends BaseLocalUserCredential {
+public class AmazonLocalUserCredential extends BaseLocalUserCredential {
 
     /** */
-    @Property(name = "dropbox.password.{0}")
+    @Property(name = "amazon.password.{0}")
     private transient String password;
 
     /**
      * @param email
      */
-    public DropBoxLocalUserCredential(String email) {
+    public AmazonLocalUserCredential(String email) {
         super(email);
 //System.err.println("password for " + id + ": " + password);
     }

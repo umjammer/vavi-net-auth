@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2.amazon;
+package vavi.net.auth.web.amazon;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -14,7 +14,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import vavi.net.auth.oauth2.AuthUI;
+import vavi.net.auth.AuthUI;
 import vavi.util.Debug;
 
 import vavix.util.selenium.SeleniumUtil;
@@ -94,9 +94,16 @@ Debug.println("no password");
                         } else {
                             continue;
                         }
-                        su.click(su.findElement(By.id("continue")));
+                        if ("email".equals(tasks.peekLast()) && (element = su.findElement(By.id("continue"))) != null) {
+                            su.click(element);
 Debug.println("set " + tasks.peekLast());
-                        su.sleep(300);
+                            su.sleep(300);
+                        }
+                        if ("password".equals(tasks.peekLast()) && (element = su.findElement(By.id("signInSubmit"))) != null) {
+                            su.click(element);
+Debug.println("set " + tasks.peekLast());
+                            su.sleep(300);
+                        }
                     } catch (org.openqa.selenium.NoSuchElementException e) {
                         su.click(su.findElement(By.id("signInSubmit")));
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {

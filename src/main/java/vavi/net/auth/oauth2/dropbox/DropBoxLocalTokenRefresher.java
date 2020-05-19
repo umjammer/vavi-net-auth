@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import com.dropbox.core.DbxAuthInfo;
 import com.dropbox.core.json.JsonReader.FileLoadException;
 
-import vavi.net.auth.oauth2.AppCredential;
+import vavi.net.auth.AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
 import vavi.util.Debug;
 

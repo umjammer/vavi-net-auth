@@ -18,15 +18,16 @@ import com.box.sdk.BoxAPIConnection;
 import com.box.sdk.BoxFolder;
 import com.box.sdk.BoxItem;
 
-import vavi.net.auth.oauth2.BasicAppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.UserCredential;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.net.auth.web.box.BoxLocalUserCredential;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
 import net.bytebuddy.utility.RandomString; // TODO this is a sibling of selenium
 
-import static vavi.net.auth.oauth2.BasicAppCredential.wrap;
+import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**
@@ -60,7 +61,7 @@ public class Main2 {
         Main2 app = new Main2();
         PropsEntity.Util.bind(app);
 
-        BasicAppCredential appCredential = new BoxLocalAppCredential();
+        OAuth2AppCredential appCredential = new BoxLocalAppCredential();
         PropsEntity.Util.bind(appCredential);
 
         BoxAPIConnection api;

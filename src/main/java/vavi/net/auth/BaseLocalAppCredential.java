@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.net.auth.oauth2;
+package vavi.net.auth;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * BaseLocalAppCredential.
  * <p>
  * bind automatically by {@link PropsEntity}
- * </p?
+ * </p>
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/05/06 umjammer initial version <br>
  */
