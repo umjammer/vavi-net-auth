@@ -21,13 +21,12 @@ Java OAuth2 and auto login and totp
 
 ### jars
 
-https://jitpack.io/#umjammer/vavi-net_auth
+ * https://jitpack.io/#umjammer/vavi-net_auth
 
 ### selenium chrome driver
 
-Download the [chromedriver executable](https://chromedriver.chromium.org/downloads) and locate it into some directory.
-
-Don't forget to run jvm with the jvm argument `-Dwebdriver.chrome.driver=/usr/local/bin/chromedriver`.
+ * Download the [chromedriver executable](https://chromedriver.chromium.org/downloads) and locate it into some directory.
+   * Don't forget to run jvm with the jvm argument `-Dwebdriver.chrome.driver=/usr/local/bin/chromedriver`.
 
 ### each authenticator installation
 
