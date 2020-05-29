@@ -5,7 +5,7 @@
   <parent>
     <artifactId>vavi-net-auth</artifactId>
     <groupId>vavi</groupId>
-    <version>${myversion}</version>
+    <version>${vavi-net-auth.version}</version>
   </parent>
 
   <artifactId>vavi-net-auth-dropbox</artifactId>
