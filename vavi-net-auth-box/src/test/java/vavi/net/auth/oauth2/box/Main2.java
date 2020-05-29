@@ -37,9 +37,10 @@ import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
  * HOWTO
  *
  * * get developer token
- *  https://app.box.com/developers/services/edit/216798
+ *  https://app.box.com/developers/console/app/216798/configuration
  * * edit properties file
- *  $ vi ~/.vavifuse/box/developer
+ *  $ vi ~/.vavifuse/credentials.properties
+ *  box.developerToken=YOUR_DEVELOPER_TOKEN
  * </pre>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
