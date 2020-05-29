@@ -5,7 +5,7 @@
   <parent>
     <artifactId>vavi-net-auth</artifactId>
     <groupId>vavi</groupId>
-    <version>${vavi-net-auth.version}</version>
+    <version>0.1.1</version>
   </parent>
 
   <artifactId>vavi-net-auth-flickr</artifactId>

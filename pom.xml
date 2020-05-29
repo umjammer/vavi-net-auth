@@ -4,11 +4,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>${vavi-net-auth.version}</version>
-
-  <properties>
-    <vavi-net-auth.version>0.1.1</vavi-net-auth.version>
-  </properties>
+  <version>0.1.1</version>
 
   <modules>
     <module>vavi-net-auth-common</module>
@@ -108,7 +104,7 @@
       <dependency>
         <groupId>vavi</groupId>
         <artifactId>vavi-net-auth-common</artifactId>
-        <version>${vavi-net-auth.version}</version>
+        <version>0.1.1</version>
       </dependency>
 
       <dependency>
@@ -133,7 +129,7 @@
       <dependency>
         <groupId>vavi</groupId>
         <artifactId>vavi-net-auth-common</artifactId>
-        <version>${vavi-net-auth.version}</version>
+        <version>0.1.1</version>
         <type>test-jar</type>
         <scope>test</scope>
       </dependency>
