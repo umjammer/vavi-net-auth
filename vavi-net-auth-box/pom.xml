@@ -5,7 +5,7 @@
   <parent>
     <artifactId>vavi-net-auth</artifactId>
     <groupId>vavi</groupId>
-    <version>0.1.0</version>
+    <version>${myversion}</version>
   </parent>
 
   <artifactId>vavi-net-auth-box</artifactId>
@@ -21,7 +21,6 @@
     <dependency>
       <groupId>vavi</groupId>
       <artifactId>vavi-net-auth-common</artifactId>
-      <version>0.1.0</version>
     </dependency>
 
     <dependency>
@@ -34,26 +33,22 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-commons</artifactId>
-      <version>1.5.2</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>vavi</groupId>
       <artifactId>vavi-net-auth-common</artifactId>
-      <version>0.1.0</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>

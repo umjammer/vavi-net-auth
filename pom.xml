@@ -4,7 +4,11 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>0.1.0</version>
+  <version>${myversion}</version>
+
+  <properties>
+    <myversion>0.1.1</myversion>
+  </properties>
 
   <modules>
     <module>vavi-net-auth-common</module>
@@ -26,7 +30,15 @@
   <issueManagement>
     <url>https://github.com/umjammer/vavi-net-auth/issues</url>
   </issueManagement>
-  <description>0.0.10
+  <description>0.1.1
+
+    clean up settings
+
+0.1.0
+
+    separate into sub modules
+
+0.0.10
 
     refactor packaging
 
@@ -90,4 +102,41 @@
       <url>https://jitpack.io</url>
     </repository>
   </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>vavi</groupId>
+        <artifactId>vavi-net-auth-common</artifactId>
+        <version>${myversion}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.3.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.3.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.platform</groupId>
+        <artifactId>junit-platform-commons</artifactId>
+        <version>1.5.2</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>vavi</groupId>
+        <artifactId>vavi-net-auth-common</artifactId>
+        <version>${myversion}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
