@@ -6,6 +6,7 @@
 
 package vavix.util.selenium;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,7 +38,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/03/03 umjammer initial version <br>
  */
-public class SeleniumUtil {
+public class SeleniumUtil implements Closeable {
 
     /** */
     private WebDriver driver;
@@ -73,7 +74,7 @@ Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.
         chromeOptions.addArguments("--headless");
         WebDriver driver = new ChromeDriver(chromeOptions);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> driver.quit()));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> close()));
 
         this.driver = driver;
     }
@@ -202,8 +203,11 @@ Debug.println("not found: " + by);
     }
 
     /** */
-    public void quit() {
-        driver.quit();
+    public void close() {
+        if (driver != null) {
+            driver.quit();
+            driver = null;
+        }
     }
 
     /** */

@@ -130,7 +130,7 @@ e.printStackTrace();
 
     @Override
     protected void finalize() {
-        su.quit();
+        su.close();
     }
 }
 
