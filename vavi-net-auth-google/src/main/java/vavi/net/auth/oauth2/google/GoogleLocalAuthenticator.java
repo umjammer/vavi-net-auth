@@ -47,7 +47,7 @@ public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCrede
                 new GoogleAuthorizationCodeFlow.Builder(GoogleOAuth2.HTTP_TRANSPORT,
                                                         GoogleOAuth2.JSON_FACTORY,
                                                         appCredential.getRawData(),
-                                                        Arrays.asList(appCredential.getScope()))
+                                                        Arrays.asList(appCredential.getScope().split(",")))
                 .setDataStoreFactory(appCredential.getDataStoreFactory())
                 .setAccessType(appCredential.getAccessType())
                 .build();
