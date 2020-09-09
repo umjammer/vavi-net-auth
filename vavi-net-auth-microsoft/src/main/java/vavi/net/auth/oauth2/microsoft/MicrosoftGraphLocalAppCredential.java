@@ -17,9 +17,11 @@ import vavi.util.properties.annotation.PropsEntity;
  *
  * properties file "~/.vavifuse/onedrive.properties"
  * <ul>
+ * <li> microsoft.graph.applicationName
  * <li> microsoft.graph.clientId
  * <li> microsoft.graph.clientSecret
  * <li> microsoft.graph.redirectUrl
+ * <li> microsoft.graph.scopes
  * </ul>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
@@ -29,16 +31,20 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "file://${user.home}/.vavifuse/onedrive.properties")
 public class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
+    @Property(name = "microsoft.graph.applicationName")
+    private String applicationName;
     @Property(name = "microsoft.graph.clientId")
     private String clientId;
     @Property(name = "microsoft.graph.clientSecret")
     private transient String clientSecret;
     @Property(name = "microsoft.graph.redirectUrl")
     private String redirectUrl;
+    @Property(name = "microsoft.graph.scopes")
+    private String scope;
 
     @Override
     public String getApplicationName() {
-        return "vavi-apps-fuse";
+        return applicationName;
     }
 
     @Override
@@ -73,7 +79,7 @@ public class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredential imp
 
     @Override
     public String getScope() {
-        return "Files.ReadWrite.All Sites.ReadWrite.All User.Read offline_access";
+        return scope;
     }
 }
 

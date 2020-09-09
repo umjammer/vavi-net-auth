@@ -103,6 +103,7 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
             OAuth2AccessToken refreshToken = readRefreshToken();
             if (!refreshToken.hasRefreshToken()) {
 Debug.println("no refreshToken: timeout? or firsttime");
+Debug.println("scope: " + appCredential.getScope());
                 OAuth2InteractiveGrant grant = new AuthorizationCodeGrant(oauth, new StringScope(appCredential.getScope()));
 
                 // Get the authorization URL and open it in a WebView
