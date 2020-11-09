@@ -32,7 +32,7 @@ import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
  */
 public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCredential, Credential> {
 
-    /** */
+    /** google library */
     private AuthorizationCodeInstalledApp app;
 
     /** */
@@ -44,8 +44,8 @@ public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCrede
     public GoogleLocalAuthenticator(GoogleAppCredential appCredential) throws IOException {
 
         GoogleAuthorizationCodeFlow flow =
-                new GoogleAuthorizationCodeFlow.Builder(GoogleOAuth2.HTTP_TRANSPORT,
-                                                        GoogleOAuth2.JSON_FACTORY,
+                new GoogleAuthorizationCodeFlow.Builder(appCredential.getHttpTransport(),
+                                                        appCredential.getJsonFactory(),
                                                         appCredential.getRawData(),
                                                         Arrays.asList(appCredential.getScope().split(",")))
                 .setDataStoreFactory(appCredential.getDataStoreFactory())
@@ -53,11 +53,6 @@ public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCrede
                 .build();
         // Build flow.
         this.app = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()) {
-            /* */
-            public Credential authorize(String userId) throws IOException {
-                return super.authorize(userId);
-            }
-
             /* */
             protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
                 String url = authorizationUrl.build();

@@ -9,6 +9,8 @@ package vavi.net.auth.oauth2.google;
 import java.io.IOException;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
 
 import vavi.net.auth.oauth2.OAuth2AppCredential;
@@ -27,7 +29,7 @@ public interface GoogleAppCredential extends OAuth2AppCredential {
     /** */
     String getApplicationName();
 
-    /** */
+    /** "online" for web applications and "offline" for installed applications */
     String getAccessType();
 
     /** */
@@ -35,6 +37,12 @@ public interface GoogleAppCredential extends OAuth2AppCredential {
 
     /** */
     DataStoreFactory getDataStoreFactory() throws IOException;
+
+    /** TODO location */
+    JsonFactory getJsonFactory();
+
+    /** TODO location  */
+    HttpTransport getHttpTransport();
 }
 
 /* */

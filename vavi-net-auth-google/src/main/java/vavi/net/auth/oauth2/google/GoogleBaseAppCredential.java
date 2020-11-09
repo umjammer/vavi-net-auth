@@ -9,6 +9,10 @@ package vavi.net.auth.oauth2.google;
 import java.util.function.Predicate;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
 
 /**
@@ -59,6 +63,30 @@ public abstract class GoogleBaseAppCredential implements GoogleAppCredential {
     @Override
     public GoogleClientSecrets getRawData() {
         return clientSecrets;
+    }
+
+    /** Global instance of the JSON factory. */
+    protected static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+
+    /** Global instance of the HTTP transport. */
+    private static HttpTransport HTTP_TRANSPORT;
+
+    static {
+        try {
+            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public JsonFactory getJsonFactory() {
+        return JSON_FACTORY;
+    }
+
+    @Override
+    public HttpTransport getHttpTransport() {
+        return HTTP_TRANSPORT;
     }
 }
 
