@@ -26,6 +26,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/03/04 umjammer initial version <br>
  */
+@Deprecated
 public class AuthorizationCodeInstalledApp
         extends com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp {
 
