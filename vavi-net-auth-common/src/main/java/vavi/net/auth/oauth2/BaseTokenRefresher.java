@@ -81,8 +81,8 @@ Debug.println("starting refresh thread");
         }
     }
 
-    /* @see vavi.net.auth.oauth2.TokenRefresher#terminate() */
-    public void terminate() {
+    /* */
+    public void close() {
         if (this.refreshThread != null) {
             keepRefreshing = false;
             refreshThread.shutdownNow();

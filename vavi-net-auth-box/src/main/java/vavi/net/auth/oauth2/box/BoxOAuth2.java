@@ -94,7 +94,7 @@ Debug.println("refresh: " + api.getExpires());
             } catch (BoxAPIException e) {
 Debug.println("restore failed, delete stored file");
 e.printStackTrace();
-                tokenRefresher.dispose();
+                tokenRefresher.close();
             }
         }
 
