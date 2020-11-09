@@ -77,7 +77,6 @@ public class MicrosoftLocalAppCredential extends BaseLocalAppCredential implemen
         return null;
     }
 
-    // TODO currently unused
     @Override
     public String getScope() {
         return scope;
