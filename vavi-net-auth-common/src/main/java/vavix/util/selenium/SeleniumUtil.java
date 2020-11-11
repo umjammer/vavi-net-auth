@@ -17,8 +17,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -28,12 +26,7 @@ import vavi.util.Debug;
 /**
  * SeleniumUtil.
  *
- * system properties
- * <ul>
- * <li> "webdriver.chrome.driver" default: $PWD + "/bin/chromedriver"</li>
- * <li> "webdriver.chrome.verboseLogging" defalut: false</li>
- * <li> "com.google.chrome.app" default: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"</li>
- * </ul>
+ * TODO https://sqa.stackexchange.com/a/22199
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/03/03 umjammer initial version <br>
@@ -48,52 +41,23 @@ public class SeleniumUtil implements Closeable {
         return driver;
     }
 
-    /** */
-    private void setEnv() {
-        if (System.getProperty("webdriver.chrome.driver") == null) {
-            String pwd = System.getProperty("user.dir");
-            System.setProperty("webdriver.chrome.driver", pwd + "/bin/chromedriver");
-        }
-Debug.println("webdriver.chrome.driver: " + System.getProperty("webdriver.chrome.driver"));
-        if (System.getProperty("webdriver.chrome.verboseLogging") == null) {
-            System.setProperty("webdriver.chrome.verboseLogging", "false");
-        }
-Debug.println("webdriver.chrome.verboseLogging: " + System.getProperty("webdriver.chrome.verboseLogging"));
-
-    }
-
     /** headless */
     public SeleniumUtil() {
-        setEnv();
-
-        ChromeOptions chromeOptions = new ChromeOptions();
-        String app = System.getProperty("com.google.chrome.app", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
-Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.app"));
-        chromeOptions.setBinary(app);
-
-        chromeOptions.addArguments("--headless");
-        WebDriver driver = new ChromeDriver(chromeOptions);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> close()));
 
-        this.driver = driver;
+        WebDriverFactory webDriverFactory = WebDriverFactory.newInstace();
+        this.driver = webDriverFactory.getDriver(true);
     }
 
     /** windowed */
     public SeleniumUtil(int width, int height) {
-        setEnv();
-
-        ChromeOptions chromeOptions = new ChromeOptions();
-        String app = System.getProperty("com.google.chrome.app", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
-Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.app"));
-        chromeOptions.setBinary(app);
-
-        WebDriver driver = new ChromeDriver(chromeOptions);
-        driver.manage().window().setSize(new Dimension(width, height));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> driver.quit()));
 
-        this.driver = driver;
+        WebDriverFactory webDriverFactory = WebDriverFactory.newInstace();
+        this.driver = webDriverFactory.getDriver(false);
+        driver.manage().window().setSize(new Dimension(width, height));
     }
 
     /** */
