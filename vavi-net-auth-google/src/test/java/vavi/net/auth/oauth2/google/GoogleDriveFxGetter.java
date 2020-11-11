@@ -38,6 +38,7 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/03/01 umjammer initial version <br>
  */
+@Deprecated
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
 public class GoogleDriveFxGetter implements Getter {
 

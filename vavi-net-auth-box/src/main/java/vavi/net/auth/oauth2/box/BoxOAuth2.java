@@ -94,7 +94,7 @@ Debug.println("refresh: " + api.getExpires());
             } catch (BoxAPIException e) {
 Debug.println("restore failed, delete stored file");
 e.printStackTrace();
-                tokenRefresher.dispose();
+                tokenRefresher.close();
             }
         }
 
@@ -102,7 +102,8 @@ e.printStackTrace();
             api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret());
             api.setExpires(60 * 24 * 60 * 60 * 1000);
             String state = RandomString.make(16);
-            URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
+Debug.println("scope: " + appCredential.getScope());
+            URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Arrays.asList(appCredential.getScope().split(",")));
 
             String accessToken = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
             api.authenticate(accessToken);

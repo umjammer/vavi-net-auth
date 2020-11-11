@@ -17,9 +17,11 @@ import vavi.util.properties.annotation.PropsEntity;
  * <p>
  * properties file "~/.vavifuse/box.properties"
  * <ul>
+ * <li> box.applicationName
  * <li> box.clientId
  * <li> box.clientSecret
  * <li> box.redirectUrl
+ * <li> box.scopes (comma separated)
  * </ul>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
@@ -28,6 +30,9 @@ import vavi.util.properties.annotation.PropsEntity;
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/box.properties")
 public class BoxLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+
+    @Property(name = "box.applicationName")
+    private transient String applicationName;
 
     @Property(name = "box.clientId")
     private transient String clientId;
@@ -38,9 +43,13 @@ public class BoxLocalAppCredential extends BaseLocalAppCredential implements OAu
     @Property(name = "box.redirectUrl")
     private String redirectUrl;
 
+    /** should be comma separated */
+    @Property(name = "box.scopes")
+    private String scope;
+
     @Override
     public String getApplicationName() {
-        return "vavi-apps-fuse";
+        return applicationName;
     }
 
     @Override
@@ -75,7 +84,7 @@ public class BoxLocalAppCredential extends BaseLocalAppCredential implements OAu
 
     @Override
     public String getScope() {
-        return null;
+        return scope;
     }
 }
 

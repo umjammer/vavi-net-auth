@@ -7,6 +7,7 @@
 package vavi.net.auth.oauth2.dropbox;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -66,12 +67,12 @@ Debug.println("refreshToken: exists: " + Files.exists(file) + ", " + file);
     }
 
     @Override
-    public void terminate() {
-    }
-
-    @Override
-    public void dispose() throws IOException {
-        Files.delete(file);
+    public void close() {
+        try {
+            Files.delete(file);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }
 

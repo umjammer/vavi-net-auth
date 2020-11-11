@@ -6,7 +6,9 @@
 
 package vavi.net.auth.oauth2;
 
+import java.io.Closeable;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 
 import org.dmfs.httpessentials.client.HttpRequestExecutor;
@@ -45,7 +47,7 @@ import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/04 umjammer initial version <br>
  */
-public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C, String> {
+public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C, String>, Closeable {
 
     /** http client for oauth */
     private static HttpRequestExecutor oauthExecutor = new HttpUrlConnectionExecutor();
@@ -103,6 +105,7 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
             OAuth2AccessToken refreshToken = readRefreshToken();
             if (!refreshToken.hasRefreshToken()) {
 Debug.println("no refreshToken: timeout? or firsttime");
+Debug.println("scope: " + appCredential.getScope());
                 OAuth2InteractiveGrant grant = new AuthorizationCodeGrant(oauth, new StringScope(appCredential.getScope()));
 
                 // Get the authorization URL and open it in a WebView
@@ -118,6 +121,7 @@ Debug.println("scope: " + token.scope());
 
             } else {
 Debug.println("use old refreshToken");
+                // TODO catch not grant error and loop again
                 token = new TokenRefreshGrant(oauth, refreshToken).accessToken(oauthExecutor);
             }
 
@@ -178,8 +182,12 @@ Debug.println("refresh");
     }
 
     /** */
-    protected void finalize() {
-        refresher.terminate();
+    public void close() {
+        try {
+            refresher.close();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }
 

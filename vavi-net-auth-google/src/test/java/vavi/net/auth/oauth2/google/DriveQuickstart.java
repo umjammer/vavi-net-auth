@@ -22,6 +22,9 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
 
+/**
+ * Google's sample.
+ */
 public class DriveQuickstart {
 
     /** Application name. */

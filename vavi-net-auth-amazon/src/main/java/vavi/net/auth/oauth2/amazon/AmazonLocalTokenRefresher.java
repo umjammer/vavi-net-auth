@@ -7,6 +7,7 @@
 package vavi.net.auth.oauth2.amazon;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -62,12 +63,12 @@ Debug.println(Level.FINE, "restore: " + state);
     }
 
     @Override
-    public void terminate() {
-    }
-
-    @Override
-    public void dispose() throws IOException {
-        Files.delete(file);
+    public void close() {
+        try {
+            Files.delete(file);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }
 
