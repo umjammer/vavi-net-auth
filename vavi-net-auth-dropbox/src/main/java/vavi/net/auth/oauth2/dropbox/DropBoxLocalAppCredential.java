@@ -28,16 +28,18 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://www.dropbox.com/developers/apps?_tk=pilot_lp&_ad=topbar4&_camp=myapps"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/dropbox.properties")
-public class DropBoxLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+public final class DropBoxLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "dropbox.applicationName")
     private String applicationName;
     @Property(name = "dropbox.clientId")
-    private String clientId;
+    private transient String clientId;
     @Property(name = "dropbox.clientSecret")
     private transient String clientSecret;
     @Property(name = "dropbox.redirectUrl")
     private String redirectUrl;
+    @Property(name = "dropbox.scopes")
+    private String scope;
 
     @Override
     public String getApplicationName() {
@@ -76,7 +78,7 @@ public class DropBoxLocalAppCredential extends BaseLocalAppCredential implements
 
     @Override
     public String getScope() {
-        return null;
+        return scope;
     }
 }
 

@@ -22,12 +22,16 @@
       <groupId>vavi</groupId>
       <artifactId>vavi-net-auth-common</artifactId>
     </dependency>
+    <dependency>
+      <groupId>${vavi-commons-net.groupId}</groupId>
+      <artifactId>vavi-commons-net</artifactId>
+    </dependency>
 
     <dependency>
       <!-- dropbox -->
       <groupId>com.dropbox.core</groupId>
       <artifactId>dropbox-core-sdk</artifactId>
-      <version>3.1.4</version>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
