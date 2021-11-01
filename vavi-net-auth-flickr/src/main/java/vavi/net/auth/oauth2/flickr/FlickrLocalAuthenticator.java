@@ -7,14 +7,12 @@
 package vavi.net.auth.oauth2.flickr;
 
 import java.io.IOException;
-import java.net.URL;
 
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.web.flickr.FlickrJavaFxAuthUI;
-import vavi.net.http.HttpServer;
 
 
 /**
@@ -37,17 +35,8 @@ public class FlickrLocalAuthenticator implements Authenticator<UserCredential, S
     @Override
     public String authorize(UserCredential userCredential) throws IOException {
 
-        URL redirectUrl = new URL(this.appCredential.getRedirectUrl());
-        String host = redirectUrl.getHost();
-        int port = redirectUrl.getPort();
-
-        HttpServer httpServer = new HttpServer(host, port);
-        httpServer.start();
-
         AuthUI<String> ui = new FlickrJavaFxAuthUI(this.appCredential, userCredential);
         ui.auth();
-
-        httpServer.stop();
 
         if (ui.getException() != null) {
             throw new IllegalStateException(ui.getException());
