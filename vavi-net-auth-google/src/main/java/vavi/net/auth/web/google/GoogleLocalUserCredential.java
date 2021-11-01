@@ -21,7 +21,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class GoogleLocalUserCredential extends BaseLocalUserCredential implements WithTotpUserCredential {
+public final class GoogleLocalUserCredential extends BaseLocalUserCredential implements WithTotpUserCredential {
 
     /** */
     @Property(name = "google.password.{0}")

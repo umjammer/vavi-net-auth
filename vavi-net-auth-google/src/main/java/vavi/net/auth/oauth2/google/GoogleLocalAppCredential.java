@@ -26,6 +26,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * GoogleLocalAppCredential.
  * <p>
  * <li> app credential properties file "~/.vavifuse/googledrive.json" </li>
+ * <li> this case 'id' is 'googledrive'
  * <p>
  * properties file "~/.vavifuse/google.properties"
  * <ul>

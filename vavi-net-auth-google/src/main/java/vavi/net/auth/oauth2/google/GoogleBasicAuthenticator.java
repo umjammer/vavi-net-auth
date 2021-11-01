@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2021 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
@@ -9,45 +9,34 @@ package vavi.net.auth.oauth2.google;
 import java.io.IOException;
 import java.util.Arrays;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 
-import vavi.net.auth.AuthUI;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.WithTotpUserCredential;
-import vavi.net.auth.web.google.GoogleSeleniumAuthUI;
 import vavi.util.Debug;
-
-import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**
- * GoogleLocalAuthenticator.
+ * GoogleBasicAuthenticator.
  *
- * use input assist.
- *
- * TODO not works 2021/10/29
- * TODO google login detects selenium???
+ * use ordinary browser, no input assist.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2016/03/04 umjammer initial version <br>
+ * @version 0.00 2021/10/29 umjammer initial version <br>
  */
-public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCredential, Credential> {
+public class GoogleBasicAuthenticator implements Authenticator<WithTotpUserCredential, Credential> {
 
     /** google library */
     private AuthorizationCodeInstalledApp app;
-
-    /** */
-    private transient WithTotpUserCredential userCredential;
 
     /**
      * @throws NullPointerException property file "~/.vavifuse/google.properties" is not set properly.
      * @see GoogleLocalAppCredential
      */
-    public GoogleLocalAuthenticator(GoogleAppCredential appCredential) throws IOException {
+    public GoogleBasicAuthenticator(GoogleAppCredential appCredential) throws IOException {
 
         GoogleAuthorizationCodeFlow flow =
                 new GoogleAuthorizationCodeFlow.Builder(appCredential.getHttpTransport(),
@@ -57,21 +46,13 @@ public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCrede
                 .setDataStoreFactory(appCredential.getDataStoreFactory())
                 .setAccessType(appCredential.getAccessType())
                 .build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         // Build flow.
-        this.app = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()) {
-            /* */
-            protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
-                String url = authorizationUrl.build();
-Debug.println("authorizationUrl: " + url);
-                AuthUI<?> ui = new GoogleSeleniumAuthUI(wrap(appCredential, url, authorizationUrl.getRedirectUri()), userCredential);
-                ui.auth();
-            }
-        };
+        this.app = new AuthorizationCodeInstalledApp(flow, receiver);
     }
 
     @Override
     public Credential authorize(WithTotpUserCredential userCredential) throws IOException {
-        this.userCredential = userCredential;
         // Trigger user authorization request.
         Credential credential = app.authorize(userCredential.getId());
 Debug.println("refreshToken: " + (credential.getRefreshToken() != null) + ", expiresInSeconds: " + credential.getExpiresInSeconds());

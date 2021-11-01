@@ -28,8 +28,8 @@ import vavi.util.properties.annotation.PropsEntity;
 public class GoogleOAuth2 implements OAuth2<WithTotpUserCredential, Credential> {
 
     /** should have a constructor with args (GoogleAppCledential) */
-    @Property(value = "vavi.net.auth.oauth2.google.GoogleLocalAuthenticator")
-    private String authenticatorClassName = "vavi.net.auth.oauth2.google.GoogleLocalAuthenticator";
+    @Property(value = "vavi.net.auth.oauth2.google.GoogleBasicAuthenticator")
+    private String authenticatorClassName = "vavi.net.auth.oauth2.google.GoogleBasicAuthenticator";
 
     /* */
     {

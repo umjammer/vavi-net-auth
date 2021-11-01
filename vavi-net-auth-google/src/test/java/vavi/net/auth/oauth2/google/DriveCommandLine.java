@@ -10,7 +10,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
@@ -32,7 +32,7 @@ public class DriveCommandLine {
         String email = args[0];
 
         HttpTransport httpTransport = new NetHttpTransport();
-        JsonFactory jsonFactory = new JacksonFactory();
+        JsonFactory jsonFactory = new GsonFactory();
 
         GoogleAppCredential appCredential = new GoogleLocalAppCredential("googledrive");
         WithTotpUserCredential userCredential = new GoogleLocalUserCredential(email);
