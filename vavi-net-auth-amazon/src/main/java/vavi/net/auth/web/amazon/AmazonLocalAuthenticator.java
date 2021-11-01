@@ -18,6 +18,8 @@ import vavi.net.auth.UserCredential;
 /**
  * AmazonLocalAuthenticator.
  *
+ * selenium, web login, input assist
+ *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/08/08 umjammer initial version <br>
  */
