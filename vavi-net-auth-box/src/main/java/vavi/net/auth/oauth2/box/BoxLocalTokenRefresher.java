@@ -19,6 +19,8 @@ import vavi.net.auth.AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
 import vavi.util.Debug;
 
+import static java.nio.file.StandardOpenOption.CREATE;
+
 
 /**
  * BoxLocalTokenRefresher.
@@ -41,7 +43,8 @@ Debug.println("file: " + file);
 
     /* @see vavi.net.auth.oauth2.TokenRefresher#writeRefreshToken(String) */
     public void writeRefreshToken(String save) throws IOException {
-        Files.write(file, save.getBytes(Charset.forName("utf-8")));
+    	Files.createDirectories(file.getParent());
+        Files.write(file, save.getBytes(Charset.forName("utf-8")), CREATE);
 Debug.println(Level.FINE, "refreshToken: " + save);
     }
 
