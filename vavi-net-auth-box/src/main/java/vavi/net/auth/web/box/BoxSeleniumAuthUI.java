@@ -6,6 +6,8 @@
 
 package vavi.net.auth.web.box;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.logging.Level;
@@ -16,6 +18,7 @@ import org.openqa.selenium.WebElement;
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.net.http.HttpServer;
 import vavi.util.Debug;
 
 import vavix.util.selenium.SeleniumUtil;
@@ -54,9 +57,23 @@ public class BoxSeleniumAuthUI implements AuthUI<String> {
     /** */
     private volatile Exception exception;
 
+    /** almost dummy, just receive redirection to local */
+    private HttpServer httpServer;
+
     @Override
     public void auth() {
-        openUI(url);
+    	try {
+	        URL redirectUrl = new URL(this.redirectUrl);
+	        String host = redirectUrl.getHost();
+	        int port = redirectUrl.getPort();
+	
+	        httpServer = new HttpServer(host, port);
+	        httpServer.start();
+	
+	        openUI(url);
+		} catch (IOException e) {
+			dealException(e);
+		}
     }
 
     private SeleniumUtil su;
@@ -125,17 +142,27 @@ Debug.println(Level.FINE, "code: " + code);
                 }
             } catch (Exception e) {
 e.printStackTrace();
-                if (exception == null) {
-                    exception = new IllegalStateException(e);
-                } else {
-                    exception.addSuppressed(e);
-                }
+                dealException(e);
             }
+        }
+    }
+
+    /** */
+    private void dealException(Exception e) {
+        if (exception == null) {
+            exception = new IllegalStateException(e);
+        } else {
+            exception.addSuppressed(e);
         }
     }
 
     @Override
     public String getResult() {
+		try {
+			httpServer.stop();
+		} catch (IOException e) {
+			dealException(e);
+		}
         return code;
     }
 

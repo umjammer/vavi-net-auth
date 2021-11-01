@@ -18,8 +18,8 @@ import vavi.net.auth.oauth2.OAuth2AppCredential;
 /**
  * BoxDevOAuth2.
  * <p>
- * environment variable
- * <li> BOX_DEVELOPER_TOKEN
+ * auth by BOX_DEVELOPER_TOKEN using environment variable.
+ * <li> BOX_DEVELOPER_TOKEN ... see `see also` url
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/02/29 umjammer initial version <br>
