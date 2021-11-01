@@ -29,12 +29,12 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/onedrive.properties")
-public class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+public final class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "microsoft.graph.applicationName")
     private String applicationName;
     @Property(name = "microsoft.graph.clientId")
-    private String clientId;
+    private transient String clientId;
     @Property(name = "microsoft.graph.clientSecret")
     private transient String clientSecret;
     @Property(name = "microsoft.graph.redirectUrl")

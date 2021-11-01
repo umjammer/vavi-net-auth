@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2021 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
@@ -13,23 +13,23 @@ import vavi.net.auth.AuthUI;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
-import vavi.net.auth.web.microsoft.MicrosoftSeleniumAuthUI;
+import vavi.net.auth.web.microsoft.MicrosoftBrowserAuthUI;
 import vavi.util.Debug;
 
 
 /**
- * MicrosoftLocalAuthenticator.
+ * MicrosoftBasicAuthenticator.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
- * @version 0.00 2016/02/16 umjammer initial version <br>
+ * @version 0.00 2021/10/29 umjammer initial version <br>
  */
-public class MicrosoftLocalAuthenticator implements Authenticator<WithTotpUserCredential, String> {
+public class MicrosoftBasicAuthenticator implements Authenticator<WithTotpUserCredential, String> {
 
     /** */
     private final OAuth2AppCredential appCredential;
 
     /** */
-    public MicrosoftLocalAuthenticator(OAuth2AppCredential appCredential) {
+    public MicrosoftBasicAuthenticator(OAuth2AppCredential appCredential) {
         this.appCredential = appCredential;
     }
 
@@ -39,7 +39,7 @@ public class MicrosoftLocalAuthenticator implements Authenticator<WithTotpUserCr
     @Override
     public String authorize(WithTotpUserCredential userCredential) throws IOException {
 
-        AuthUI<String> ui = new MicrosoftSeleniumAuthUI(this.appCredential, userCredential);
+        AuthUI<String> ui = new MicrosoftBrowserAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         if (ui.getException() != null) {

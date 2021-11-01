@@ -29,12 +29,12 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://apps.dev.microsoft.com/?mkt=ja-jp&referrer=https%3a%2f%2faccount.live.com#/appList"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/onedrive.properties")
-public class MicrosoftLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+public final class MicrosoftLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "onedrive.applicationName")
     private String applicationName;
     @Property(name = "onedrive.clientId")
-    private String clientId;
+    private transient String clientId;
     @Property(name = "onedrive.clientSecret")
     private transient String clientSecret;
     @Property(name = "onedrive.redirectUrl")
