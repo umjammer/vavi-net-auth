@@ -62,18 +62,18 @@ public class BoxSeleniumAuthUI implements AuthUI<String> {
 
     @Override
     public void auth() {
-    	try {
-	        URL redirectUrl = new URL(this.redirectUrl);
-	        String host = redirectUrl.getHost();
-	        int port = redirectUrl.getPort();
-	
-	        httpServer = new HttpServer(host, port);
-	        httpServer.start();
-	
-	        openUI(url);
-		} catch (IOException e) {
-			dealException(e);
-		}
+        try {
+            URL redirectUrl = new URL(this.redirectUrl);
+            String host = redirectUrl.getHost();
+            int port = redirectUrl.getPort();
+
+            httpServer = new HttpServer(host, port);
+            httpServer.start();
+
+            openUI(url);
+        } catch (IOException e) {
+            dealException(e);
+        }
     }
 
     private SeleniumUtil su;
@@ -158,11 +158,11 @@ e.printStackTrace();
 
     @Override
     public String getResult() {
-		try {
-			httpServer.stop();
-		} catch (IOException e) {
-			dealException(e);
-		}
+        try {
+            httpServer.stop();
+        } catch (IOException e) {
+            dealException(e);
+        }
         return code;
     }
 

@@ -34,9 +34,9 @@ public class MicrosoftOAuth2 implements OAuth2<WithTotpUserCredential, String> {
 
     public static final String BASIC_LOCAL_TOKEN_REFRESHER = "vavi.net.auth.oauth2.BasicLocalTokenRefresher";
 
-	public static final String MICROSOFT_LOCAL_AUTHENTICATOR = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator";
+    public static final String MICROSOFT_LOCAL_AUTHENTICATOR = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator";
 
-	/** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
+    /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value = MICROSOFT_LOCAL_AUTHENTICATOR)
     private String authenticatorClassName = MICROSOFT_LOCAL_AUTHENTICATOR;
 

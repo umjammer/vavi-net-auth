@@ -60,18 +60,18 @@ Debug.println("totpSecret: " + totpSecret);
 
     @Override
     public void auth() {
-    	try {
-	        URL redirectUrl = new URL(this.redirectUrl);
-	        String host = redirectUrl.getHost();
-	        int port = redirectUrl.getPort();
-	
-	        HttpServer httpServer = new HttpServer(host, port);
-	        httpServer.start();
-	
-	        openUI(url);
-		} catch (IOException e) {
-			dealException(e);
-		}
+        try {
+            URL redirectUrl = new URL(this.redirectUrl);
+            String host = redirectUrl.getHost();
+            int port = redirectUrl.getPort();
+
+            HttpServer httpServer = new HttpServer(host, port);
+            httpServer.start();
+
+            openUI(url);
+        } catch (IOException e) {
+            dealException(e);
+        }
     }
 
     private SeleniumUtil su;
@@ -156,7 +156,7 @@ Debug.println(Level.FINE, "code: " + code);
                 }
             } catch (Exception e) {
 e.printStackTrace();
-				dealException(e);
+                dealException(e);
             }
         }
     }
@@ -172,11 +172,11 @@ e.printStackTrace();
 
     @Override
     public String getResult() {
-    	try {
-			httpServer.stop();
-		} catch (IOException e) {
-			dealException(e);
-		}
+        try {
+            httpServer.stop();
+        } catch (IOException e) {
+            dealException(e);
+        }
         return code;
     }
 

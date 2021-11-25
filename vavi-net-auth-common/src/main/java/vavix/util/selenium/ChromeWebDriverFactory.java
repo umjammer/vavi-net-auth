@@ -29,15 +29,15 @@ import vavi.util.Debug;
  */
 public class ChromeWebDriverFactory implements WebDriverFactory {
 
-	public static final String COM_GOOGLE_CHROME_APP = "com.google.chrome.app";
-	public static final String DEFAULT_COM_GOOGLE_CHROME_APP = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+    public static final String COM_GOOGLE_CHROME_APP = "com.google.chrome.app";
+    public static final String DEFAULT_COM_GOOGLE_CHROME_APP = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
-	public static final String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
-	public static final String WEBDRIVER_CHROME_HEADLESS = "webdriver.chrome.headless";
-	public static final String WEBDRIVER_CHROME_VERBOSE_LOGGING = "webdriver.chrome.verboseLogging";
+    public static final String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
+    public static final String WEBDRIVER_CHROME_HEADLESS = "webdriver.chrome.headless";
+    public static final String WEBDRIVER_CHROME_VERBOSE_LOGGING = "webdriver.chrome.verboseLogging";
     public static final String WEBDRIVER_CHROME_PROFILE_DIRECTORY = "webdriver.chrome.profile_directory";
 
-	/** */
+    /** */
     private void setEnv() {
         if (System.getProperty(WEBDRIVER_CHROME_DRIVER) == null) {
             String pwd = System.getProperty("user.dir");
@@ -63,7 +63,7 @@ Debug.println(COM_GOOGLE_CHROME_APP + ": " + System.getProperty(COM_GOOGLE_CHROM
             chromeOptions.addArguments("--headless");
         }
         if (System.getProperty(WEBDRIVER_CHROME_PROFILE_DIRECTORY) != null) {
-        	String dir = System.getProperty(WEBDRIVER_CHROME_PROFILE_DIRECTORY);
+            String dir = System.getProperty(WEBDRIVER_CHROME_PROFILE_DIRECTORY);
             chromeOptions.addArguments("--user-data-dir=" + dir);
         }
         WebDriver driver = new ChromeDriver(chromeOptions);

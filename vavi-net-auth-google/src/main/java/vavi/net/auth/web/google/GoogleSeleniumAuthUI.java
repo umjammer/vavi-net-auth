@@ -112,10 +112,10 @@ Debug.println("no password");
 //                                continue;
 //                            }
                         } else {
-                        	retry++;
-                        	if (retry == 10) {
-                        		throw new IllegalStateException("to many retries");
-                        	}
+                            retry++;
+                            if (retry == 10) {
+                                throw new IllegalStateException("to many retries");
+                            }
                             continue;
                         }
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
