@@ -8,7 +8,7 @@ package vavi.net.auth.oauth2.box;
 
 import java.net.URI;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,7 +73,7 @@ public class Main2 {
 Debug.println("file: " + file);
 
             if (Files.exists(file)) {
-                String save = new String(Files.readAllBytes(file), Charset.forName("utf-8"));
+                String save = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
 Debug.println("restore: " + save);
                 api = BoxAPIConnection.restore(appCredential.getClientId(), appCredential.getClientSecret(), save);
                 if (api.needsRefresh()) {
@@ -93,7 +93,7 @@ Debug.println("restore: " + save);
             api.setLastRefresh(System.currentTimeMillis());
             String save = api.save();
 Debug.println("save: " + save);
-            Files.write(file, save.getBytes(Charset.forName("utf-8")));
+            Files.write(file, save.getBytes(StandardCharsets.UTF_8));
         }
 
         BoxFolder rootFolder = BoxFolder.getRootFolder(api);
