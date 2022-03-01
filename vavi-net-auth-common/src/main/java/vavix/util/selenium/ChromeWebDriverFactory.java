@@ -40,8 +40,9 @@ public class ChromeWebDriverFactory implements WebDriverFactory {
     /** */
     private void setEnv() {
         if (System.getProperty(WEBDRIVER_CHROME_DRIVER) == null) {
-            String pwd = System.getProperty("user.dir");
-            System.setProperty(WEBDRIVER_CHROME_DRIVER, pwd + "/bin/chromedriver");
+//            String pwd = System.getProperty("user.dir");
+//            System.setProperty(WEBDRIVER_CHROME_DRIVER, pwd + "/bin/chromedriver");
+            System.setProperty(WEBDRIVER_CHROME_DRIVER, "/usr/local/bin/chromedriver");
         }
 Debug.println(WEBDRIVER_CHROME_DRIVER + ": " + System.getProperty(WEBDRIVER_CHROME_DRIVER));
         if (System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING) == null) {
