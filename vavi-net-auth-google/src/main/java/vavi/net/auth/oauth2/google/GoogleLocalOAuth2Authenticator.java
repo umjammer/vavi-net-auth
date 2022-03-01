@@ -25,17 +25,17 @@ import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**
- * GoogleLocalAuthenticator.
- *
+ * GoogleLocalOAuth2Authenticator.
+ * <p>
  * use input assist.
- *
+ * </p>
  * TODO not works 2021/10/29
  * TODO google login detects selenium???
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/03/04 umjammer initial version <br>
  */
-public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCredential, Credential> {
+public class GoogleLocalOAuth2Authenticator implements Authenticator<WithTotpUserCredential, Credential> {
 
     /** google library */
     private AuthorizationCodeInstalledApp app;
@@ -45,13 +45,13 @@ public class GoogleLocalAuthenticator implements Authenticator<WithTotpUserCrede
 
     /**
      * @throws NullPointerException property file "~/.vavifuse/google.properties" is not set properly.
-     * @see GoogleLocalAppCredential
+     * @see GoogleLocalOAuth2AppCredential
      */
-    public GoogleLocalAuthenticator(GoogleAppCredential appCredential) throws IOException {
+    public GoogleLocalOAuth2Authenticator(GoogleOAuth2AppCredential appCredential) throws IOException {
 
         GoogleAuthorizationCodeFlow flow =
-                new GoogleAuthorizationCodeFlow.Builder(appCredential.getHttpTransport(),
-                                                        appCredential.getJsonFactory(),
+                new GoogleAuthorizationCodeFlow.Builder(GoogleOAuth2.getHttpTransport(),
+                                                        GoogleOAuth2.getJsonFactory(),
                                                         appCredential.getRawData(),
                                                         Arrays.asList(appCredential.getScope().split(",")))
                 .setDataStoreFactory(appCredential.getDataStoreFactory())

@@ -34,7 +34,7 @@ public class DriveCommandLine {
         HttpTransport httpTransport = new NetHttpTransport();
         JsonFactory jsonFactory = new GsonFactory();
 
-        GoogleAppCredential appCredential = new GoogleLocalAppCredential("googledrive");
+        GoogleOAuth2AppCredential appCredential = new GoogleLocalOAuth2AppCredential("googledrive");
         WithTotpUserCredential userCredential = new GoogleLocalUserCredential(email);
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(

@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 
 import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2;
@@ -28,31 +32,53 @@ import vavi.util.properties.annotation.PropsEntity;
 public class GoogleOAuth2 implements OAuth2<WithTotpUserCredential, Credential> {
 
     /** should have a constructor with args (GoogleAppCledential) */
-    @Property(value = "vavi.net.auth.oauth2.google.GoogleBasicAuthenticator")
-    private String authenticatorClassName = "vavi.net.auth.oauth2.google.GoogleBasicAuthenticator";
+    @Property(value = "vavi.net.auth.oauth2.google.GoogleBasicOAuth2Authenticator")
+    private String authenticatorClassName = "vavi.net.auth.oauth2.google.GoogleBasicOAuth2Authenticator";
 
     /* */
     {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.WARNING, "no onedrive.properties in classpath, use defaut");
+Debug.println(Level.WARNING, "no googledrive.properties in classpath, use defaut");
         }
 Debug.println("authenticatorClassName: " + authenticatorClassName);
     }
 
     /** */
-    private GoogleAppCredential appCredential;
+    private GoogleOAuth2AppCredential appCredential;
 
     /** */
-    public GoogleOAuth2(GoogleAppCredential appCredential) {
+    public GoogleOAuth2(GoogleOAuth2AppCredential appCredential) {
         this.appCredential = appCredential;
     }
 
     /* */
     @Override
     public Credential authorize(WithTotpUserCredential userCredential) throws IOException {
-        return Credential.class.cast(OAuth2.getAuthenticator(authenticatorClassName, GoogleAppCredential.class, appCredential).authorize(userCredential));
+        return Credential.class.cast(OAuth2.getAuthenticator(authenticatorClassName, GoogleOAuth2AppCredential.class, appCredential).authorize(userCredential));
+    }
+
+    /** Global instance of the JSON factory. */
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+
+    /** Global instance of the HTTP transport. */
+    private static HttpTransport HTTP_TRANSPORT;
+
+    static {
+        try {
+            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static JsonFactory getJsonFactory() {
+        return JSON_FACTORY;
+    }
+
+    public static HttpTransport getHttpTransport() {
+        return HTTP_TRANSPORT;
     }
 }
 

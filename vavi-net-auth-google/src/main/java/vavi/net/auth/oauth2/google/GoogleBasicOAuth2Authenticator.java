@@ -20,27 +20,28 @@ import vavi.util.Debug;
 
 
 /**
- * GoogleBasicAuthenticator.
- *
+ * GoogleBasicOAuth2Authenticator.
+ * <p>
  * use ordinary browser, no input assist.
+ * </p>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2021/10/29 umjammer initial version <br>
  */
-public class GoogleBasicAuthenticator implements Authenticator<WithTotpUserCredential, Credential> {
+public class GoogleBasicOAuth2Authenticator implements Authenticator<WithTotpUserCredential, Credential> {
 
     /** google library */
     private AuthorizationCodeInstalledApp app;
 
     /**
      * @throws NullPointerException property file "~/.vavifuse/google.properties" is not set properly.
-     * @see GoogleLocalAppCredential
+     * @see GoogleLocalOAuth2AppCredential
      */
-    public GoogleBasicAuthenticator(GoogleAppCredential appCredential) throws IOException {
+    public GoogleBasicOAuth2Authenticator(GoogleOAuth2AppCredential appCredential) throws IOException {
 
         GoogleAuthorizationCodeFlow flow =
-                new GoogleAuthorizationCodeFlow.Builder(appCredential.getHttpTransport(),
-                                                        appCredential.getJsonFactory(),
+                new GoogleAuthorizationCodeFlow.Builder(GoogleOAuth2.getHttpTransport(),
+                                                        GoogleOAuth2.getJsonFactory(),
                                                         appCredential.getRawData(),
                                                         Arrays.asList(appCredential.getScope().split(",")))
                 .setDataStoreFactory(appCredential.getDataStoreFactory())
