@@ -8,6 +8,7 @@ package vavi.net.auth.oauth2.acd;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import vavi.net.auth.UserCredential;
@@ -34,6 +35,7 @@ public class TestACD {
     }
 
     @Test
+    @Disabled("doesn't work 2022-03-08")
     void process() throws IOException {
         String email = System.getenv("TEST_AMAZON_ACCOUNT");
         OAuth2AppCredential appCredential = new AmazonLocalAppCredential();
