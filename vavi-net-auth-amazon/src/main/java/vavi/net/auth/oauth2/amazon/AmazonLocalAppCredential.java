@@ -6,8 +6,12 @@
 
 package vavi.net.auth.oauth2.amazon;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import vavi.net.auth.BaseLocalAppCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -17,9 +21,11 @@ import vavi.util.properties.annotation.PropsEntity;
  * <p>
  * properties file "~/.vavifuse/acd.properties"
  * <ul>
+ * <li> acd.applicationName
  * <li> acd.clientId
  * <li> acd.clientSecret
  * <li> acd.redirectUrl
+ * <li> acd.scopes "clouddrive:read_all", "clouddrive:write"
  * </ul>
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
@@ -27,7 +33,10 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://app.box.com/developers/console"
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/acd.properties")
-public class AmazonLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+public final class AmazonLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+
+    @Property(name = "acd.applicationName")
+    private String applicationName;
 
     @Property(name = "acd.clientId")
     private transient String clientId;
@@ -38,9 +47,12 @@ public class AmazonLocalAppCredential extends BaseLocalAppCredential implements 
     @Property(name = "acd.redirectUrl")
     private String redirectUrl;
 
+    @Property(name = "acd.scopes")
+    private String scope;
+
     @Override
     public String getApplicationName() {
-        return "vavi-apps-fuse";
+        return applicationName;
     }
 
     @Override
@@ -65,7 +77,14 @@ public class AmazonLocalAppCredential extends BaseLocalAppCredential implements 
 
     @Override
     public String getOAuthAuthorizationUrl() {
-        return "https://www.amazon.com/ap/oa?client_id=%s&scope=%s&response_type=code&redirect_uri=%s";
+        try {
+            String url = String.format("https://www.amazon.com/auth/o2/create/codepair?client_id=%s&scope=%s&response_type=device_code",
+                          clientId, scope, URLEncoder.encode(redirectUrl, "UTF-8"));
+Debug.println(url);
+            return url;
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
@@ -75,7 +94,7 @@ public class AmazonLocalAppCredential extends BaseLocalAppCredential implements 
 
     @Override
     public String getScope() {
-        return "clouddrive:read_all"; //  clouddrive:write
+        return scope;  
     }
 }
 

@@ -115,8 +115,8 @@ Debug.println("scope: " + appCredential.getScope());
                 // After the redirect, feed the URL to the grant to retrieve the access token
                 // redirect url include code and state parameters
                 String redirectUrl = String.class.cast(OAuth2.getAuthenticator(getAuthenticatorClassName(), OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
-                token = grant.withRedirect(new LazyUri(new Precoded(redirectUrl))).accessToken(oauthExecutor);
 Debug.println("redirectUrl: " +redirectUrl);
+                token = grant.withRedirect(new LazyUri(new Precoded(redirectUrl))).accessToken(oauthExecutor);
 Debug.println("scope: " + token.scope());
 
             } else {

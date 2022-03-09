@@ -42,6 +42,7 @@ public class DropBoxLocalTokenRefresher implements TokenRefresher<DbxAuthInfo> {
 
     /* @see vavi.net.auth.oauth2.TokenRefresher#writeRefreshToken(java.lang.Object) */
     public void writeRefreshToken(DbxAuthInfo authInfo) throws IOException {
+        Files.createDirectories(file.getParent());
         DbxAuthInfo.Writer.writeToFile(authInfo, file.toFile(), true);
 Debug.println(Level.FINE, "refreshToken: " + authInfo.getAccessToken());
     }

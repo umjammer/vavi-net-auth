@@ -20,6 +20,7 @@ import vavi.util.Debug;
  * <ul>
  * <li> "webdriver.chrome.driver" default: $PWD + "/bin/chromedriver"</li>
  * <li> "webdriver.chrome.verboseLogging" defalut: false</li>
+ * <li> "webdriver.chrome.profile_directory" defalut: null</li>
  * <li> "com.google.chrome.app" default: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"</li>
  * </ul>
  *
@@ -28,18 +29,26 @@ import vavi.util.Debug;
  */
 public class ChromeWebDriverFactory implements WebDriverFactory {
 
+    public static final String COM_GOOGLE_CHROME_APP = "com.google.chrome.app";
+    public static final String DEFAULT_COM_GOOGLE_CHROME_APP = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+
+    public static final String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
+    public static final String WEBDRIVER_CHROME_HEADLESS = "webdriver.chrome.headless";
+    public static final String WEBDRIVER_CHROME_VERBOSE_LOGGING = "webdriver.chrome.verboseLogging";
+    public static final String WEBDRIVER_CHROME_PROFILE_DIRECTORY = "webdriver.chrome.profile_directory";
+
     /** */
     private void setEnv() {
-        if (System.getProperty("webdriver.chrome.driver") == null) {
-            String pwd = System.getProperty("user.dir");
-            System.setProperty("webdriver.chrome.driver", pwd + "/bin/chromedriver");
+        if (System.getProperty(WEBDRIVER_CHROME_DRIVER) == null) {
+//            String pwd = System.getProperty("user.dir");
+//            System.setProperty(WEBDRIVER_CHROME_DRIVER, pwd + "/bin/chromedriver");
+            System.setProperty(WEBDRIVER_CHROME_DRIVER, "/usr/local/bin/chromedriver");
         }
-Debug.println("webdriver.chrome.driver: " + System.getProperty("webdriver.chrome.driver"));
-        if (System.getProperty("webdriver.chrome.verboseLogging") == null) {
-            System.setProperty("webdriver.chrome.verboseLogging", "false");
+Debug.println(WEBDRIVER_CHROME_DRIVER + ": " + System.getProperty(WEBDRIVER_CHROME_DRIVER));
+        if (System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING) == null) {
+            System.setProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING, Boolean.FALSE.toString());
         }
-Debug.println("webdriver.chrome.verboseLogging: " + System.getProperty("webdriver.chrome.verboseLogging"));
-
+Debug.println(WEBDRIVER_CHROME_VERBOSE_LOGGING + ": " + System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING));
     }
 
     @Override
@@ -47,12 +56,16 @@ Debug.println("webdriver.chrome.verboseLogging: " + System.getProperty("webdrive
         setEnv();
 
         ChromeOptions chromeOptions = new ChromeOptions();
-        String app = System.getProperty("com.google.chrome.app", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
-Debug.println("com.google.chrome.app: " + System.getProperty("com.google.chrome.app"));
+        String app = System.getProperty(COM_GOOGLE_CHROME_APP, DEFAULT_COM_GOOGLE_CHROME_APP);
+Debug.println(COM_GOOGLE_CHROME_APP + ": " + System.getProperty(COM_GOOGLE_CHROME_APP));
         chromeOptions.setBinary(app);
 
-        if (headless) {
+        if (headless || Boolean.valueOf(System.getProperty(WEBDRIVER_CHROME_HEADLESS, Boolean.FALSE.toString()))) {
             chromeOptions.addArguments("--headless");
+        }
+        if (System.getProperty(WEBDRIVER_CHROME_PROFILE_DIRECTORY) != null) {
+            String dir = System.getProperty(WEBDRIVER_CHROME_PROFILE_DIRECTORY);
+            chromeOptions.addArguments("--user-data-dir=" + dir);
         }
         WebDriver driver = new ChromeDriver(chromeOptions);
         return driver;

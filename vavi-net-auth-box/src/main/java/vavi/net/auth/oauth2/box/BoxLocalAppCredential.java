@@ -29,7 +29,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @see "https://app.box.com/developers/console"
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/box.properties")
-public class BoxLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+public final class BoxLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
 
     @Property(name = "box.applicationName")
     private transient String applicationName;

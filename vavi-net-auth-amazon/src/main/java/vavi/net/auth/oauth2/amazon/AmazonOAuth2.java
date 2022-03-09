@@ -36,8 +36,8 @@ public class AmazonOAuth2 implements OAuth2<UserCredential, ACDSession> {
     private OAuth2AppCredential appCredential;
 
     /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
-    @Property(value =  "vavi.net.auth.oauth2.amazon.AmazonLocalAuthenticator")
-    private String authenticatorClassName = "vavi.net.auth.oauth2.amazon.AmazonLocalAuthenticator";
+    @Property(value =  "vavi.net.auth.oauth2.amazon.AmazonBasicAuthenticator")
+    private String authenticatorClassName = "vavi.net.auth.oauth2.amazon.AmazonBasicAuthenticator";
 
     // TODO move into Authenticator (this should be pair with that)
     /** should be {@link vavi.net.auth.oauth2.TokenRefresher} and have a constructor with args (AppCredential, String, Supplier<Long>) */

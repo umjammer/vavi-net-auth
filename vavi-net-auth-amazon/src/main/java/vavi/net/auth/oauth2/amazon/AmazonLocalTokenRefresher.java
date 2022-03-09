@@ -8,7 +8,7 @@ package vavi.net.auth.oauth2.amazon;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +41,7 @@ Debug.println("file: " + file);
 
     /* @see vavi.net.auth.oauth2.TokenRefresher#writeRefreshToken(String) */
     public void writeRefreshToken(String save) throws IOException {
-        Files.write(file, save.getBytes(Charset.forName("utf-8")));
+        Files.write(file, save.getBytes(StandardCharsets.UTF_8));
 Debug.println(Level.FINE, "refreshToken: " + save);
     }
 
@@ -50,7 +50,7 @@ Debug.println(Level.FINE, "refreshToken: " + save);
      */
     public String readRefreshToken() throws IOException {
         if (Files.exists(file)) {
-            String state = new String(Files.readAllBytes(file), Charset.forName("utf-8"));
+            String state = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
 Debug.println(Level.FINE, "restore: " + state);
             return state;
         } else {

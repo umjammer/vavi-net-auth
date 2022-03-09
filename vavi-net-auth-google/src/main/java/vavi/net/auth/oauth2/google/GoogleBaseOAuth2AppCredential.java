@@ -9,10 +9,6 @@ package vavi.net.auth.oauth2.google;
 import java.util.function.Predicate;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 
 
 /**
@@ -21,7 +17,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/05/03 umjammer initial version <br>
  */
-public abstract class GoogleBaseAppCredential implements GoogleAppCredential {
+public abstract class GoogleBaseOAuth2AppCredential implements GoogleOAuth2AppCredential {
 
     /** */
     protected GoogleClientSecrets clientSecrets;
@@ -30,9 +26,7 @@ public abstract class GoogleBaseAppCredential implements GoogleAppCredential {
     protected abstract Predicate<? super String> getFilter();
 
     @Override
-    public String getScheme() {
-        return "googledrive";
-    }
+    public abstract String getScheme();
 
     @Override
     public String getClientId() {
@@ -63,30 +57,6 @@ public abstract class GoogleBaseAppCredential implements GoogleAppCredential {
     @Override
     public GoogleClientSecrets getRawData() {
         return clientSecrets;
-    }
-
-    /** Global instance of the JSON factory. */
-    protected static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
-    /** Global instance of the HTTP transport. */
-    private static HttpTransport HTTP_TRANSPORT;
-
-    static {
-        try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override
-    public JsonFactory getJsonFactory() {
-        return JSON_FACTORY;
-    }
-
-    @Override
-    public HttpTransport getHttpTransport() {
-        return HTTP_TRANSPORT;
     }
 }
 

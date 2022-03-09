@@ -33,14 +33,14 @@ class GoogleLocalAppCredentialTest {
         String email = "umjammer@gmail.com";
 
         WithTotpUserCredential userCredential = new GoogleLocalUserCredential(email);
-        GoogleAppCredential appCredential = new GoogleLocalAppCredential("youtube");
+        GoogleOAuth2AppCredential appCredential = new GoogleLocalOAuth2AppCredential("youtube");
 
         Credential credential = new GoogleOAuth2(appCredential).authorize(userCredential);
     }
 
 
     public static void main(String[] args) throws Exception {
-        GoogleLocalAppCredential appCredential = new GoogleLocalAppCredential("googledrive");
+        GoogleLocalOAuth2AppCredential appCredential = new GoogleLocalOAuth2AppCredential("googledrive");
         System.err.println(appCredential.getClientId());
         System.err.println(appCredential.getClientSecret());
         System.err.println(appCredential.getOAuthAuthorizationUrl());

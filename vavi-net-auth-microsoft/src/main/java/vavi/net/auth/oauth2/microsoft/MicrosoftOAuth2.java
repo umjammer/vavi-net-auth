@@ -32,14 +32,18 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "classpath:onedrive.properties")
 public class MicrosoftOAuth2 implements OAuth2<WithTotpUserCredential, String> {
 
+    public static final String BASIC_LOCAL_TOKEN_REFRESHER = "vavi.net.auth.oauth2.BasicLocalTokenRefresher";
+
+    public static final String MICROSOFT_LOCAL_AUTHENTICATOR = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator";
+
     /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
-    @Property(value = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator")
-    private String authenticatorClassName = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator";
+    @Property(value = MICROSOFT_LOCAL_AUTHENTICATOR)
+    private String authenticatorClassName = MICROSOFT_LOCAL_AUTHENTICATOR;
 
     // TODO move into Authenticator (this should be pair with that)
     /** should be {@link vavi.net.auth.oauth2.TokenRefresher} and have a constructor with args (AppCredential, String, Supplier<Long>) */
-    @Property(value = "vavi.net.auth.oauth2.BasicLocalTokenRefresher")
-    private String tokenRefresherClassName = "vavi.net.auth.oauth2.BasicLocalTokenRefresher";
+    @Property(value = BASIC_LOCAL_TOKEN_REFRESHER)
+    private String tokenRefresherClassName = BASIC_LOCAL_TOKEN_REFRESHER;
 
     /* */
     {

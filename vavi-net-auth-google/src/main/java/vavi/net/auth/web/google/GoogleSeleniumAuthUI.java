@@ -72,6 +72,7 @@ Debug.println(Level.FINER, "totpSecret: " + totpSecret);
         Deque<String> tasks = new ArrayDeque<>();
 
         boolean login = false;
+        int retry = 0;
         while (!login) {
             try {
                 su.sleep(300);
@@ -111,6 +112,10 @@ Debug.println("no password");
 //                                continue;
 //                            }
                         } else {
+                            retry++;
+                            if (retry == 10) {
+                                throw new IllegalStateException("to many retries");
+                            }
                             continue;
                         }
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {

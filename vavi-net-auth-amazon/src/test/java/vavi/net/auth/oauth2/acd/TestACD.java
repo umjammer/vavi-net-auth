@@ -8,14 +8,14 @@ package vavi.net.auth.oauth2.acd;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.net.auth.oauth2.amazon.AmazonBasicAuthenticator;
 import vavi.net.auth.oauth2.amazon.AmazonLocalAppCredential;
-import vavi.net.auth.oauth2.amazon.AmazonLocalAuthenticator;
 import vavi.net.auth.web.amazon.AmazonLocalUserCredential;
-import vavi.util.properties.annotation.PropsEntity;
-
-import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
 /**
@@ -26,22 +26,21 @@ import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
  */
 public class TestACD {
 
-    private String email;
-
     /**
-     * @param args email
+     * @param args
      */
     public static void main(String[] args) throws Exception {
         TestACD app = new TestACD();
-        app.email = args[0];
         app.process();
     }
 
+    @Test
+    @Disabled("doesn't work 2022-03-08")
     void process() throws IOException {
+        String email = System.getenv("TEST_AMAZON_ACCOUNT");
         OAuth2AppCredential appCredential = new AmazonLocalAppCredential();
-        PropsEntity.Util.bind(appCredential);
         UserCredential credential = new AmazonLocalUserCredential(email);
-        String code = new AmazonLocalAuthenticator(wrap(appCredential, appCredential.getOAuthAuthorizationUrl(), "http://localhost:3300")).authorize(credential);
+        String code = new AmazonBasicAuthenticator(appCredential).authorize(credential);
 System.err.println("code: " + code);
     }
 }

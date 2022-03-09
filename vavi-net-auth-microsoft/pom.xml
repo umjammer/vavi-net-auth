@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>vavi-net-auth</artifactId>
     <groupId>vavi</groupId>
-    <version>0.1.3</version>
+    <artifactId>vavi-net-auth</artifactId>
+    <version>0.1.4</version>
   </parent>
 
   <artifactId>vavi-net-auth-microsoft</artifactId>
@@ -21,6 +21,10 @@
     <dependency>
       <groupId>vavi</groupId>
       <artifactId>vavi-net-auth-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${vavi-commons-net.groupId}</groupId>
+      <artifactId>vavi-commons-net</artifactId>
     </dependency>
 
     <dependency>

@@ -53,7 +53,7 @@ public class SeleniumUtil implements Closeable {
     /** windowed */
     public SeleniumUtil(int width, int height) {
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> driver.quit()));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> close()));
 
         WebDriverFactory webDriverFactory = WebDriverFactory.newInstace();
         this.driver = webDriverFactory.getDriver(false);

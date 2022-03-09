@@ -20,7 +20,7 @@ import vavi.util.properties.annotation.PropsEntity;
  * @version 0.00 2020/05/02 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
-public class BoxLocalUserCredential extends BaseLocalUserCredential {
+public final class BoxLocalUserCredential extends BaseLocalUserCredential {
 
     /** */
     @Property(name = "box.password.{0}")
