@@ -10,6 +10,18 @@
 
   <artifactId>vavi-net-auth-amazon</artifactId>
 
+  <profiles>
+    <profile>
+      <id>local (not on CI)</id>
+      <activation>
+        <file>
+          <exists>${basedir}/local.properties</exists>
+        </file>
+        <property>
+          <name>env.JITPACK</name>
+          <value>!true</value>
+        </property>
+      </activation>
   <build>
     <plugins>
       <plugin>
@@ -30,6 +42,13 @@
           </execution>
         </executions>
       </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <build>
+    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
