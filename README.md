@@ -21,7 +21,7 @@ Java OAuth2 and auto login and totp
 
 ### jars
 
- * https://jitpack.io/#umjammer/vavi-net_auth
+ * https://jitpack.io/#umjammer/vavi-net-auth
 
 ### selenium chrome driver
 
