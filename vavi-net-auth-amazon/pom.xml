@@ -85,9 +85,9 @@
 
     <dependency>
       <!-- amazon drive -->
-      <groupId>com.github.umjammer</groupId>
+      <groupId>org.yetiz</groupId> <!-- com.github.umjammer -->
       <artifactId>ACD-JAPI</artifactId>
-      <version>1.1.4v</version>
+      <version>1.1.5v-SNAPSHOT</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
