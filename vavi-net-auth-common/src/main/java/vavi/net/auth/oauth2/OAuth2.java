@@ -30,37 +30,39 @@ public interface OAuth2<I, O> {
      * @param tokenRefresherClassName class name which has a constructor (AppCredential, String, Supplier<Long>)
      * @param refresher nullable, when null dummy function is set
      */
+    @SuppressWarnings("unchecked")
     static <T> TokenRefresher<T> getTokenRefresher(String tokenRefresherClassName,
                                              AppCredential appCredential,
                                              String id,
                                              Supplier<Long> refresher) {
         try {
-            if (refresher == null) refresher = () -> { return 0l; /* dummy */};
-            return TokenRefresher.class.cast(Class.forName(tokenRefresherClassName)
+            if (refresher == null) refresher = () -> { return 0L; /* dummy */};
+            return (TokenRefresher<T>) Class.forName(tokenRefresherClassName)
                 .getDeclaredConstructor(AppCredential.class, String.class, Supplier.class)
-                .newInstance(appCredential, id, refresher));
+                .newInstance(appCredential, id, refresher);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
             throw new IllegalStateException(e);
         }
-    };
+    }
 
 
     /**
      * TODO protected
      * @param authenticatorClassName class name which has a constructor (? extends BasicAppCredential)
      */
+    @SuppressWarnings("unchecked")
     static <I, O> Authenticator<I, O> getAuthenticator(String authenticatorClassName,
                                                        Class<? extends OAuth2AppCredential> clazz,
                                                        OAuth2AppCredential appCredential) {
         try {
-            return Authenticator.class.cast(Class.forName(authenticatorClassName)
-                                            .getDeclaredConstructor(clazz).newInstance(appCredential));
+            return (Authenticator<I, O>) Class.forName(authenticatorClassName)
+                    .getDeclaredConstructor(clazz).newInstance(appCredential);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
             throw new IllegalStateException(e);
         }
-    };
+    }
 }
 
 /* */

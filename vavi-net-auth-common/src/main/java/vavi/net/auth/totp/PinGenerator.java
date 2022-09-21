@@ -33,9 +33,7 @@ public class PinGenerator {
             mac.init(new SecretKeySpec(keyBytes, ""));
             PasscodeGenerator pcg = new PasscodeGenerator(mac);
             return pcg.generateTimeoutCode();
-        } catch (GeneralSecurityException e) {
-            throw new IllegalStateException(e);
-        } catch (Base32String.DecodingException e) {
+        } catch (GeneralSecurityException | Base32String.DecodingException e) {
             throw new IllegalStateException(e);
         }
     }

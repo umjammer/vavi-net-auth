@@ -55,11 +55,7 @@ Debug.println("refreshToken: exists: " + Files.exists(file) + ", " + file);
 
     @Override
     public void close() {
-        try {
-            super.close();
-        } catch (UncheckedIOException e) {
-            throw e;
-        }
+        super.close();
     }
 }
 

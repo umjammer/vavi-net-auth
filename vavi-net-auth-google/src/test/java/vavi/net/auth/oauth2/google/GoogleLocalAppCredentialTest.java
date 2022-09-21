@@ -38,7 +38,6 @@ class GoogleLocalAppCredentialTest {
         Credential credential = new GoogleOAuth2(appCredential).authorize(userCredential);
     }
 
-
     public static void main(String[] args) throws Exception {
         GoogleLocalOAuth2AppCredential appCredential = new GoogleLocalOAuth2AppCredential("googledrive");
         System.err.println(appCredential.getClientId());

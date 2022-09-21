@@ -69,12 +69,7 @@ System.err.println(url);
 
         exception = null;
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                initAndShowGUI(url);
-            }
-        });
+        SwingUtilities.invokeLater(() -> initAndShowGUI(url));
 
         try {
             System.err.println("wait until sign in...");
@@ -115,12 +110,8 @@ System.err.println(url);
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
-            @Override
-            public void run() {
-                initFX(fxPanel, url);
-            }
-        });
+        // this will run initFX as JavaFX-Thread
+        Platform.runLater((Runnable) () -> initFX(fxPanel, url));
     }
 
     /** Creates a WebView and fires up */
@@ -206,7 +197,7 @@ System.err.println("accept");
 //System.err.println(webEngine.executeScript("document.documentElement.outerHTML"));
 
                         Document doc = webEngine.getDocument();
-                        code = ((HTMLInputElement) doc.getElementById("code")).getAttribute("value");
+                        code = doc.getElementById("code").getAttribute("value");
 System.err.println("code: " + code);
                         latch.countDown();
                     }

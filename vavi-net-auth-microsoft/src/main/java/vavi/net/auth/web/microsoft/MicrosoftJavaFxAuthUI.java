@@ -62,7 +62,7 @@ public class MicrosoftJavaFxAuthUI implements AuthUI<String> {
     /* @see vavi.net.auth.oauth2.AuthUI#auth() */
     @Override
     public void auth() {
-        SwingUtilities.invokeLater(() -> { openUI(url); });
+        SwingUtilities.invokeLater(() -> openUI(url));
 
         try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
 
@@ -89,7 +89,7 @@ public class MicrosoftJavaFxAuthUI implements AuthUI<String> {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(() -> { initFX(fxPanel, url); });
+        Platform.runLater(() -> initFX(fxPanel, url));
     }
 
     /** */
@@ -119,7 +119,7 @@ public class MicrosoftJavaFxAuthUI implements AuthUI<String> {
                     String location = webEngine.getLocation();
 System.err.println("location: " + location);
 
-                    if (location.indexOf(url) > -1) {
+                    if (location.contains(url)) {
 
                         if (!login) {
                             Document doc = webEngine.getDocument();
@@ -141,7 +141,7 @@ System.err.println("submit");
                             exception = new IllegalArgumentException("wrong email or password");
                             latch.countDown();
                         }
-                    } else if (location.indexOf(redirectUrl) > -1) {
+                    } else if (location.contains(redirectUrl)) {
                         code = location.substring(location.indexOf("code=") + "code=".length());
 System.err.println("code: " + code);
                         latch.countDown();

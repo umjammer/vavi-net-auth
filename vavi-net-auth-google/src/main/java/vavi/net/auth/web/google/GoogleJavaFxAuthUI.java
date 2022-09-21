@@ -62,7 +62,7 @@ public class GoogleJavaFxAuthUI implements AuthUI<Void> {
     public void auth() {
         exception = null;
 
-        SwingUtilities.invokeLater(() -> { openUI(url); });
+        SwingUtilities.invokeLater(() -> openUI(url));
 
         try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
 
@@ -106,12 +106,8 @@ public class GoogleJavaFxAuthUI implements AuthUI<Void> {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
-            @Override
-            public void run() {
-                initFX(fxPanel, url);
-            }
-        });
+        // this will run initFX as JavaFX-Thread
+        Platform.runLater((Runnable) () -> initFX(fxPanel, url));
     }
 
     /** */

@@ -66,7 +66,7 @@ public class BoxJavaFxAuthUI implements AuthUI<String> {
     /* @see Authenticator#get(java.lang.String) */
     @Override
     public void auth() {
-        SwingUtilities.invokeLater(() -> { openUI(url); });
+        SwingUtilities.invokeLater(() -> openUI(url));
 
         try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
 
@@ -93,7 +93,7 @@ public class BoxJavaFxAuthUI implements AuthUI<String> {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(() -> { initFX(fxPanel, url); });
+        Platform.runLater(() -> initFX(fxPanel, url));
     }
 
     /** */
@@ -123,7 +123,7 @@ public class BoxJavaFxAuthUI implements AuthUI<String> {
                     String location = webEngine.getLocation();
                     System.err.println("location: " + location);
 
-                    if (location.indexOf(url) > -1) {
+                    if (location.contains(url)) {
 
                         if (!login) {
                             System.err.println("set email: " + email);
@@ -160,7 +160,7 @@ System.err.println(webEngine.executeScript("document.documentElement.outerHTML")
                             Node input = inputs.item(i);
 System.err.println("input: " + ((Element) input).getAttribute("type")); // == text
                         }
-                        code = ((HTMLInputElement) doc.getElementById("code")).getAttribute("data-token");
+                        code = doc.getElementById("code").getAttribute("data-token");
 System.err.println("code: " + code);
                         latch.countDown();
                     }

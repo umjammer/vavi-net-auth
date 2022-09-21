@@ -74,9 +74,7 @@ public class Ui4jGetter implements Getter {
             page.executeScript(e.getText().get());
         });
         System.err.println("---- ---- ---- ----");
-        page.getDocument().queryAll("html").forEach(e -> {
-            System.err.println(e.getText().get());
-        });
+        page.getDocument().queryAll("html").forEach(e -> System.err.println(e.getText().get()));
 
         try {
             System.err.println("wait until redirect");

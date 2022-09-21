@@ -79,7 +79,7 @@ Debug.println(Level.FINER, "totpSecret: " + totpSecret);
                 su.waitFor();
                 String location = su.getCurrentUrl();
 Debug.println("location: " + location);
-                if (location.indexOf("accounts.google.com") > -1) {
+                if (location.contains("accounts.google.com")) {
                     try {
                         WebElement element = null;
 //Debug.println("element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
@@ -121,7 +121,7 @@ Debug.println("no password");
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
 Debug.println(Level.WARNING, e.getMessage());
                     }
-                } else if (location.indexOf(redirectUrl) > -1) {
+                } else if (location.contains(redirectUrl)) {
 //                    code = location.substring(location.indexOf("code=") + "code=".length(), location.indexOf("&"));
                     code = location;
 Debug.println(Level.FINE, "code: " + code);

@@ -96,9 +96,9 @@ Debug.println("totpSecret: " + totpSecret);
                 su.waitFor();
                 String location = su.getCurrentUrl();
 //Debug.println("location: " + location);
-                if (location.indexOf("oauth20_authorize") > -1 ||
-                    location.indexOf("microsoft") > -1 ||
-                    location.indexOf("login.live.com") > -1) {
+                if (location.contains("oauth20_authorize") ||
+                        location.contains("microsoft") ||
+                        location.contains("login.live.com")) {
                     try {
                         WebElement element = su.findElement(By.className("form-control"));
 //Debug.println("element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
@@ -148,7 +148,7 @@ e.printStackTrace();
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
 Debug.println(Level.WARNING, e.getMessage());
                     }
-                } else if (location.indexOf(redirectUrl) > -1) {
+                } else if (location.contains(redirectUrl)) {
 //                    code = location.substring(location.indexOf("code=") + "code=".length(), location.indexOf("&"));
                     code = location;
 Debug.println(Level.FINE, "code: " + code);

@@ -60,7 +60,7 @@ Debug.println(WEBDRIVER_CHROME_VERBOSE_LOGGING + ": " + System.getProperty(WEBDR
 Debug.println(COM_GOOGLE_CHROME_APP + ": " + System.getProperty(COM_GOOGLE_CHROME_APP));
         chromeOptions.setBinary(app);
 
-        if (headless || Boolean.valueOf(System.getProperty(WEBDRIVER_CHROME_HEADLESS, Boolean.FALSE.toString()))) {
+        if (headless || Boolean.parseBoolean(System.getProperty(WEBDRIVER_CHROME_HEADLESS, Boolean.FALSE.toString()))) {
             chromeOptions.addArguments("--headless");
         }
         if (System.getProperty(WEBDRIVER_CHROME_PROFILE_DIRECTORY) != null) {
