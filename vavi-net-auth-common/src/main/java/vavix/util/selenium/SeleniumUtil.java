@@ -7,6 +7,7 @@
 package vavix.util.selenium;
 
 import java.io.Closeable;
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -74,11 +75,13 @@ public class SeleniumUtil implements Closeable {
         waitFor(driver, 10);
     }
 
-    /** */
+    /**
+     * @param delay in [milli seconds]
+     */
     public static void waitFor(WebDriver driver, int delay) {
-        new WebDriverWait(driver, delay).until(d -> {
+        new WebDriverWait(driver, Duration.ofMillis(delay)).until(d -> {
             if (d == null) {
-                throw new IllegalStateException("browser maight be closed");
+                throw new IllegalStateException("browser might be closed");
             }
             String r = ((JavascriptExecutor) d).executeScript("return document.readyState;").toString();
 //Debug.println(r);
