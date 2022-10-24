@@ -40,13 +40,14 @@ public class AuthorizationCodeInstalledApp
     /** */
     private String userId;
 
+    @Override
     public Credential authorize(String userId) throws IOException {
         this.userId = userId;
 
         return super.authorize(userId);
     }
 
-    /* */
+    @Override
     protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
         PropsEntity.Util.bind(this, userId);
 
