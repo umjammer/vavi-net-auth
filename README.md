@@ -44,5 +44,6 @@ Java OAuth2 and auto login and totp
 
 ## TODO
 
- * google data store to prefs
- * refer to cyberduck profile
+ * google data store to prefs (wip)
+ * refer to cyberduck profile * box when refresh token expired
+ * `GoogleCredentials#getApplicationDefault()` !!!
