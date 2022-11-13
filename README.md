@@ -1,5 +1,5 @@
 [![Release](https://jitpack.io/v/umjammer/vavi-net-auth.svg)](https://jitpack.io/#umjammer/vavi-net-auth)
-[![Java CI with Maven](https://github.com/umjammer/vavi-net-auth/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/umjammer/vavi-net-auth/actions)
+[![Java CI with Maven](https://github.com/umjammer/vavi-net-auth/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-net-auth/actions)
 [![CodeQL](https://github.com/umjammer/vavi-net-auth/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-net-auth/actions/workflows/codeql-analysis.yml)
 ![Java](https://img.shields.io/badge/Java-8-b07219)
 [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
