@@ -12,7 +12,7 @@ import vavi.net.auth.AuthUI;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
-import vavi.net.auth.web.facebook.FacebookJavaFxAuthUI;
+import vavi.net.auth.web.facebook.FacebookBrowserAuthUI;
 
 
 /**
@@ -35,7 +35,7 @@ public class FacebookLocalAuthenticator implements Authenticator<UserCredential,
     @Override
     public String authorize(UserCredential userCredential) throws IOException {
 
-        AuthUI<String> ui = new FacebookJavaFxAuthUI(this.appCredential, userCredential);
+        AuthUI<String> ui = new FacebookBrowserAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         if (ui.getException() != null) {

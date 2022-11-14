@@ -78,7 +78,7 @@ public class BoxSeleniumAuthUI implements AuthUI<String> {
 
     private SeleniumUtil su;
 
-    /** Create a JFrame with a JButton and a JFXPanel containing the WebView. */
+    /** Create a Selenium Driver. */
     private void openUI(String url) {
         su = new SeleniumUtil(480, 640);
         process(url);
