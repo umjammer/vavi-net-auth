@@ -19,11 +19,13 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.google.api.client.auth.oauth2.Credential;
 
 import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.web.google.GoogleLocalUserCredential;
 import vavi.util.Debug;
@@ -69,6 +71,8 @@ class GoogleLocalAppCredentialTest {
     }
 
     @Test
+    @DisplayName("find all zip in  the drive, takes long time")
+    @EnabledIfSystemProperty(named = "vavi.test", matches = "ide")
     void test2() throws Exception {
         WithTotpUserCredential userCredential = new GoogleLocalUserCredential(email);
         GoogleOAuth2AppCredential appCredential = new GoogleLocalOAuth2AppCredential(app);
@@ -102,6 +106,7 @@ long t = System.currentTimeMillis();
 Debug.println(System.currentTimeMillis() - t + " ms, " + files.size() + " items");
     }
 
+    /** */
     public static void main(String[] args) throws Exception {
         GoogleLocalOAuth2AppCredential appCredential = new GoogleLocalOAuth2AppCredential("googledrive");
         System.err.println(appCredential.getClientId());
