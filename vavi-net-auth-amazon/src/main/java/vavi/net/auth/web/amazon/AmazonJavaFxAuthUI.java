@@ -38,6 +38,7 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2018/11/23 umjammer initial version <br>
  */
+@Deprecated
 public class AmazonJavaFxAuthUI implements AuthUI<String> {
 
     private String email;
