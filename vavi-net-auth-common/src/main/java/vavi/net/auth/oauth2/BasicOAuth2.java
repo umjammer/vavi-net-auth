@@ -67,7 +67,9 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
     /** */
     private TokenRefresher<String> refresher;
 
-    /** */
+    /**
+     * @param id user credential id (e.g. email)
+     */
     protected abstract TokenRefresher<String> getTokenRefresher(AppCredential appCredential, String id);
 
     /** */

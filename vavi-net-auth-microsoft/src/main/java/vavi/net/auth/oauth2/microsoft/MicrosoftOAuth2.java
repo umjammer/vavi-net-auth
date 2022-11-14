@@ -72,6 +72,7 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
         tokenRefresher = OAuth2.getTokenRefresher(tokenRefresherClassName, appCredential, id, null);
     }
 
+    /** @return code */
     @Override
     public String authorize(WithTotpUserCredential userCredential) throws IOException {
         String code = (String) OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, appCredential).authorize(userCredential);

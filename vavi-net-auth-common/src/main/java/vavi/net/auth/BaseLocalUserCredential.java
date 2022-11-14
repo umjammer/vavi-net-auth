@@ -21,12 +21,13 @@ import vavi.util.properties.annotation.PropsEntity;
  */
 public abstract class BaseLocalUserCredential implements UserCredential {
 
-    /** */
+    /** credential identifier (e.g. email) */
     protected String id;
 
     /**
      * bind automatically by {@link PropsEntity}
-     * @throw IllegalStateException when binding properties
+     * @param id credential identifier (e.g. email)
+     * @throws IllegalStateException when binding properties
      */
     public BaseLocalUserCredential(String id) {
         this.id = id;
@@ -38,7 +39,7 @@ public abstract class BaseLocalUserCredential implements UserCredential {
         }
     }
 
-    /** */
+    /** gets credential identifier */
     public String getId() {
         return id;
     }
