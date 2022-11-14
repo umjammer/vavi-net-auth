@@ -21,7 +21,7 @@
           <target>1.8</target>
           <encoding>utf-8</encoding>
           <testExcludes>
-            <testExclude>**/*Fx*.java</testExclude>
+            <testExclude>vavi/net/auth/oauth2/microsoft/FxGetter.java</testExclude>
           </testExcludes>
         </configuration>
       </plugin>
