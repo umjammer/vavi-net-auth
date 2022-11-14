@@ -38,6 +38,7 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2018/11/23 umjammer initial version <br>
  */
+@Deprecated
 public class AmazonJavaFxAuthUI implements AuthUI<String> {
 
     private String email;
@@ -62,7 +63,7 @@ public class AmazonJavaFxAuthUI implements AuthUI<String> {
     public void auth() {
         exception = null;
 
-        SwingUtilities.invokeLater(() -> { openUI(url); });
+        SwingUtilities.invokeLater(() -> openUI(url));
 
         try { latch.await(); } catch (InterruptedException e) { throw new IllegalStateException(e); }
 
@@ -104,12 +105,8 @@ public class AmazonJavaFxAuthUI implements AuthUI<String> {
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
-            @Override
-            public void run() {
-                initFX(fxPanel, url);
-            }
-        });
+        // this will run initFX as JavaFX-Thread
+        Platform.runLater((Runnable) () -> initFX(fxPanel, url));
     }
 
     /** */
@@ -139,7 +136,7 @@ public class AmazonJavaFxAuthUI implements AuthUI<String> {
                     String location = webEngine.getLocation();
 System.err.println("location: " + location);
 
-                    if (location.indexOf(url) > -1) {
+                    if (location.contains(url)) {
 
                         if (!login) {
                             Document doc = webEngine.getDocument();
@@ -161,7 +158,7 @@ System.err.println("submit");
                             exception = new IllegalArgumentException("wrong email or password");
                             latch.countDown();
                         }
-                    } else if (location.indexOf(redirectUrl) > -1) {
+                    } else if (location.contains(redirectUrl)) {
 System.err.println("done");
                         latch.countDown();
                     }

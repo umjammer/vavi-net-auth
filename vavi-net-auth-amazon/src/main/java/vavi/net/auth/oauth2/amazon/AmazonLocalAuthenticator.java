@@ -12,7 +12,7 @@ import vavi.net.auth.AuthUI;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
-import vavi.net.auth.web.amazon.AmazonJavaFxAuthUI;
+import vavi.net.auth.web.amazon.AmazonBrowserAuthUI;
 
 
 /**
@@ -35,7 +35,7 @@ public class AmazonLocalAuthenticator implements Authenticator<UserCredential, S
     @Override
     public String authorize(UserCredential userCredential) throws IOException {
 
-        AuthUI<String> ui = new AmazonJavaFxAuthUI(this.appCredential, userCredential);
+        AuthUI<String> ui = new AmazonBrowserAuthUI(this.appCredential, userCredential);
         ui.auth();
 
         if (ui.getException() != null) {

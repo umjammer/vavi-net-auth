@@ -78,7 +78,7 @@ public final class AmazonLocalAppCredential extends BaseLocalAppCredential imple
     @Override
     public String getOAuthAuthorizationUrl() {
         try {
-            String url = String.format("https://www.amazon.com/auth/o2/create/codepair?client_id=%s&scope=%s&response_type=device_code",
+            String url = String.format("https://www.amazon.com/auth/o2/create/codepair?client_id=%s&scope=%s&response_type=device_code&redirectUrl=%s",
                           clientId, scope, URLEncoder.encode(redirectUrl, "UTF-8"));
 Debug.println(url);
             return url;

@@ -85,9 +85,9 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
                 api = BoxAPIConnection.restore(appCredential.getClientId(), appCredential.getClientSecret(), refreshToken);
                 if (api.needsRefresh()) {
 Debug.println("refresh: " + api.getExpires());
-                    // TODO doesn't work??? got 400
+                    // TODO doesn't work??? got 400, and retry sometimes and throw error
                     api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret(), api.getAccessToken(), api.getRefreshToken());
-                    api.setExpires(60 * 24 * 60 * 60 * 1000);
+                    api.setExpires(60 * 24 * 60 * 60 * 1000L);
                     api.refresh();
                 }
                 login = true;
@@ -100,12 +100,12 @@ e.printStackTrace();
 
         if (!login) {
             api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret());
-            api.setExpires(60 * 24 * 60 * 60 * 1000);
+            api.setExpires(60 * 24 * 60 * 60 * 1000L);
             String state = RandomString.make(16);
 Debug.println("scope: " + appCredential.getScope());
             URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Arrays.asList(appCredential.getScope().split(",")));
 
-            String accessToken = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential));
+            String accessToken = (String) OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential);
             api.authenticate(accessToken);
             api.setAutoRefresh(true);
         }

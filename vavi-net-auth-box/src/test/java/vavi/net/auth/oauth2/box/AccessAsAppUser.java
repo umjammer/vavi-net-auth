@@ -68,9 +68,9 @@ public final class AccessAsAppUser {
 
     private static void listFolder(BoxFolder folder, int depth) {
         for (BoxItem.Info itemInfo : folder) {
-            String indent = "";
+            StringBuilder indent = new StringBuilder();
             for (int i = 0; i < depth; i++) {
-                indent += "    ";
+                indent.append("    ");
             }
 
             System.out.println(indent + itemInfo.getName());

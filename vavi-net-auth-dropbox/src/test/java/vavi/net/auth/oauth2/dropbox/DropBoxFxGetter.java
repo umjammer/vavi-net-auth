@@ -40,6 +40,7 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/03/02 umjammer initial version <br>
  */
+@Deprecated
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
 public class DropBoxFxGetter implements Getter {
 
@@ -71,12 +72,7 @@ System.err.println(url);
         System.setProperty("http.proxyHost","127.0.0.1"); // TODO
         System.setProperty("http.proxyPort","8888");
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                initAndShowGUI(url);
-            }
-        });
+        SwingUtilities.invokeLater(() -> initAndShowGUI(url));
 
         try {
             System.err.println("wait until sign in...");
@@ -118,12 +114,8 @@ System.err.println(url);
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
-            @Override
-            public void run() {
-                initFX(fxPanel, url);
-            }
-        });
+        // this will run initFX as JavaFX-Thread
+        Platform.runLater((Runnable) () -> initFX(fxPanel, url));
     }
 
     /** Creates a WebView and fires up */
@@ -184,7 +176,7 @@ System.err.println(webEngine.executeScript("document.documentElement.outerHTML")
                             Node input = inputs.item(i);
 System.err.println("input: " + ((Element) input).getAttribute("type")); // == text
                         }
-                        code = ((HTMLInputElement) doc.getElementById("code")).getAttribute("data-token");
+                        code = doc.getElementById("code").getAttribute("data-token");
 System.err.println("code: " + code);
                         latch.countDown();
                     }

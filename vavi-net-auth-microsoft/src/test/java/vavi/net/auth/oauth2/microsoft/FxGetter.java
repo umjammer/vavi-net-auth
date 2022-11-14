@@ -74,12 +74,7 @@ System.err.println(url);
         HttpServer httpServer = new HttpServer(host, port);
         httpServer.start();
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                initAndShowGUI(url);
-            }
-        });
+        SwingUtilities.invokeLater(() -> initAndShowGUI(url));
 
         try {
             System.err.println("wait until sign in...");
@@ -122,12 +117,8 @@ Thread.getAllStackTraces().keySet().forEach(System.err::println);
         frame.getContentPane().setPreferredSize(new Dimension(480, 640));
         frame.pack();
 
-        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
-            @Override
-            public void run() {
-                initFX(fxPanel, url);
-            }
-        });
+        // this will run initFX as JavaFX-Thread
+        Platform.runLater((Runnable) () -> initFX(fxPanel, url));
     }
 
     /** Creates a WebView and fires up */
@@ -151,7 +142,7 @@ Thread.getAllStackTraces().keySet().forEach(System.err::println);
                     String location = webEngine.getLocation();
                     System.err.println("location: " + location);
 
-                    if (location.indexOf(url) > -1) {
+                    if (location.contains(url)) {
 
                         if (!login) {
                             System.err.println("set email: " + email);
@@ -182,7 +173,7 @@ System.err.println("submit");
                             exception = new IllegalArgumentException("wrong email or password");
                             latch.countDown();
                         }
-                    } else if (location.indexOf(redirectUrl) > -1) {
+                    } else if (location.contains(redirectUrl)) {
                         code = location.substring(location.indexOf("code=") + 5);
 System.err.println("code: " + code);
                         latch.countDown();

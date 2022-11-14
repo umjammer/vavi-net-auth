@@ -7,7 +7,7 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
   </parent>
 
   <artifactId>vavi-net-auth-common</artifactId>
@@ -17,6 +17,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
         <executions>
           <execution>
             <goals>
@@ -32,12 +33,12 @@
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>3.141.59</version>
+      <version>4.6.0</version>
     </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-chrome-driver</artifactId>
-      <version>3.141.59</version>
+      <version>4.6.0</version>
     </dependency>
 
     <dependency>
@@ -49,12 +50,12 @@
     <dependency>
       <groupId>org.dmfs</groupId>
       <artifactId>httpurlconnection-executor</artifactId>
-      <version>0.18</version>
+      <version>1.16.2</version>
     </dependency>
     <dependency>
       <groupId>org.dmfs</groupId>
       <artifactId>okhttp-executor</artifactId>
-      <version>0.18</version>
+      <version>1.16.2</version>
       <exclusions>
         <exclusion>
           <groupId>com.squareup.okhttp3</groupId>
@@ -66,7 +67,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.1.6</version>
+      <version>1.1.8</version>
     </dependency>
 
     <dependency>

@@ -52,7 +52,7 @@ public abstract class BaseTokenRefresher<T> implements TokenRefresher<T> {
             this.refreshThread = Executors.newSingleThreadExecutor();
             this.refreshThread.submit(() -> {
                 // initial delay
-                try { Thread.sleep(refreshDelay); } catch (InterruptedException e) {}
+                try { Thread.sleep(refreshDelay); } catch (InterruptedException ignored) {}
                 // continuously refresh thread
                 while (keepRefreshing) {
 Debug.println("refreshing session");
@@ -67,13 +67,13 @@ Debug.println(Level.WARNING, "failed to refresh session - attempting recovery");
                                 refresh.get();
                             } catch (Exception e1) {
 Debug.println(Level.WARNING, "failed to refresh session - attempting retrying");
-                                try { Thread.sleep(500); } catch (InterruptedException e2) {}
+                                try { Thread.sleep(500); } catch (InterruptedException ignored) {}
                             }
                         }
 Debug.println(Level.SEVERE, "could not refresh session");
                         e.printStackTrace();
                         // back off after error
-                        try { Thread.sleep(10000); } catch (Exception e1) {}
+                        try { Thread.sleep(10000); } catch (Exception ignored) {}
                     }
                 }
             });

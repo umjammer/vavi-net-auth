@@ -51,7 +51,7 @@ public class AmazonSeleniumAuthUI implements AuthUI<WebDriver> {
 
     private SeleniumUtil su;
 
-    /** Create a JFrame with a JButton and a JFXPanel containing the WebView. */
+    /** Create a Selenium Driver. */
     private void openUI(String url) {
         su = new SeleniumUtil(480, 640);
         process(url);
@@ -70,7 +70,7 @@ public class AmazonSeleniumAuthUI implements AuthUI<WebDriver> {
                 su.waitFor(10);
                 String location = su.getCurrentUrl();
 //Debug.println("location: " + location);
-                if (location.indexOf("www.amazon.co.jp/ap/signin") > -1) {
+                if (location.contains("www.amazon.co.jp/ap/signin")) {
                     try {
                         WebElement element = null;
 //Debug.println("element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
@@ -111,8 +111,8 @@ Debug.println("set " + tasks.peekLast());
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
 Debug.println(Level.WARNING, e.getMessage());
                     }
-                } else if (location.indexOf("www.amazon.co.jp") > -1 &&
-                           location.indexOf("www.amazon.co.jp/ap/signin") == -1) {
+                } else if (location.contains("www.amazon.co.jp") &&
+                        !location.contains("www.amazon.co.jp/ap/signin")) {
                     login = true;
                 }
             } catch (Exception e) {

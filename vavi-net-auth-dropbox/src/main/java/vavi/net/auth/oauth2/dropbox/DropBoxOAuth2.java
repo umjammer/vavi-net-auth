@@ -103,7 +103,7 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
                 String authorizeUrl = webAuth.authorize(request);
 
                 // redirect url include code parameter
-                String redirectUri = String.class.cast(OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, wrap(appCredential, authorizeUrl)).authorize(userCredential));
+                String redirectUri = (String) OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, wrap(appCredential, authorizeUrl)).authorize(userCredential);
                 DbxAuthFinish authFinish = webAuth.finishFromRedirect(appCredential.getRedirectUrl(), csrfTokenStore, HttpUtil.splitQuery(URI.create(redirectUri)));
 
                 // Save auth information to output file.

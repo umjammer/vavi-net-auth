@@ -7,6 +7,7 @@
 package vavix.util.selenium;
 
 import java.io.Closeable;
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,7 +20,6 @@ import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import vavi.util.Debug;
 
 
@@ -44,7 +44,7 @@ public class SeleniumUtil implements Closeable {
     /** headless */
     public SeleniumUtil() {
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> close()));
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
 
         WebDriverFactory webDriverFactory = WebDriverFactory.newInstace();
         this.driver = webDriverFactory.getDriver(true);
@@ -53,7 +53,7 @@ public class SeleniumUtil implements Closeable {
     /** windowed */
     public SeleniumUtil(int width, int height) {
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> close()));
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
 
         WebDriverFactory webDriverFactory = WebDriverFactory.newInstace();
         this.driver = webDriverFactory.getDriver(false);
@@ -75,11 +75,13 @@ public class SeleniumUtil implements Closeable {
         waitFor(driver, 10);
     }
 
-    /** */
+    /**
+     * @param delay in [milli seconds]
+     */
     public static void waitFor(WebDriver driver, int delay) {
-        new WebDriverWait(driver, delay).until(d -> {
+        new WebDriverWait(driver, Duration.ofMillis(delay)).until(d -> {
             if (d == null) {
-                throw new IllegalStateException("browser maight be closed");
+                throw new IllegalStateException("browser might be closed");
             }
             String r = ((JavascriptExecutor) d).executeScript("return document.readyState;").toString();
 //Debug.println(r);
@@ -97,7 +99,7 @@ public class SeleniumUtil implements Closeable {
         System.err.println("----------------------------");
         System.err.println(driver.getCurrentUrl());
         AtomicInteger c = new AtomicInteger();
-        driver.getWindowHandles().forEach(h -> { System.err.println(c.incrementAndGet() + ": " + h); });
+        driver.getWindowHandles().forEach(h -> System.err.println(c.incrementAndGet() + ": " + h));
         System.err.println("----------------------------");
     }
 
@@ -176,7 +178,7 @@ Debug.println("not found: " + by);
 
     /** */
     public void sleep(long miliseconds) {
-        try { Thread.sleep(miliseconds); } catch (InterruptedException e) {}
+        try { Thread.sleep(miliseconds); } catch (InterruptedException ignored) {}
     }
 }
 

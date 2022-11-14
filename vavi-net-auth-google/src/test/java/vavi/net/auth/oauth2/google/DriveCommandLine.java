@@ -2,6 +2,7 @@ package vavi.net.auth.oauth2.google;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -42,7 +43,7 @@ public class DriveCommandLine {
                 jsonFactory,
                 appCredential.getClientId(),
                 appCredential.getClientSecret(),
-                Arrays.asList(appCredential.getScope())
+                Collections.singletonList(appCredential.getScope())
                 ).setAccessType("online").setApprovalPrompt("auto").build();
 
         String url = flow.newAuthorizationUrl().setRedirectUri(appCredential.getRedirectUrl()).build();

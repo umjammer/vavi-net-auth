@@ -1,9 +1,10 @@
-package vavi.net.auth.oauth2.facebook;
 /*
  * Copyright (c) 2016 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
+
+package vavi.net.auth.oauth2.facebook;
 
 import java.io.IOException;
 

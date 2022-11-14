@@ -5,10 +5,53 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
   </parent>
 
   <artifactId>vavi-net-auth-microsoft</artifactId>
+
+  <profiles>
+    <profile>
+      <id>github workflow</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_WORKFLOW</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.10.1</version>
+            <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+              <encoding>utf-8</encoding>
+              <excludes>
+                <exclude>vavi/net/auth/web/microsoft/MicrosoftJavaFxAuthUI.java</exclude>
+              </excludes>
+              <testExcludes>
+                <testExclude>vavi/net/auth/oauth2/microsoft/FxGetter.java</testExclude>
+              </testExcludes>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M7</version>
+            <configuration>
+              <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
+              <trimStackTrace>false</trimStackTrace>
+              <excludes>
+                <exclude>**/*Fx*.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <repositories>
     <repository>
@@ -36,7 +79,7 @@
     <dependency>
       <groupId>org.httpunit</groupId>
       <artifactId>httpunit</artifactId>
-      <version>1.7.2</version>
+      <version>1.7.3</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

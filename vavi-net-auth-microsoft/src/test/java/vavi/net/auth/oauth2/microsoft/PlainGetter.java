@@ -25,7 +25,7 @@ public class PlainGetter implements Getter {
     /* @see Getter#get(java.lang.String) */
     @Override
     public String get(String url) throws IOException {
-        HttpURLConnection conn = HttpURLConnection.class.cast(new URL(url).openConnection());
+        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setInstanceFollowRedirects(true);
         InputStream is = conn.getInputStream();
         StringBuilder sb = new StringBuilder();
@@ -37,7 +37,7 @@ public class PlainGetter implements Getter {
             }
             sb.append(new String(buf));
         }
-        System.err.println(sb.toString());
+        System.err.println(sb);
 
         return null;
     }

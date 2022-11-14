@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 
 import com.box.sdk.BoxAPIConnection;
 import com.box.sdk.BoxFolder;
@@ -82,7 +83,7 @@ Debug.println("restore: " + save);
             } else {
                 api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret());
                 String state = RandomString.make(16);
-                URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Arrays.asList("root_readwrite"));
+                URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Collections.singletonList("root_readwrite"));
 
                 UserCredential credential = new BoxLocalUserCredential(email);
                 String accessToken = new BoxLocalAuthenticator(wrap(appCredential, authorizationUrl.toString())).authorize(credential);

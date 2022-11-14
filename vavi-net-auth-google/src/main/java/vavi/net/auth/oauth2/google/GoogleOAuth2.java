@@ -56,7 +56,7 @@ Debug.println("authenticatorClassName: " + authenticatorClassName);
     /* */
     @Override
     public Credential authorize(WithTotpUserCredential userCredential) throws IOException {
-        return Credential.class.cast(OAuth2.getAuthenticator(authenticatorClassName, GoogleOAuth2AppCredential.class, appCredential).authorize(userCredential));
+        return (Credential) OAuth2.getAuthenticator(authenticatorClassName, GoogleOAuth2AppCredential.class, appCredential).authorize(userCredential);
     }
 
     /** Global instance of the JSON factory. */

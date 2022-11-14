@@ -5,10 +5,38 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
   </parent>
 
   <artifactId>vavi-net-auth-flickr</artifactId>
+
+  <profiles>
+    <profile>
+      <id>github workflow</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_WORKFLOW</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.10.1</version>
+            <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+              <encoding>utf-8</encoding>
+              <excludes>
+                <exclude>vavi/net/auth/web/flickr/FlickrJavaFxAuthUI.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <repositories>
     <repository>
@@ -27,7 +55,7 @@
       <!-- flickr -->
       <groupId>com.flickr4java</groupId>
       <artifactId>flickr4java</artifactId>
-      <version>2.16</version>
+      <version>3.0.6</version>
     </dependency>
 
     <dependency>

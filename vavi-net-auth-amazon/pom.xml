@@ -5,12 +5,38 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
   </parent>
 
   <artifactId>vavi-net-auth-amazon</artifactId>
 
   <profiles>
+    <profile>
+      <id>github workflow</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_WORKFLOW</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.10.1</version>
+            <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+              <encoding>utf-8</encoding>
+              <excludes>
+                <exclude>vavi/net/auth/web/amazon/AmazonJavaFxAuthUI.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <profile>
       <id>local (not on CI)</id>
       <activation>
@@ -22,26 +48,26 @@
           <value>!true</value>
         </property>
       </activation>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <executions>
-          <execution>
-            <phase>initialize</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-            <configuration>
-              <files>
-                <file>${basedir}/local.properties</file>
-              </files>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+              <execution>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>read-project-properties</goal>
+                </goals>
+                <configuration>
+                  <files>
+                    <file>${basedir}/local.properties</file>
+                  </files>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -52,7 +78,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M5</version>
+        <version>3.0.0-M7</version>
         <configuration>
           <trimStackTrace>false</trimStackTrace>
           <argLine>
@@ -84,10 +110,10 @@
     </dependency>
 
     <dependency>
-      <!-- amazon drive -->
+      <!-- amazon drive: com.github.umjammer / org.yetiz -->
       <groupId>com.github.umjammer</groupId>
       <artifactId>ACD-JAPI</artifactId>
-      <version>1.1.4v</version>
+      <version>1.1.5v</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>

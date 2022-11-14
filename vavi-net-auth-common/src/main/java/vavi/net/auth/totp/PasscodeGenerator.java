@@ -59,11 +59,7 @@ public class PasscodeGenerator {
      * @param interval The interval that a passcode is valid for
      */
     public PasscodeGenerator(final Mac mac, int passCodeLength, int interval) {
-        this(new Signer() {
-            public byte[] sign(byte[] data) {
-                return mac.doFinal(data);
-            }
-        }, passCodeLength, interval);
+        this(mac::doFinal, passCodeLength, interval);
     }
 
     public PasscodeGenerator(Signer signer, int passCodeLength, int interval) {
@@ -73,11 +69,11 @@ public class PasscodeGenerator {
     }
 
     private String padOutput(int value) {
-        String result = Integer.toString(value);
+        StringBuilder result = new StringBuilder(Integer.toString(value));
         for (int i = result.length(); i < codeLength; i++) {
-            result = "0" + result;
+            result.insert(0, "0");
         }
-        return result;
+        return result.toString();
     }
 
     /**

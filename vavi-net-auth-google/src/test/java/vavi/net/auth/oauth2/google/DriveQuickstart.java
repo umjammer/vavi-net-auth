@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -49,7 +51,7 @@ public class DriveQuickstart {
      * If modifying these scopes, delete your previously saved credentials
      * at ~/.credentials/drive-java-quickstart.json
      */
-    private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_METADATA_READONLY);
+    private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY);
 
     static {
         try {
@@ -68,7 +70,7 @@ public class DriveQuickstart {
      */
     public static Credential authorize(String email) throws IOException {
         // Load client secrets.
-        InputStream in = new FileInputStream(new java.io.File(DATA_STORE_DIR.getParent(), "googledrive.json"));
+        InputStream in = Files.newInputStream(new java.io.File(DATA_STORE_DIR.getParent(), "googledrive.json").toPath());
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
