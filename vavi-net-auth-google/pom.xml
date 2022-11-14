@@ -33,6 +33,7 @@
               <testExcludes>
                 <testExclude>vavi/net/auth/oauth2/google/AuthorizationCodeInstalledApp.java</testExclude>
                 <testExclude>vavi/net/auth/oauth2/google/GoogleDriveFxGetter.java</testExclude>
+                <testExclude>vavi/net/auth/oauth2/google/DriveQuickstart.java</testExclude>
               </testExcludes>
             </configuration>
           </plugin>
