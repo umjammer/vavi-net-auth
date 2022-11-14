@@ -31,6 +31,7 @@
                 <exclude>vavi/net/auth/web/google/GoogleJavaFxAuthUI.java</exclude>
               </excludes>
               <testExcludes>
+                <testExclude>vavi/net/auth/oauth2/google/AuthorizationCodeInstalledApp.java</testExclude>
                 <testExclude>vavi/net/auth/oauth2/google/GoogleDriveFxGetter.java</testExclude>
               </testExcludes>
             </configuration>
