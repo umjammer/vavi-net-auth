@@ -32,6 +32,7 @@
                 <exclude>vavi/net/auth/web/dropbox/DropBoxJavaFxAuthUI.java</exclude>
               </excludes>
               <testExcludes>
+                <!-- TODO at least remaining one compilation target?-->
                 <testExclude>vavi/net/auth/oauth2/dropbox/DropBoxFxGetter.java</testExclude>
               </testExcludes>
             </configuration>

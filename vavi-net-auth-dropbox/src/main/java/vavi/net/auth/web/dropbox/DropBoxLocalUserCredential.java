@@ -12,7 +12,7 @@ import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * DropBoxUserCredencial.
+ * DropBoxUserCredential.
  *
  * properties file "~/vavifuse/credentials.properties"
  *
