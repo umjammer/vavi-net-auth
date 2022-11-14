@@ -5,7 +5,7 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
   </parent>
 
   <artifactId>vavi-net-auth-amazon</artifactId>
@@ -22,26 +22,26 @@
           <value>!true</value>
         </property>
       </activation>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <executions>
-          <execution>
-            <phase>initialize</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-            <configuration>
-              <files>
-                <file>${basedir}/local.properties</file>
-              </files>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+              <execution>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>read-project-properties</goal>
+                </goals>
+                <configuration>
+                  <files>
+                    <file>${basedir}/local.properties</file>
+                  </files>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -84,10 +84,10 @@
     </dependency>
 
     <dependency>
-      <!-- amazon drive -->
-      <groupId>org.yetiz</groupId> <!-- com.github.umjammer -->
+      <!-- amazon drive: com.github.umjammer / org.yetiz -->
+      <groupId>com.github.umjammer</groupId>
       <artifactId>ACD-JAPI</artifactId>
-      <version>1.1.5v-SNAPSHOT</version>
+      <version>1.1.5v</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
