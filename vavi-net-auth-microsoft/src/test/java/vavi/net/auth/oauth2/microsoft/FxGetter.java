@@ -42,6 +42,7 @@ import javafx.scene.web.WebView;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/02/16 umjammer initial version <br>
  */
+@Deprecated
 @PropsEntity(url = "file://${HOME}/.vavifuse/credentials.properties")
 public class FxGetter implements Getter {
 

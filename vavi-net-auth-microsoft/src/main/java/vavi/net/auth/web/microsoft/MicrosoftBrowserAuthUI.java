@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.concurrent.CountDownLatch;
 
 import vavi.net.auth.AuthUI;
@@ -66,7 +67,7 @@ Debug.println("totpSecret: " + totpSecret);
 Debug.println("uri: " + location);
                 res.setContentType("plain/text");
                 PrintWriter os = res.getWriter();
-                os.println("code: " + location.substring(location.indexOf("code=") + "code=".length(), location.lastIndexOf("&") > 0 ? location.lastIndexOf("&") : location.length()));
+                os.println("code: " + URLEncoder.encode(location.substring(location.indexOf("code=") + "code=".length(), location.lastIndexOf("&") > 0 ? location.lastIndexOf("&") : location.length()), "utf-8"));
                 os.flush();
                 code = this.redirectUrl + location;
                 cdl.countDown();

@@ -14,7 +14,8 @@ import vavi.util.properties.annotation.PropsEntity;
 
 /**
  * MicrosoftGraphLocalAppCredential.
- *
+ * <p>
+ * binds below automatically.<br/>
  * properties file "~/.vavifuse/onedrive.properties"
  * <ul>
  * <li> microsoft.graph.applicationName

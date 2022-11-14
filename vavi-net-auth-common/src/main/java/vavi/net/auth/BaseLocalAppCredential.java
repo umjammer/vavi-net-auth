@@ -23,7 +23,7 @@ public abstract class BaseLocalAppCredential implements AppCredential {
 
     /**
      * bind automatically by {@link PropsEntity}
-     * @throw IllegalStateException when binding properties
+     * @throws IllegalStateException when binding properties
      */
     protected BaseLocalAppCredential() {
         try {

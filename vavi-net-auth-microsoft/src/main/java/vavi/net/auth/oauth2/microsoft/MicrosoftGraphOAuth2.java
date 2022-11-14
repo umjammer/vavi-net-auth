@@ -58,8 +58,8 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
     /**
-     * @param appCredential
-     * @param startTokenRefresher
+     * @param appCredential application credential
+     * @param startTokenRefresher refresher start or not
      */
     public MicrosoftGraphOAuth2(OAuth2AppCredential appCredential, boolean startTokenRefresher) {
         super(appCredential, startTokenRefresher);
