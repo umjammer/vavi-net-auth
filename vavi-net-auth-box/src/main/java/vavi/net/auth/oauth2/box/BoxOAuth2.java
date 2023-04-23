@@ -42,8 +42,8 @@ public class BoxOAuth2 implements OAuth2<UserCredential, BoxAPIConnection> {
     private OAuth2AppCredential appCredential;
 
     /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
-    @Property(value =  "vavi.net.auth.oauth2.box.BoxLocalAuthenticator", useSystem = true)
-    private String authenticatorClassName = "vavi.net.auth.oauth2.box.BoxLocalAuthenticator";
+    @Property(value =  "vavi.net.auth.oauth2.box.BoxBasicAuthenticator", useSystem = true)
+    private String authenticatorClassName = "vavi.net.auth.oauth2.box.BoxBasicAuthenticator";
 
     // TODO move into Authenticator (this should be pair with that)
     /** should be {@link vavi.net.auth.oauth2.TokenRefresher} and have a constructor with args (AppCredential, String, Supplier<Long>) */
