@@ -71,11 +71,21 @@
     </dependency>
 
     <dependency>
-      <!-- box -->
-      <groupId>com.box</groupId>
+      <groupId>com.box</groupId> <!-- box -->
       <artifactId>box-java-sdk</artifactId>
-      <version>3.7.1</version>
+      <version>4.0.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcprov-jdk15on</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+<dependency>
+  <groupId>org.bouncycastle</groupId>
+  <artifactId>bcprov-jdk15on</artifactId>
+  <version>1.70</version>
+</dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
