@@ -33,6 +33,13 @@
   </issueManagement>
   <description>network authentication library like OAuth2</description>
 
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/umjammer/vavi-net-auth</url>
+    </repository>
+  </distributionManagement>
+
   <profiles>
     <profile>
       <id>github workflow</id>
