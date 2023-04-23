@@ -46,10 +46,10 @@ public class MicrosoftGraphOAuth2 extends BasicOAuth2<WithTotpUserCredential> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.WARNING, "no onedrive.properties in classpath, use defaut");
+Debug.println(Level.INFO, "no onedrive.properties in classpath, use default");
         }
-Debug.println("authenticatorClassName: " + authenticatorClassName);
-Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
+Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
+Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
     @Override

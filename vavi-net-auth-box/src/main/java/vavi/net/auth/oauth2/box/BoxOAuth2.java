@@ -55,10 +55,10 @@ public class BoxOAuth2 implements OAuth2<UserCredential, BoxAPIConnection> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.WARNING, "no box.properties in classpath, use defaut");
+Debug.println(Level.INFO, "no box.properties in classpath, use default");
         }
-Debug.println("authenticatorClassName: " + authenticatorClassName);
-Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
+Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
+Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
     /** never start refresh thread */
@@ -84,7 +84,7 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
             try {
                 api = BoxAPIConnection.restore(appCredential.getClientId(), appCredential.getClientSecret(), refreshToken);
                 if (api.needsRefresh()) {
-Debug.println("refresh: " + api.getExpires());
+Debug.println(Level.FINE, "refresh: " + api.getExpires());
                     // TODO doesn't work??? got 400, and retry sometimes and throw error
                     api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret(), api.getAccessToken(), api.getRefreshToken());
                     api.setExpires(60 * 24 * 60 * 60 * 1000L);
@@ -92,7 +92,7 @@ Debug.println("refresh: " + api.getExpires());
                 }
                 login = true;
             } catch (BoxAPIException e) {
-Debug.println("restore failed, delete stored file");
+Debug.println(Level.FINE, "restore failed, delete stored file");
 e.printStackTrace();
                 tokenRefresher.close();
             }
@@ -102,7 +102,7 @@ e.printStackTrace();
             api = new BoxAPIConnection(appCredential.getClientId(), appCredential.getClientSecret());
             api.setExpires(60 * 24 * 60 * 60 * 1000L);
             String state = RandomString.make(16);
-Debug.println("scope: " + appCredential.getScope());
+Debug.println(Level.FINE, "scope: " + appCredential.getScope());
             URL authorizationUrl = BoxAPIConnection.getAuthorizationURL(appCredential.getClientId(), URI.create(appCredential.getRedirectUrl()), state, Arrays.asList(appCredential.getScope().split(",")));
 
             String accessToken = (String) OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential);
@@ -120,7 +120,7 @@ Debug.println("refresh tocken" + api.getRefreshToken());
             }
             @Override
             public void onError(BoxAPIConnection api, BoxAPIException error) {
-Debug.println("box api exception:");
+Debug.println(Level.FINE, "box api exception:");
                 error.printStackTrace();
             }
         });

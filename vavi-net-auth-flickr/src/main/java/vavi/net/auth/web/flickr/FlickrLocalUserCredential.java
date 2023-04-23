@@ -31,7 +31,7 @@ public class FlickrLocalUserCredential extends BaseLocalUserCredential {
      */
     public FlickrLocalUserCredential(String email) {
         super(email);
-//System.err.println("password for " + id + ": " + password);
+//Debug.println("password for " + id + ": " + password);
     }
 
     /* */

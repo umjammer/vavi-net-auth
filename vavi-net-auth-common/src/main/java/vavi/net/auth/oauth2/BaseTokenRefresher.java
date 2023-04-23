@@ -55,7 +55,7 @@ public abstract class BaseTokenRefresher<T> implements TokenRefresher<T> {
                 try { Thread.sleep(refreshDelay); } catch (InterruptedException ignored) {}
                 // continuously refresh thread
                 while (keepRefreshing) {
-Debug.println("refreshing session");
+Debug.println(Level.FINE, "refreshing session");
                     try {
                         refresh.get(); // TODO update refresh delay
                         Thread.sleep(refreshDelay);
@@ -77,7 +77,7 @@ Debug.println(Level.SEVERE, "could not refresh session");
                     }
                 }
             });
-Debug.println("starting refresh thread");
+Debug.println(Level.FINE, "starting refresh thread");
         }
     }
 
@@ -86,7 +86,7 @@ Debug.println("starting refresh thread");
         if (this.refreshThread != null) {
             keepRefreshing = false;
             refreshThread.shutdownNow();
-Debug.println("stopping refresh thread");
+Debug.println(Level.FINE, "stopping refresh thread");
         }
     }
 

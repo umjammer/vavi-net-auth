@@ -48,7 +48,7 @@ Debug.println(Level.FINE, "refreshToken: " + refreshToken);
 
     @Override
     public String readRefreshToken() throws IOException {
-Debug.println("refreshToken: exists: " + Files.exists(file) + ", " + file);
+Debug.println(Level.FINE, "refreshToken: exists: " + Files.exists(file) + ", " + file);
         String refreshToken = Files.exists(file) ? new String(Files.readAllBytes(file)) : null;
         return refreshToken;
     }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import vavi.net.auth.web.box.BoxLocalUserCredential;
+import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -46,5 +47,6 @@ public class Test1 {
         BoxLocalAppCredential appCredential = new BoxLocalAppCredential();
 
         BoxAPIConnection connection = new BoxOAuth2(appCredential).authorize(userCredential);
+Debug.println(connection.getBaseURL());
     }
 }

@@ -78,37 +78,37 @@ Debug.println(Level.FINER, "totpSecret: " + totpSecret);
                 su.sleep(300);
                 su.waitFor();
                 String location = su.getCurrentUrl();
-Debug.println("location: " + location);
+Debug.println(Level.FINE, "location: " + location);
                 if (location.contains("accounts.google.com")) {
                     try {
                         WebElement element = null;
-//Debug.println("element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
+//Debug.println(Level.FINE, "element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
                         if (!tasks.contains("email") && (element = su.findElement(By.id("identifierId"))) != null) {
                             element.sendKeys(email);
                             tasks.add("email");
                             su.click(su.findElement(By.id("identifierNext")));
-Debug.println("set " + tasks.peekLast());
+Debug.println(Level.FINE, "set " + tasks.peekLast());
                             su.sleep(300);
                         } else if (!tasks.contains("password") && (element = su.findElement(By.name("password"))) != null) {
                             if (password != null) {
                                 element.sendKeys(password);
                                 tasks.add("password");
                                 su.click(su.findElement(By.id("passwordNext")));
-Debug.println("set " + tasks.peekLast());
+Debug.println(Level.FINE, "set " + tasks.peekLast());
                                 su.sleep(300);
                             } else {
-Debug.println("no password");
+Debug.println(Level.FINE, "no password");
                                 continue;
                             }
 //                        } else if (!tasks.contains("totp") && (element = su.findElement(By.name("Email"))) != null) {
 //                            if (totpSecret != null) {
-//Debug.println("here");
+//Debug.println(Level.FINE, "here");
 //                                String pin = PinGenerator.computePin(totpSecret, null);
-//Debug.println("pin: " + pin);
+//Debug.println(Level.FINE, "pin: " + pin);
 //                                element.sendKeys(pin);
 //                                tasks.add("totp");
 //                            } else {
-//Debug.println("no pin");
+//Debug.println(Level.FINE, "no pin");
 //                                continue;
 //                            }
                         } else {

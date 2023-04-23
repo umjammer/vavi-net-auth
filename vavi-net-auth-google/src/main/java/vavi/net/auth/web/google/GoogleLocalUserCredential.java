@@ -34,7 +34,7 @@ public final class GoogleLocalUserCredential extends BaseLocalUserCredential imp
      */
     public GoogleLocalUserCredential(String email) {
         super(email);
-//System.err.println("password for " + id + ": " + password);
+//Debug.println("password for " + id + ": " + password);
     }
 
     /* */
