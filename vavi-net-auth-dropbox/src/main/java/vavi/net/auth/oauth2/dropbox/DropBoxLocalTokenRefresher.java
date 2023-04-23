@@ -51,7 +51,7 @@ Debug.println(Level.FINE, "refreshToken: " + authInfo.getAccessToken());
      * @return null when not found
      */
     public DbxAuthInfo readRefreshToken() throws IOException {
-Debug.println("refreshToken: exists: " + Files.exists(file) + ", " + file);
+Debug.println(Level.FINE, "refreshToken: exists: " + Files.exists(file) + ", " + file);
         if (Files.exists(file)) {
             try {
                 return DbxAuthInfo.Reader.readFromFile(file.toFile());

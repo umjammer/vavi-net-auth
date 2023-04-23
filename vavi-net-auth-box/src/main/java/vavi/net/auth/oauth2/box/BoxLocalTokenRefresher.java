@@ -38,7 +38,7 @@ public class BoxLocalTokenRefresher implements TokenRefresher<String> {
      */
     public BoxLocalTokenRefresher(AppCredential appCredential, String id, Supplier<Long> refresh) {
         this.file = Paths.get(System.getProperty("user.home"), ".vavifuse", appCredential.getScheme(), id);
-Debug.println("file: " + file);
+Debug.println(Level.FINE, "file: " + file);
     }
 
     /* @see vavi.net.auth.oauth2.TokenRefresher#writeRefreshToken(String) */

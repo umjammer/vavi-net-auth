@@ -7,10 +7,63 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.6</version>
+    <version>0.1.7</version>
   </parent>
 
   <artifactId>vavi-net-auth-common</artifactId>
+
+  <profiles>
+    <profile>
+      <id>local (not on jitpack)</id>
+      <activation>
+        <os>
+          <family>mac</family>
+          <arch>x86_64</arch>
+        </os>
+        <property>
+          <name>env.JITPACK</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.3.0</version>
+            <executions>
+              <execution>
+                <id>copy</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>copy</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.rococoa</groupId>
+                      <artifactId>rococoa-core</artifactId>
+                      <type>dylib</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                      <destFileName>librococoa.dylib</destFileName>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.rococoa</groupId>
+          <artifactId>rococoa-core</artifactId>
+          <version>0.8.5</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
   <build>
     <plugins>
@@ -29,11 +82,30 @@
     </plugins>
   </build>
 
+  <repositories>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/umjammer/*</url>
+    </repository>
+  </repositories>
+
   <dependencies>
+    <dependency>
+      <groupId>com.github.umjammer</groupId>
+      <artifactId>vavi-commons</artifactId>
+      <version>1.1.9</version>
+    </dependency>
+
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <version>4.6.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
@@ -46,7 +118,18 @@
       <groupId>com.github.dmfs.oauth2-essentials</groupId>
       <artifactId>oauth2-essentials</artifactId>
       <version>0.13</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+<dependency>
+  <groupId>org.json</groupId>
+  <artifactId>json</artifactId>
+  <version>20230227</version>
+</dependency>
     <dependency>
       <groupId>org.dmfs</groupId>
       <artifactId>httpurlconnection-executor</artifactId>
@@ -65,9 +148,15 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.umjammer</groupId>
-      <artifactId>vavi-commons</artifactId>
-      <version>1.1.8</version>
+      <groupId>vavi</groupId>
+      <artifactId>vavi-crypto-sandbox</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.40.1.0</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>

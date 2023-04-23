@@ -5,7 +5,7 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.6</version>
+    <version>0.1.7</version>
   </parent>
 
   <artifactId>vavi-net-auth-amazon</artifactId>
@@ -110,10 +110,9 @@
     </dependency>
 
     <dependency>
-      <!-- amazon drive: com.github.umjammer / org.yetiz -->
-      <groupId>com.github.umjammer</groupId>
+      <groupId>com.github.umjammer</groupId> <!-- amazon drive: com.github.umjammer / org.yetiz -->
       <artifactId>ACD-JAPI</artifactId>
-      <version>1.1.5v</version>
+      <version>1.1.6v</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>

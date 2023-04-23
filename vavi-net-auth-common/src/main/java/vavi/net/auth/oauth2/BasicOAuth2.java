@@ -10,6 +10,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.util.logging.Level;
 
 import org.dmfs.httpessentials.client.HttpRequestExecutor;
 import org.dmfs.httpessentials.exceptions.ProtocolError;
@@ -106,8 +107,8 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
             OAuth2AccessToken token;
             OAuth2AccessToken refreshToken = readRefreshToken();
             if (!refreshToken.hasRefreshToken()) {
-Debug.println("no refreshToken: timeout? or firsttime");
-Debug.println("scope: " + appCredential.getScope());
+Debug.println(Level.FINE, "no refreshToken: timeout? or first time");
+Debug.println(Level.FINE, "scope: " + appCredential.getScope());
                 OAuth2InteractiveGrant grant = new AuthorizationCodeGrant(oauth, new StringScope(appCredential.getScope()));
 
                 // Get the authorization URL and open it in a WebView
@@ -117,12 +118,12 @@ Debug.println("scope: " + appCredential.getScope());
                 // After the redirect, feed the URL to the grant to retrieve the access token
                 // redirect url include code and state parameters
                 String redirectUrl = (String) OAuth2.getAuthenticator(getAuthenticatorClassName(), OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential);
-Debug.println("redirectUrl: " +redirectUrl);
+Debug.println(Level.FINE, "redirectUrl: " +redirectUrl);
                 token = grant.withRedirect(new LazyUri(new Precoded(redirectUrl))).accessToken(oauthExecutor);
-Debug.println("scope: " + token.scope());
+Debug.println(Level.FINE, "scope: " + token.scope());
 
             } else {
-Debug.println("use old refreshToken");
+Debug.println(Level.FINE, "use old refreshToken");
                 // TODO catch not grant error and loop again
                 token = new TokenRefreshGrant(oauth, refreshToken).accessToken(oauthExecutor);
             }
@@ -141,7 +142,7 @@ Debug.println("use old refreshToken");
     protected long refresh() {
         try {
             OAuth2AccessToken token = new TokenRefreshGrant(oauth, readRefreshToken()).accessToken(oauthExecutor);
-Debug.println("refresh");
+Debug.println(Level.FINE, "refresh");
             refresher.writeRefreshToken(token.refreshToken().toString());
             return token.expirationDate().getTimestamp();
         } catch (ProtocolError | ProtocolException | IOException e) {

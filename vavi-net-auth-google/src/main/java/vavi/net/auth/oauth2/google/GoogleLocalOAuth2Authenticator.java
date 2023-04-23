@@ -8,6 +8,7 @@ package vavi.net.auth.oauth2.google;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.Credential;
@@ -62,7 +63,7 @@ public class GoogleLocalOAuth2Authenticator implements Authenticator<WithTotpUse
             /* */
             protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
                 String url = authorizationUrl.build();
-Debug.println("authorizationUrl: " + url);
+Debug.println(Level.FINE, "authorizationUrl: " + url);
                 AuthUI<?> ui = new GoogleSeleniumAuthUI(wrap(appCredential, url, authorizationUrl.getRedirectUri()), userCredential);
                 ui.auth();
             }
@@ -74,7 +75,7 @@ Debug.println("authorizationUrl: " + url);
         this.userCredential = userCredential;
         // Trigger user authorization request.
         Credential credential = app.authorize(userCredential.getId());
-Debug.println("refreshToken: " + (credential.getRefreshToken() != null) + ", expiresInSeconds: " + credential.getExpiresInSeconds());
+Debug.println(Level.FINE, "refreshToken: " + (credential.getRefreshToken() != null) + ", expiresInSeconds: " + credential.getExpiresInSeconds());
         return credential;
     }
 }

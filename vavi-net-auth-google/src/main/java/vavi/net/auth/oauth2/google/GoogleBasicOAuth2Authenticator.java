@@ -8,6 +8,7 @@ package vavi.net.auth.oauth2.google;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -33,6 +34,9 @@ public class GoogleBasicOAuth2Authenticator implements Authenticator<WithTotpUse
     /** google library */
     private AuthorizationCodeInstalledApp app;
 
+    /** local web server port */
+    private static final int PORT = 8888;
+
     /**
      * @throws NullPointerException property file "~/.vavifuse/google.properties" is not set properly.
      * @see GoogleLocalOAuth2AppCredential
@@ -47,7 +51,7 @@ public class GoogleBasicOAuth2Authenticator implements Authenticator<WithTotpUse
                 .setDataStoreFactory(appCredential.getDataStoreFactory())
                 .setAccessType(appCredential.getAccessType())
                 .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(PORT).build();
         // Build flow.
         this.app = new AuthorizationCodeInstalledApp(flow, receiver);
     }
@@ -56,7 +60,7 @@ public class GoogleBasicOAuth2Authenticator implements Authenticator<WithTotpUse
     public Credential authorize(WithTotpUserCredential userCredential) throws IOException {
         // Trigger user authorization request.
         Credential credential = app.authorize(userCredential.getId());
-Debug.println("refreshToken: " + (credential.getRefreshToken() != null) + ", expiresInSeconds: " + credential.getExpiresInSeconds());
+Debug.println(Level.FINE, "refreshToken: " + (credential.getRefreshToken() != null) + ", expiresInSeconds: " + credential.getExpiresInSeconds());
         return credential;
     }
 }

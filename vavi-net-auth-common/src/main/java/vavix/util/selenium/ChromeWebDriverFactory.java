@@ -6,6 +6,8 @@
 
 package vavix.util.selenium;
 
+import java.util.logging.Level;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -44,11 +46,11 @@ public class ChromeWebDriverFactory implements WebDriverFactory {
 //            System.setProperty(WEBDRIVER_CHROME_DRIVER, pwd + "/bin/chromedriver");
             System.setProperty(WEBDRIVER_CHROME_DRIVER, "/usr/local/bin/chromedriver");
         }
-Debug.println(WEBDRIVER_CHROME_DRIVER + ": " + System.getProperty(WEBDRIVER_CHROME_DRIVER));
+Debug.println(Level.FINE, WEBDRIVER_CHROME_DRIVER + ": " + System.getProperty(WEBDRIVER_CHROME_DRIVER));
         if (System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING) == null) {
             System.setProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING, Boolean.FALSE.toString());
         }
-Debug.println(WEBDRIVER_CHROME_VERBOSE_LOGGING + ": " + System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING));
+Debug.println(Level.FINE, WEBDRIVER_CHROME_VERBOSE_LOGGING + ": " + System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING));
     }
 
     @Override
@@ -57,8 +59,10 @@ Debug.println(WEBDRIVER_CHROME_VERBOSE_LOGGING + ": " + System.getProperty(WEBDR
 
         ChromeOptions chromeOptions = new ChromeOptions();
         String app = System.getProperty(COM_GOOGLE_CHROME_APP, DEFAULT_COM_GOOGLE_CHROME_APP);
-Debug.println(COM_GOOGLE_CHROME_APP + ": " + System.getProperty(COM_GOOGLE_CHROME_APP));
+Debug.println(Level.FINE, COM_GOOGLE_CHROME_APP + ": " + System.getProperty(COM_GOOGLE_CHROME_APP));
         chromeOptions.setBinary(app);
+        // https://stackoverflow.com/a/75711246
+        chromeOptions.addArguments("--remote-allow-origins=*");
 
         if (headless || Boolean.parseBoolean(System.getProperty(WEBDRIVER_CHROME_HEADLESS, Boolean.FALSE.toString()))) {
             chromeOptions.addArguments("--headless");

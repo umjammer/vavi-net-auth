@@ -96,7 +96,7 @@ public class GoogleLocalOAuth2AppCredential extends GoogleBaseOAuth2AppCredentia
 
     @Override
     protected Predicate<? super String> getFilter() {
-        return s -> ((String) s).contains("localhost");
+        return s -> s.contains("localhost");
     }
 
     @Override
@@ -114,12 +114,15 @@ public class GoogleLocalOAuth2AppCredential extends GoogleBaseOAuth2AppCredentia
         return accessType;
     }
 
-    /** @see {@link #dataStoreFactoryFactory}, {@link #getDataStoreFactory()} */
+    /**
+     * @see #dataStoreFactoryFactory
+     * @see #getDataStoreFactory()}
+     */
     public interface DataStoreFactoryFactory {
         DataStoreFactory newDataStoreFactory() throws IOException;
     }
 
-    /** @see {@link #dataStoreFactoryFactory} */
+    /** @see #dataStoreFactoryFactory */
     private class DefaultDataStoreFactoryFactory implements DataStoreFactoryFactory {
         @Override
         public DataStoreFactory newDataStoreFactory() throws IOException {

@@ -8,6 +8,7 @@ package vavi.net.auth.web.flickr;
 
 import java.awt.Dimension;
 import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -30,6 +31,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import vavi.util.Debug;
 
 
 /**
@@ -133,7 +135,7 @@ public class FlickrJavaFxAuthUI implements AuthUI<String> {
             public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
                 if (newState == State.SUCCEEDED) {
                     String location = webEngine.getLocation();
-System.err.println("location: " + location);
+Debug.println(Level.FINE, "location: " + location);
 
                     if (location.contains(url)) {
 
@@ -143,14 +145,14 @@ System.err.println("location: " + location);
                             NodeList inputs = doc.getElementsByTagName("INPUT");
 
                             ((HTMLInputElement) inputs.item(0)).setValue(email);
-System.err.println("set email: " + email);
+Debug.println(Level.FINE, "set email: " + email);
                             ((HTMLInputElement) inputs.item(1)).setValue(password);
-System.err.println("set passwd: " + password);
+Debug.println(Level.FINE, "set passwd: " + password);
                             ((Element) inputs.item(2)).setAttribute("checked", "true");
-System.err.println("set checked: " + true);
+Debug.println(Level.FINE, "set checked: " + true);
 
                             ((HTMLInputElement) inputs.item(3)).click();
-System.err.println("submit");
+Debug.println(Level.FINE, "submit");
 
                             login = true;
                         } else {
@@ -158,7 +160,7 @@ System.err.println("submit");
                             latch.countDown();
                         }
                     } else if (location.contains(redirectUrl)) {
-System.err.println("done");
+Debug.println(Level.FINE, "done");
                         latch.countDown();
                     }
                 }
