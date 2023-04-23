@@ -41,15 +41,17 @@
           <name>env.GITHUB_WORKFLOW</name>
         </property>
       </activation>
-      <dependencies>
-        <dependency>
-          <!-- doesn't work well -->
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx</artifactId>
-          <version>11.0.2</version>
-          <type>pom</type>
-        </dependency>
-      </dependencies>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <!-- doesn't work well -->
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx</artifactId>
+            <version>11.0.2</version>
+            <type>pom</type>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
     </profile>
   </profiles>
 
@@ -103,7 +105,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.9.1</version>
+        <version>5.9.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
