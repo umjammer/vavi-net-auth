@@ -5,7 +5,7 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.7</version>
+    <version>0.1.8</version>
   </parent>
 
   <artifactId>vavi-net-auth-box</artifactId>
@@ -23,29 +23,16 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.10.1</version>
             <configuration>
-              <source>1.8</source>
-              <target>1.8</target>
-              <encoding>utf-8</encoding>
-              <excludes>
-                <exclude>vavi/net/auth/web/box/BoxJavaFxAuthUI.java</exclude>
-              </excludes>
-              <testExcludes>
-                <testExclude>vavi/net/auth/oauth2/box/BoxFxGetter.java</testExclude>
-              </testExcludes>
+              <release>17</release>
             </configuration>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.0.0-M7</version>
             <configuration>
               <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
               <trimStackTrace>false</trimStackTrace>
-              <excludes>
-                <exclude>**/*Fx*.java</exclude>
-              </excludes>
             </configuration>
           </plugin>
         </plugins>
@@ -79,12 +66,30 @@
           <groupId>org.bouncycastle</groupId>
           <artifactId>bcprov-jdk15on</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>com.squareup.okio</groupId>
+          <artifactId>okio-jvm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.bitbucket.b_c</groupId>
+          <artifactId>jose4j</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
 <dependency>
   <groupId>org.bouncycastle</groupId>
-  <artifactId>bcprov-jdk15on</artifactId>
-  <version>1.70</version>
+  <artifactId>bcprov-jdk18on</artifactId>
+  <version>1.74</version>
+</dependency>
+<dependency>
+  <groupId>com.squareup.okio</groupId>
+  <artifactId>okio-jvm</artifactId>
+  <version>3.4.0</version>
+</dependency>
+<dependency>
+  <groupId>org.bitbucket.b_c</groupId>
+  <artifactId>jose4j</artifactId>
+  <version>0.9.3</version>
 </dependency>
 
     <dependency>

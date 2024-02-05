@@ -20,7 +20,7 @@ import vavi.util.Debug;
  *
  * system properties
  * <ul>
- * <li> "webdriver.chrome.driver" default: $PWD + "/bin/chromedriver"</li>
+ * <li> "webdriver.chrome.driver" default: /opt/homebrew/bin/chromedriver"</li>
  * <li> "webdriver.chrome.verboseLogging" defalut: false</li>
  * <li> "webdriver.chrome.profile_directory" defalut: null</li>
  * <li> "com.google.chrome.app" default: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"</li>
@@ -44,7 +44,7 @@ public class ChromeWebDriverFactory implements WebDriverFactory {
         if (System.getProperty(WEBDRIVER_CHROME_DRIVER) == null) {
 //            String pwd = System.getProperty("user.dir");
 //            System.setProperty(WEBDRIVER_CHROME_DRIVER, pwd + "/bin/chromedriver");
-            System.setProperty(WEBDRIVER_CHROME_DRIVER, "/usr/local/bin/chromedriver");
+            System.setProperty(WEBDRIVER_CHROME_DRIVER, "/opt/homebrew/bin/chromedriver");
         }
 Debug.println(Level.FINE, WEBDRIVER_CHROME_DRIVER + ": " + System.getProperty(WEBDRIVER_CHROME_DRIVER));
         if (System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING) == null) {

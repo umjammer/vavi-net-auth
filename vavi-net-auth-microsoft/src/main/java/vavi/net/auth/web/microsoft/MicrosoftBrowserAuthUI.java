@@ -69,7 +69,7 @@ Debug.println("uri: " + location);
                 PrintWriter os = res.getWriter();
                 os.println("code: " + URLEncoder.encode(location.substring(location.indexOf("code=") + "code=".length(), location.lastIndexOf("&") > 0 ? location.lastIndexOf("&") : location.length()), "utf-8"));
                 os.flush();
-                code = this.redirectUrl + location;
+                code = this.redirectUrl + location; // full url, starts with http://...
                 cdl.countDown();
             });
             httpServer.start();
@@ -80,10 +80,12 @@ Debug.println("uri: " + location);
         }
     }
 
+    /** Returns *URL* contains code */
     @Override
     public String getResult() {
         try {
             cdl.await();
+            Thread.sleep(2000);
             httpServer.stop();
         } catch (IOException | InterruptedException e) {
             if (exception == null) {
@@ -92,7 +94,7 @@ Debug.println("uri: " + location);
                 exception.addSuppressed(e);
             }
         }
-Debug.println("return: " + code);
+Debug.println("return: " + code); // full url, starts with http://...
 
         return code;
     }

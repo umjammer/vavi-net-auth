@@ -40,6 +40,11 @@ public class Test1 {
         PropsEntity.Util.bind(this);
     }
 
+    /**
+     * when failed...
+     * <li>refresh token is expired (rm ~/.vavifuse/msgraph/email@address)</li>
+     * <li>check secret is expired (<a href="https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade">azure.com</a>)</li>
+     */
     @Test
     void test1() throws Exception {
         WithTotpUserCredential userCredential = new MicrosoftLocalUserCredential(email);

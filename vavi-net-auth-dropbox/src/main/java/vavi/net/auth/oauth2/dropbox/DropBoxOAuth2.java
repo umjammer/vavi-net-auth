@@ -63,7 +63,7 @@ public class DropBoxOAuth2 implements OAuth2<UserCredential, String> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.INFO, "no dropbox.properties in classpath, use default");
+Debug.println(Level.FINE, "no dropbox.properties in classpath, use default");
         }
 Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
 Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName);

@@ -5,7 +5,7 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.7</version>
+    <version>0.1.8</version>
   </parent>
 
   <artifactId>vavi-net-auth-google</artifactId>
@@ -23,31 +23,16 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.10.1</version>
             <configuration>
-              <source>1.8</source>
-              <target>1.8</target>
-              <encoding>utf-8</encoding>
-              <excludes>
-                <exclude>vavi/net/auth/web/google/GoogleJavaFxAuthUI.java</exclude>
-              </excludes>
-              <testExcludes>
-                <testExclude>vavi/net/auth/oauth2/google/AuthorizationCodeInstalledApp.java</testExclude>
-                <testExclude>vavi/net/auth/oauth2/google/GoogleDriveFxGetter.java</testExclude>
-                <testExclude>vavi/net/auth/oauth2/google/DriveQuickstart.java</testExclude>
-              </testExcludes>
+              <release>17</release>
             </configuration>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.0.0-M7</version>
             <configuration>
               <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
               <trimStackTrace>false</trimStackTrace>
-              <excludes>
-                <exclude>**/*Fx*.java</exclude>
-              </excludes>
             </configuration>
           </plugin>
         </plugins>
@@ -87,7 +72,7 @@
     <dependency>
       <groupId>com.google.auth</groupId>
       <artifactId>google-auth-library-oauth2-http</artifactId>
-      <version>1.16.1</version>
+      <version>1.20.0</version>
     </dependency>
 
     <dependency>
@@ -131,13 +116,13 @@
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk15to18</artifactId>
-      <version>1.72</version>
+      <version>1.77</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcutil-jdk15to18</artifactId>
-      <version>1.72</version>
+      <version>1.77</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -38,7 +38,7 @@ public class FacebookOAuth2 implements OAuth2<UserCredential, String> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.INFO, "no box.properties in classpath, use default");
+Debug.println(Level.FINE, "no box.properties in classpath, use default");
         }
 Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
     }

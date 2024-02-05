@@ -46,6 +46,7 @@ public class Test1 {
         BoxLocalUserCredential userCredential = new BoxLocalUserCredential(email);
         BoxLocalAppCredential appCredential = new BoxLocalAppCredential();
 
+        // if you got an error, remove refresh token at ~/.vavifuse/box/you@box.com
         BoxAPIConnection connection = new BoxOAuth2(appCredential).authorize(userCredential);
 Debug.println(connection.getBaseURL());
     }

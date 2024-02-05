@@ -41,7 +41,7 @@ public class FlickrOAuth2 implements OAuth2<UserCredential, Flickr> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.INFO, "no box.properties in classpath, use default");
+Debug.println(Level.FINE, "no box.properties in classpath, use default");
         }
 Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
     }
