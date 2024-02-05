@@ -40,7 +40,7 @@ public class GoogleOAuth2 implements OAuth2<WithTotpUserCredential, Credential> 
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.INFO, "no googledrive.properties in classpath, use default");
+Debug.println(Level.FINE, "no googledrive.properties in classpath, use default");
         }
 Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
     }

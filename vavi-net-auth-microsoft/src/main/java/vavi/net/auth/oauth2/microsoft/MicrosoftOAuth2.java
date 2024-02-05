@@ -50,7 +50,7 @@ public class MicrosoftOAuth2 implements OAuth2<WithTotpUserCredential, String> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.INFO, "no onedrive.properties in classpath, use default");
+Debug.println(Level.FINE, "no onedrive.properties in classpath, use default");
         }
 Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
 Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName);
