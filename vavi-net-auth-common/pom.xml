@@ -18,7 +18,6 @@
       <activation>
         <os>
           <family>mac</family>
-          <arch>x86_64</arch>
         </os>
         <property>
           <name>env.JITPACK</name>
