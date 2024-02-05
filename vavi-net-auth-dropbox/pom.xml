@@ -28,13 +28,6 @@
               <source>1.8</source>
               <target>1.8</target>
               <encoding>utf-8</encoding>
-              <excludes>
-                <exclude>vavi/net/auth/web/dropbox/DropBoxJavaFxAuthUI.java</exclude>
-              </excludes>
-              <testExcludes>
-                <!-- TODO at least remaining one compilation target?-->
-                <testExclude>vavi/net/auth/oauth2/dropbox/DropBoxFxGetter.java</testExclude>
-              </testExcludes>
             </configuration>
           </plugin>
           <plugin>
@@ -44,9 +37,6 @@
             <configuration>
               <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
               <trimStackTrace>false</trimStackTrace>
-              <excludes>
-                <exclude>**/*Fx*.java</exclude>
-              </excludes>
             </configuration>
           </plugin>
         </plugins>

@@ -28,14 +28,6 @@
               <source>1.8</source>
               <target>1.8</target>
               <encoding>utf-8</encoding>
-              <excludes>
-                <exclude>vavi/net/auth/web/google/GoogleJavaFxAuthUI.java</exclude>
-              </excludes>
-              <testExcludes>
-                <testExclude>vavi/net/auth/oauth2/google/AuthorizationCodeInstalledApp.java</testExclude>
-                <testExclude>vavi/net/auth/oauth2/google/GoogleDriveFxGetter.java</testExclude>
-                <testExclude>vavi/net/auth/oauth2/google/DriveQuickstart.java</testExclude>
-              </testExcludes>
             </configuration>
           </plugin>
           <plugin>
@@ -45,9 +37,6 @@
             <configuration>
               <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
               <trimStackTrace>false</trimStackTrace>
-              <excludes>
-                <exclude>**/*Fx*.java</exclude>
-              </excludes>
             </configuration>
           </plugin>
         </plugins>

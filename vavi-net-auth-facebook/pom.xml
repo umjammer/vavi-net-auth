@@ -28,9 +28,6 @@
               <source>1.8</source>
               <target>1.8</target>
               <encoding>utf-8</encoding>
-              <excludes>
-                <exclude>vavi/net/auth/web/facebook/FacebookJavaFxAuthUI.java</exclude>
-              </excludes>
             </configuration>
           </plugin>
         </plugins>
