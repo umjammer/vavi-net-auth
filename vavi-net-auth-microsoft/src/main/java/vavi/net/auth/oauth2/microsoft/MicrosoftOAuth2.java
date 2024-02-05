@@ -75,8 +75,12 @@ Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName)
     /** @return code */
     @Override
     public String authorize(WithTotpUserCredential userCredential) throws IOException {
-        String code = (String) OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, appCredential).authorize(userCredential);
-        return code.substring(code.indexOf("code=") + "code=".length());
+        String url = (String) OAuth2.getAuthenticator(authenticatorClassName, OAuth2AppCredential.class, appCredential).authorize(userCredential);
+        String query = url.substring(url.indexOf("code=") + "code=".length());
+        int p = query.indexOf('&');
+        String code = p >= 0 ? query.substring(0, p) : query;
+Debug.println("code: " + code);
+        return code;
     }
 
     /** for loose coupling */
