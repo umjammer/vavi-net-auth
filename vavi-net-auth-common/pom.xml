@@ -12,58 +12,6 @@
 
   <artifactId>vavi-net-auth-common</artifactId>
 
-  <profiles>
-    <profile>
-      <id>local (not on jitpack)</id>
-      <activation>
-        <os>
-          <family>mac</family>
-        </os>
-        <property>
-          <name>env.JITPACK</name>
-          <value>!true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>3.3.0</version>
-            <executions>
-              <execution>
-                <id>copy</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>copy</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.rococoa</groupId>
-                      <artifactId>rococoa-core</artifactId>
-                      <type>dylib</type>
-                      <overWrite>false</overWrite>
-                      <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-                      <destFileName>librococoa.dylib</destFileName>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-      <dependencies>
-        <dependency>
-          <groupId>org.rococoa</groupId>
-          <artifactId>rococoa-core</artifactId>
-          <version>0.8.6</version>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
-
   <build>
     <plugins>
       <plugin>
@@ -80,13 +28,6 @@
       </plugin>
     </plugins>
   </build>
-
-  <repositories>
-    <repository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/umjammer/*</url>
-    </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
@@ -191,18 +132,6 @@
   <artifactId>okio-jvm</artifactId>
   <version>3.4.0</version>
 </dependency>
-
-    <dependency>
-      <groupId>vavi</groupId>
-      <artifactId>vavi-crypto-sandbox</artifactId>
-      <version>1.0.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.xerial</groupId>
-      <artifactId>sqlite-jdbc</artifactId>
-      <version>3.42.0.0</version>
-      <scope>runtime</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>

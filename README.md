@@ -52,3 +52,4 @@ Java OAuth2 and auto login and totp
  * refer to cyberduck profile
  * box when refresh token expired
  * [`GoogleCredentials#getApplicationDefault()`](https://cloud.google.com/docs/authentication/application-default-credentials) !!!
+ * ~~only cookie.chrome.mac uses jna~~ 
