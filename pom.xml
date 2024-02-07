@@ -4,7 +4,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>0.1.8</version>
+  <version>0.1.9</version>
 
   <modules>
     <module>vavi-net-auth-common</module>
@@ -32,13 +32,6 @@
     <url>https://github.com/umjammer/vavi-net-auth/issues</url>
   </issueManagement>
   <description>network authentication library like OAuth2</description>
-
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/umjammer/vavi-net-auth</url>
-    </repository>
-  </distributionManagement>
 
   <profiles>
     <profile>
@@ -87,7 +80,7 @@
       <dependency>
         <groupId>vavi</groupId>
         <artifactId>vavi-net-auth-common</artifactId>
-        <version>0.1.8</version>
+        <version>0.1.9</version>
       </dependency>
       <dependency>
         <!-- tiny http server for oauth -->
@@ -107,7 +100,7 @@
       <dependency>
         <groupId>vavi</groupId>
         <artifactId>vavi-net-auth-common</artifactId>
-        <version>0.1.8</version>
+        <version>0.1.9</version>
         <type>test-jar</type>
         <scope>test</scope>
       </dependency>

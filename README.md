@@ -1,7 +1,7 @@
-[![GitHub Packages](https://github.com/umjammer/vavi-net-auth/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/umjammer?tab=packages&repo_name=vavi-net-auth)
-[![Java CI with Maven](https://github.com/umjammer/vavi-net-auth/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-net-auth/actions)
+[![Release](https://jitpack.io/v/umjammer/vavi-net-auth.svg)](https://jitpack.io/#umjammer/vavi-net-auth)
+[![Java CI](https://github.com/umjammer/vavi-net-auth/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-net-auth/actions)
 [![CodeQL](https://github.com/umjammer/vavi-net-auth/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-net-auth/actions/workflows/codeql-analysis.yml)
-![Java](https://img.shields.io/badge/Java-8-b07219)
+![Java](https://img.shields.io/badge/Java-17-b07219)
 [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
 # vavi-net-auth
@@ -25,9 +25,7 @@ Java OAuth2 and auto login and totp
 
 ### jars
 
- * https://github.com/umjammer?tab=packages&repo_name=vavi-net-auth
- * this project uses gitlab package registry. add a personal access token to `~/.m2/settings.xml`
- * see https://docs.gitlab.com/ee/user/packages/maven_repository/index.html#authenticate-to-the-package-registry-with-maven
+ * [maven](https://jitpack.io/#umjammer/vavi-net-auth)
 
 ### ~~selenium chrome driver~~ (obsolete, use os default browser)
 
@@ -52,3 +50,4 @@ Java OAuth2 and auto login and totp
  * refer to cyberduck profile
  * box when refresh token expired
  * [`GoogleCredentials#getApplicationDefault()`](https://cloud.google.com/docs/authentication/application-default-credentials) !!!
+ * ~~only cookie.chrome.mac uses jna~~ 
