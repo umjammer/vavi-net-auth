@@ -39,55 +39,20 @@
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>4.10.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-codec</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-handler</artifactId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-<dependency>
-  <groupId>io.netty</groupId>
-  <artifactId>netty-codec</artifactId>
-  <version>4.1.95.Final</version>
-</dependency>
-<dependency>
-  <groupId>io.netty</groupId>
-  <artifactId>netty-handler</artifactId>
-  <version>4.1.95.Final</version>
-</dependency>
-<dependency>
-  <artifactId>guava</artifactId>
-  <groupId>com.google.guava</groupId>
-  <version>32.0.0-jre</version>
+      <version>4.16.1</version>
     </dependency>
 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-chrome-driver</artifactId>
-      <version>4.10.0</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
+      <version>4.17.0</version>
     </dependency>
 
     <dependency>
       <!-- oauth2 -->
       <groupId>org.dmfs</groupId>
       <artifactId>oauth2-essentials</artifactId>
-      <version>0.22.0</version>
+      <version>0.22.1</version>
       <exclusions>
         <exclusion>
           <groupId>org.json</groupId>
@@ -103,37 +68,20 @@
     <dependency>
       <groupId>org.dmfs</groupId>
       <artifactId>httpurlconnection-executor</artifactId>
-      <version>1.21.3</version>
+      <version>1.22.1</version>
     </dependency>
     <dependency>
       <groupId>org.dmfs</groupId>
       <artifactId>okhttp-executor</artifactId>
-      <version>1.16.2</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.squareup.okhttp3</groupId>
-          <artifactId>okhttp</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>1.22.1</version>
     </dependency>
+
     <dependency>
-  <groupId>com.squareup.okhttp3</groupId>
-  <artifactId>okhttp</artifactId>
-  <version>4.10.0</version>
-  <exclusions>
-    <exclusion>
-      <groupId>com.squareup.okio</groupId>
-      <artifactId>okio-jvm</artifactId>
-    </exclusion>
-  </exclusions>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-crypto-sandbox</artifactId>
       <version>1.0.3</version>
     </dependency>
     <dependency>
-  <groupId>com.squareup.okio</groupId>
-  <artifactId>okio-jvm</artifactId>
-  <version>3.4.0</version>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.45.0.0</version>
