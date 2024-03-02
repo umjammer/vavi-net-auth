@@ -4,7 +4,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-net-auth</artifactId>
-  <version>0.1.9</version>
+  <version>0.1.10</version>
 
   <modules>
     <module>vavi-net-auth-common</module>
@@ -80,7 +80,7 @@
       <dependency>
         <groupId>vavi</groupId>
         <artifactId>vavi-net-auth-common</artifactId>
-        <version>0.1.9</version>
+        <version>0.1.10</version>
       </dependency>
       <dependency>
         <!-- tiny http server for oauth -->
@@ -92,7 +92,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.10.1</version>
+        <version>5.10.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -100,7 +100,7 @@
       <dependency>
         <groupId>vavi</groupId>
         <artifactId>vavi-net-auth-common</artifactId>
-        <version>0.1.9</version>
+        <version>0.1.10</version>
         <type>test-jar</type>
         <scope>test</scope>
       </dependency>
