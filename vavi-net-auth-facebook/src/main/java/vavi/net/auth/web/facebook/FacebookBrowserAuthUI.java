@@ -50,5 +50,3 @@ public class FacebookBrowserAuthUI implements AuthUI<String> {
         return exception;
     }
 }
-
-/* */

@@ -45,5 +45,3 @@ public class AmazonLocalAuthenticator implements Authenticator<UserCredential, S
         return ui.getResult();
     }
 }
-
-/* */

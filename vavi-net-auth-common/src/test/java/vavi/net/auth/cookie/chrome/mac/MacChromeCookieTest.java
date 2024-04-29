@@ -36,5 +36,3 @@ Debug.println(cookie.get("cf_clearance"));
         assertNotNull(cookie.get("user_id"));
     }
 }
-
-/* */

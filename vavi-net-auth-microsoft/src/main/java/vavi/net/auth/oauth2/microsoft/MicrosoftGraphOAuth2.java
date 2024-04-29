@@ -70,5 +70,3 @@ Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName)
         return OAuth2.getTokenRefresher(tokenRefresherClassName, appCredential, id, this::refresh);
     }
 }
-
-/* */

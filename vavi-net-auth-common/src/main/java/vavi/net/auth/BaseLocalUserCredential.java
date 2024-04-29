@@ -44,5 +44,3 @@ public abstract class BaseLocalUserCredential implements UserCredential {
         return id;
     }
 }
-
-/* */

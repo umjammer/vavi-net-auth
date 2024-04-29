@@ -46,5 +46,3 @@ public final class MicrosoftLocalUserCredential extends BaseLocalUserCredential 
         return totpSecret;
     }
 }
-
-/* */

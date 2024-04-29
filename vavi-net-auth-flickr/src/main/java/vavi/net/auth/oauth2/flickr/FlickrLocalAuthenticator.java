@@ -45,5 +45,3 @@ public class FlickrLocalAuthenticator implements Authenticator<UserCredential, S
         return ui.getResult();
     }
 }
-
-/* */

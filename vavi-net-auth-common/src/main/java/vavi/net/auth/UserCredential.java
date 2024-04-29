@@ -21,5 +21,3 @@ public interface UserCredential {
     /** */
     String getPassword();
 }
-
-/* */

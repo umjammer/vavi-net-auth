@@ -50,5 +50,3 @@ public class FlickrBrowserAuthUI implements AuthUI<String> {
         return exception;
     }
 }
-
-/* */

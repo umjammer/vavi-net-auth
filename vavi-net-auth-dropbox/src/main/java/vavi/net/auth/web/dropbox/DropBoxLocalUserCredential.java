@@ -39,5 +39,3 @@ public final class DropBoxLocalUserCredential extends BaseLocalUserCredential {
         return password;
     }
 }
-
-/* */

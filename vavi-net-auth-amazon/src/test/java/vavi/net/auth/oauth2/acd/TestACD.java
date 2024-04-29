@@ -44,5 +44,3 @@ public class TestACD {
 System.err.println("code: " + code);
     }
 }
-
-/* */

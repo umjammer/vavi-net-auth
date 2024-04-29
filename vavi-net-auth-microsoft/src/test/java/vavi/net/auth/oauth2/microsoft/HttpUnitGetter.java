@@ -38,5 +38,3 @@ public class HttpUnitGetter implements Getter {
         return null;
     }
 }
-
-/* */

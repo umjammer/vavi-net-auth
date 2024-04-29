@@ -97,5 +97,3 @@ Debug.println(url);
         return scope;  
     }
 }
-
-/* */

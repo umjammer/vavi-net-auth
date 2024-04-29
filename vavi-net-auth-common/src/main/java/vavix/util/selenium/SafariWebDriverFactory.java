@@ -30,5 +30,3 @@ public class SafariWebDriverFactory implements WebDriverFactory {
         return driver;
     }
 }
-
-/* */

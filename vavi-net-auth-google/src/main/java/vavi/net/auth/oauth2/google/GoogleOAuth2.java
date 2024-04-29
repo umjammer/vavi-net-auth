@@ -81,5 +81,3 @@ Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
         return HTTP_TRANSPORT;
     }
 }
-
-/* */

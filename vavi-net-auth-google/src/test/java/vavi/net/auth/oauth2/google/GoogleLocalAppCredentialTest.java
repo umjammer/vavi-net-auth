@@ -119,5 +119,3 @@ Debug.println(System.currentTimeMillis() - t + " ms, " + files.size() + " items"
         System.err.println(appCredential.getAccessType());
     }
 }
-
-/* */

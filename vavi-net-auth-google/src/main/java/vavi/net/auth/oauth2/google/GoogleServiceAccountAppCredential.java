@@ -66,5 +66,3 @@ public class GoogleServiceAccountAppCredential implements GoogleAppCredential<Se
         return credentials;
     }
 }
-
-/* */

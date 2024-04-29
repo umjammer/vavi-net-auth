@@ -33,5 +33,3 @@ public abstract class BaseLocalAppCredential implements AppCredential {
         }
     }
 }
-
-/* */

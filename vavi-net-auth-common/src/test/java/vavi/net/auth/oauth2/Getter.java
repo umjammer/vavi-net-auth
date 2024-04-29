@@ -25,5 +25,3 @@ public interface Getter {
      */
     String get(String url) throws IOException;
 }
-
-/* */

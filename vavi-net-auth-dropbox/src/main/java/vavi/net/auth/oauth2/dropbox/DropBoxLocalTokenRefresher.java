@@ -76,5 +76,3 @@ Debug.println(Level.FINE, "refreshToken: exists: " + Files.exists(file) + ", " +
         }
     }
 }
-
-/* */

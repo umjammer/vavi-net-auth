@@ -59,5 +59,3 @@ public abstract class GoogleBaseOAuth2AppCredential implements GoogleOAuth2AppCr
         return clientSecrets;
     }
 }
-
-/* */

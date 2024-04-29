@@ -18,5 +18,3 @@ public interface WithTotpUserCredential extends UserCredential {
     /** */
     String getTotpSecret();
 }
-
-/* */

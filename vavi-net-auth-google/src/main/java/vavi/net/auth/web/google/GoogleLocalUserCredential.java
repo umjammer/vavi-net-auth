@@ -47,5 +47,3 @@ public final class GoogleLocalUserCredential extends BaseLocalUserCredential imp
         return totpSecret;
     }
 }
-
-/* */

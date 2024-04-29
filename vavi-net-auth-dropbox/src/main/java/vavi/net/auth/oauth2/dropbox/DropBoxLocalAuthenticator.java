@@ -49,5 +49,3 @@ public class DropBoxLocalAuthenticator implements Authenticator<UserCredential, 
         return ui.getResult();
     }
 }
-
-/* */

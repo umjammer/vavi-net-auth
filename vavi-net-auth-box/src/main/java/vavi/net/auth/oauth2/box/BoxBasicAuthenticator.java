@@ -48,5 +48,3 @@ public class BoxBasicAuthenticator implements Authenticator<UserCredential, Stri
         return ui.getResult();
     }
 }
-
-/* */

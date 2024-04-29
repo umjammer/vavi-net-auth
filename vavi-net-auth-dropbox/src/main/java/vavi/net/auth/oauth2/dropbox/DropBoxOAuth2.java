@@ -117,5 +117,3 @@ Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName)
         }
     }
 }
-
-/* */

@@ -41,5 +41,3 @@ public class InteractiveGetter implements Getter {
     }
 
 }
-
-/* */

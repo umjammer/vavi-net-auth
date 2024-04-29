@@ -26,5 +26,3 @@ public interface WebDriverFactory {
 //        return new SafariWebDriverFactory();
     }
 }
-
-/* */

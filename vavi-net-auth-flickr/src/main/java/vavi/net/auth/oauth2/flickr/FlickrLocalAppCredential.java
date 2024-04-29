@@ -75,5 +75,3 @@ public class FlickrLocalAppCredential extends BaseLocalAppCredential implements 
         return null;
     }
 }
-
-/* */

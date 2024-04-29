@@ -44,5 +44,3 @@ public class TestFacebook {
         System.err.println("token: " + token);
     }
 }
-
-/* */

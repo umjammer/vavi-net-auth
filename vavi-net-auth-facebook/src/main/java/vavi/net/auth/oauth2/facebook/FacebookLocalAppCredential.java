@@ -71,5 +71,3 @@ public class FacebookLocalAppCredential implements OAuth2AppCredential {
         return null;
     }
 }
-
-/* */

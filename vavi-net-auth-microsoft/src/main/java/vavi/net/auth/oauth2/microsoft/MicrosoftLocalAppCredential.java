@@ -82,5 +82,3 @@ public final class MicrosoftLocalAppCredential extends BaseLocalAppCredential im
         return scope;
     }
 }
-
-/* */

@@ -39,5 +39,3 @@ public class AmazonLocalUserCredential extends BaseLocalUserCredential {
         return password;
     }
 }
-
-/* */
