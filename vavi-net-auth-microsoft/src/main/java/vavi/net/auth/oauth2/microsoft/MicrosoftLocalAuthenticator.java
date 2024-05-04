@@ -49,5 +49,3 @@ public class MicrosoftLocalAuthenticator implements Authenticator<WithTotpUserCr
         return ui.getResult();
     }
 }
-
-/* */

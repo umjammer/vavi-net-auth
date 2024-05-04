@@ -24,5 +24,3 @@ public interface AppCredential {
     /** id for authenticate */
     String getClientId();
 }
-
-/* */

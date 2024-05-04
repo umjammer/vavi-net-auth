@@ -90,5 +90,3 @@ public class Ui4jGetter implements Getter {
         return "ACCESS_TOKEN";
     }
 }
-
-/* */

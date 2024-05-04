@@ -29,5 +29,3 @@ public interface TokenRefresher<T> extends Closeable {
      */
     T readRefreshToken() throws IOException;
 }
-
-/* */

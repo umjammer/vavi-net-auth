@@ -74,5 +74,3 @@ Debug.println(Level.FINE, "restore: " + state);
         }
     }
 }
-
-/* */

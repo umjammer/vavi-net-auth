@@ -135,5 +135,3 @@ public class GoogleLocalOAuth2AppCredential extends GoogleBaseOAuth2AppCredentia
         return dataStoreFactoryFactory.newDataStoreFactory();
     }
 }
-
-/* */

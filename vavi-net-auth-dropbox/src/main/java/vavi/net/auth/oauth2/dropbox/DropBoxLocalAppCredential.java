@@ -81,5 +81,3 @@ public final class DropBoxLocalAppCredential extends BaseLocalAppCredential impl
         return scope;
     }
 }
-
-/* */

@@ -7,7 +7,7 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.10</version>
+    <version>0.1.11</version>
   </parent>
 
   <artifactId>vavi-net-auth-common</artifactId>
@@ -39,13 +39,13 @@
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>4.16.1</version>
+      <version>4.20.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-chrome-driver</artifactId>
-      <version>4.17.0</version>
+      <version>4.20.0</version>
     </dependency>
 
     <dependency>
@@ -63,7 +63,7 @@
 <dependency>
   <groupId>org.json</groupId>
   <artifactId>json</artifactId>
-  <version>20231013</version>
+  <version>20240303</version>
 </dependency>
     <dependency>
       <groupId>org.dmfs</groupId>
@@ -84,7 +84,7 @@
     <dependency>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
-      <version>3.45.0.0</version>
+      <version>3.45.3.0</version>
       <scope>runtime</scope>
     </dependency>
 

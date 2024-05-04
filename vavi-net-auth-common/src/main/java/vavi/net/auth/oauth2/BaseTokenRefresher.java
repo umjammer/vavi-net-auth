@@ -96,5 +96,3 @@ Debug.println(Level.FINE, "stopping refresh thread");
     /* */
     public abstract T readRefreshToken() throws IOException;
 }
-
-/* */

@@ -31,5 +31,3 @@ public interface GoogleOAuth2AppCredential extends OAuth2AppCredential, GoogleAp
     /** */
     DataStoreFactory getDataStoreFactory() throws IOException;
 }
-
-/* */

@@ -87,5 +87,3 @@ public final class BoxLocalAppCredential extends BaseLocalAppCredential implemen
         return scope;
     }
 }
-
-/* */

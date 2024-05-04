@@ -39,5 +39,3 @@ public class FlickrLocalUserCredential extends BaseLocalUserCredential {
         return password;
     }
 }
-
-/* */

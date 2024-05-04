@@ -24,5 +24,3 @@ public interface AuthUI<T> {
     /** */
     Exception getException();
 }
-
-/* */

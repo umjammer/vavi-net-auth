@@ -75,5 +75,3 @@ Debug.println(Level.FINE, COM_GOOGLE_CHROME_APP + ": " + System.getProperty(COM_
         return driver;
     }
 }
-
-/* */

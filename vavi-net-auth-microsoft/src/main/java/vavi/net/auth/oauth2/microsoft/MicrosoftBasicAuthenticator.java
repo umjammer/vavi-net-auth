@@ -49,5 +49,3 @@ public class MicrosoftBasicAuthenticator implements Authenticator<WithTotpUserCr
         return ui.getResult();
     }
 }
-
-/* */

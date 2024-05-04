@@ -50,5 +50,3 @@ public class AmazonBasicAuthenticator implements Authenticator<UserCredential, S
         return ui.getResult();
     }
 }
-
-/* */

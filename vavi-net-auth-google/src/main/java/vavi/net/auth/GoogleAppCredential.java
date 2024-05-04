@@ -21,5 +21,3 @@ public interface GoogleAppCredential<T> {
     /** */
     String getApplicationName();
 }
-
-/* */

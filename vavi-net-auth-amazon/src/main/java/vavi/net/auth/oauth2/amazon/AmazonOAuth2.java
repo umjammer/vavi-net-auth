@@ -105,5 +105,3 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
         }
     }
 }
-
-/* */

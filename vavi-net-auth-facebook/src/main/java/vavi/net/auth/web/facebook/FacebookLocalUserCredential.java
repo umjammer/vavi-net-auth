@@ -39,5 +39,3 @@ public class FacebookLocalUserCredential extends BaseLocalUserCredential {
         return password;
     }
 }
-
-/* */

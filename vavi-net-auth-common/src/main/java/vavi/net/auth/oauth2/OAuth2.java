@@ -64,5 +64,3 @@ public interface OAuth2<I, O> {
         }
     }
 }
-
-/* */

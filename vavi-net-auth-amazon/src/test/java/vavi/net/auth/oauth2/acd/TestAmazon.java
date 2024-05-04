@@ -39,5 +39,3 @@ public class TestAmazon {
         Thread.sleep(5);
     }
 }
-
-/* */

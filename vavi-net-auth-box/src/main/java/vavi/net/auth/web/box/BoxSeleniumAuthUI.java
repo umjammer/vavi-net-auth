@@ -176,5 +176,3 @@ e.printStackTrace();
         su.close();
     }
 }
-
-/* */

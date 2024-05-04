@@ -59,5 +59,3 @@ Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
         return flickr;
     }
 }
-
-/* */

@@ -83,5 +83,3 @@ public final class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredenti
         return scope;
     }
 }
-
-/* */

@@ -36,5 +36,3 @@ public class BoxDevOAuth2 implements OAuth2<UserCredential, BoxAPIConnection> {
         return new BoxAPIConnection(System.getenv("BOX_DEVELOPER_TOKEN"));
     }
 }
-
-/* */

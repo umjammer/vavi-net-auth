@@ -51,5 +51,3 @@ public class BoxLocalAuthenticator implements Authenticator<UserCredential, Stri
         return ui.getResult();
     }
 }
-
-/* */

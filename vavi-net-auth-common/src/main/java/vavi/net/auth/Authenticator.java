@@ -23,5 +23,3 @@ public interface Authenticator<I, O> {
      */
     O authorize(I credential) throws IOException;
 }
-
-/* */

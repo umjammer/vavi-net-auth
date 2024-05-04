@@ -79,5 +79,3 @@ Debug.println(Level.FINE, "refreshToken: " + (credential.getRefreshToken() != nu
         return credential;
     }
 }
-
-/* */

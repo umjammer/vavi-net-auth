@@ -45,5 +45,3 @@ public class FacebookLocalAuthenticator implements Authenticator<UserCredential,
         return ui.getResult();
     }
 }
-
-/* */
