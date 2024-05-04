@@ -5,7 +5,7 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.10</version>
+    <version>0.1.11</version>
   </parent>
 
   <artifactId>vavi-net-auth-amazon</artifactId>
@@ -58,21 +58,21 @@
               </execution>
             </executions>
           </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <trimStackTrace>false</trimStackTrace>
-          <argLine>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <trimStackTrace>false</trimStackTrace>
+              <argLine>
                 -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
-          </argLine>
-          <environmentVariables>
-            <TEST_AMAZON_ACCOUNT>${test.account}</TEST_AMAZON_ACCOUNT>
-          </environmentVariables>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+              </argLine>
+              <environmentVariables>
+                <TEST_AMAZON_ACCOUNT>${test.account}</TEST_AMAZON_ACCOUNT>
+              </environmentVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
