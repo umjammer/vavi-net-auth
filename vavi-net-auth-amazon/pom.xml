@@ -32,22 +32,18 @@
     </profile>
 
     <profile>
-      <id>local (not on CI)</id>
+      <id>local</id>
       <activation>
         <file>
           <exists>${basedir}/local.properties</exists>
         </file>
-        <property>
-          <name>env.JITPACK</name>
-          <value>!true</value>
-        </property>
       </activation>
       <build>
         <plugins>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>properties-maven-plugin</artifactId>
-            <version>1.0.0</version>
+            <version>1.2.1</version>
             <executions>
               <execution>
                 <phase>initialize</phase>
@@ -62,20 +58,13 @@
               </execution>
             </executions>
           </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
-  <build>
-    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <trimStackTrace>false</trimStackTrace>
           <argLine>
-            -Djava.util.logging.config.file=${project.build.testResources.testResource.directory}/logging.properties
+                -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
           </argLine>
           <environmentVariables>
             <TEST_AMAZON_ACCOUNT>${test.account}</TEST_AMAZON_ACCOUNT>
@@ -84,6 +73,8 @@
       </plugin>
     </plugins>
   </build>
+    </profile>
+  </profiles>
 
   <repositories>
     <repository>
@@ -120,7 +111,7 @@
 <dependency>
   <groupId>io.netty</groupId>
   <artifactId>netty-handler</artifactId>
-  <version>4.1.106.Final</version>
+  <version>4.1.107.Final</version>
 </dependency>
 
     <dependency>

@@ -19,7 +19,7 @@
 
   <properties>
     <vavi-commons-net.groupId>com.github.umjammer</vavi-commons-net.groupId> <!-- vavi -->
-    <vavi-commons-net.version>1.0.7</vavi-commons-net.version>
+    <vavi-commons-net.version>1.0.9</vavi-commons-net.version>
   </properties>
 
   <packaging>pom</packaging>
