@@ -102,16 +102,6 @@
       <artifactId>google-api-services-drive</artifactId>
       <version>v3-rev20240123-2.0.0</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.api-client</groupId>
-          <artifactId>google-api-client</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.bouncycastle</groupId>

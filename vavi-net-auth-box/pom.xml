@@ -60,28 +60,8 @@
     <dependency>
       <groupId>com.box</groupId> <!-- box -->
       <artifactId>box-java-sdk</artifactId>
-      <version>4.7.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk15on</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.squareup.okio</groupId>
-          <artifactId>okio-jvm</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>4.9.1</version>
     </dependency>
-<dependency>
-  <groupId>org.bouncycastle</groupId>
-  <artifactId>bcprov-jdk18on</artifactId>
-  <version>1.78</version>
-</dependency>
-<dependency>
-  <groupId>com.squareup.okio</groupId>
-  <artifactId>okio-jvm</artifactId>
-  <version>3.9.0</version>
-</dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
