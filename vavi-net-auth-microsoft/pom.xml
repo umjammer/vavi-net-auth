@@ -5,7 +5,7 @@
   <parent>
     <groupId>vavi</groupId>
     <artifactId>vavi-net-auth</artifactId>
-    <version>0.1.12</version>
+    <version>0.1.13</version>
   </parent>
 
   <artifactId>vavi-net-auth-microsoft</artifactId>
@@ -91,16 +91,15 @@
           <artifactId>junit</artifactId>
         </exclusion>
         <exclusion>
+          <groupId>net.sf.jtidy</groupId>
+          <artifactId>jtidy</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>nekohtml</groupId>
           <artifactId>nekohtml</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
-<dependency>
-  <groupId>org.codelibs</groupId>
-  <artifactId>nekohtml</artifactId>
-  <version>2.1.2</version>
-</dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
