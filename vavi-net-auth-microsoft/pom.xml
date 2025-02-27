@@ -91,16 +91,15 @@
           <artifactId>junit</artifactId>
         </exclusion>
         <exclusion>
+          <groupId>net.sf.jtidy</groupId>
+          <artifactId>jtidy</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>nekohtml</groupId>
           <artifactId>nekohtml</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
-<dependency>
-  <groupId>org.codelibs</groupId>
-  <artifactId>nekohtml</artifactId>
-  <version>2.1.2</version>
-</dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
