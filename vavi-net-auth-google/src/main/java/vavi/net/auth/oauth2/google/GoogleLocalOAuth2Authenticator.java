@@ -30,8 +30,8 @@ import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
  * <p>
  * use input assist.
  * </p>
- * TODO not works 2021/10/29
- * TODO google login detects selenium???
+ * TODO not works 2021/10/29 -> works see below
+ * TODO google login detects selenium??? -> use normal browser
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2016/03/04 umjammer initial version <br>
@@ -65,8 +65,8 @@ public class GoogleLocalOAuth2Authenticator implements Authenticator<WithTotpUse
             /* */
             protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
                 String url = authorizationUrl.build();
-Debug.println(Level.FINE, "authorizationUrl: " + url);
-                AuthUI<?> ui = new GoogleSeleniumAuthUI(wrap(appCredential, url, authorizationUrl.getRedirectUri()), userCredential);
+logger.log(Level.DEBUG, "authorizationUrl: " + url);
+                AuthUI<?> ui = new GoogleBrowserAuthUI(wrap(appCredential, url, authorizationUrl.getRedirectUri()), userCredential);
                 ui.auth();
             }
         };
