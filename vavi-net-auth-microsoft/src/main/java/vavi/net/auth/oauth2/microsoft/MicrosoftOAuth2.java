@@ -7,16 +7,18 @@
 package vavi.net.auth.oauth2.microsoft;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 
 import vavi.net.auth.WithTotpUserCredential;
-import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.OAuth2;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -31,6 +33,8 @@ import vavi.util.properties.annotation.PropsEntity;
  */
 @PropsEntity(url = "classpath:onedrive.properties")
 public class MicrosoftOAuth2 implements OAuth2<WithTotpUserCredential, String> {
+
+    private static final Logger logger = getLogger(MicrosoftOAuth2.class.getName());
 
     public static final String BASIC_LOCAL_TOKEN_REFRESHER = "vavi.net.auth.oauth2.BasicLocalTokenRefresher";
 
@@ -50,10 +54,10 @@ public class MicrosoftOAuth2 implements OAuth2<WithTotpUserCredential, String> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.FINE, "no onedrive.properties in classpath, use default");
+logger.log(Level.DEBUG, "no onedrive.properties in classpath, use default");
         }
-Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
-Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName);
+logger.log(Level.DEBUG, "authenticatorClassName: " + authenticatorClassName);
+logger.log(Level.DEBUG, "tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
     /** never start refresh thread, use SDK's refresh thread */
@@ -79,7 +83,7 @@ Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName)
         String query = url.substring(url.indexOf("code=") + "code=".length());
         int p = query.indexOf('&');
         String code = p >= 0 ? query.substring(0, p) : query;
-Debug.println("code: " + code);
+logger.log(Level.DEBUG, "code: " + code);
         return code;
     }
 

@@ -8,18 +8,19 @@ package vavi.net.auth.oauth2.dropbox;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 
 import com.dropbox.core.DbxAuthInfo;
 import com.dropbox.core.json.JsonReader.FileLoadException;
-
 import vavi.net.auth.AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -30,8 +31,10 @@ import vavi.util.Debug;
  */
 public class DropBoxLocalTokenRefresher implements TokenRefresher<DbxAuthInfo> {
 
+    private static final Logger logger = getLogger(DropBoxLocalTokenRefresher.class.getName());
+
     /** for refreshToken */
-    private Path file;
+    private final Path file;
 
     /**
      * @param refresh you should call {@link #writeRefreshToken(DbxAuthInfo)} and return new refresh delay.
@@ -44,14 +47,14 @@ public class DropBoxLocalTokenRefresher implements TokenRefresher<DbxAuthInfo> {
     public void writeRefreshToken(DbxAuthInfo authInfo) throws IOException {
         Files.createDirectories(file.getParent());
         DbxAuthInfo.Writer.writeToFile(authInfo, file.toFile(), true);
-Debug.println(Level.FINE, "refreshToken: " + authInfo.getAccessToken());
+logger.log(Level.DEBUG, "refreshToken: " + authInfo.getAccessToken());
     }
 
     /**
      * @return null when not found
      */
     public DbxAuthInfo readRefreshToken() throws IOException {
-Debug.println(Level.FINE, "refreshToken: exists: " + Files.exists(file) + ", " + file);
+logger.log(Level.DEBUG, "refreshToken: exists: " + Files.exists(file) + ", " + file);
         if (Files.exists(file)) {
             try {
                 return DbxAuthInfo.Reader.readFromFile(file.toFile());

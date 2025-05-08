@@ -7,14 +7,16 @@
 package vavi.net.auth.oauth2.microsoft;
 
 import java.io.IOException;
-import java.util.logging.Level;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.web.microsoft.MicrosoftSeleniumAuthUI;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -24,6 +26,8 @@ import vavi.util.Debug;
  * @version 0.00 2016/02/16 umjammer initial version <br>
  */
 public class MicrosoftLocalAuthenticator implements Authenticator<WithTotpUserCredential, String> {
+
+    private static final Logger logger = getLogger(MicrosoftLocalAuthenticator.class.getName());
 
     /** */
     private final OAuth2AppCredential appCredential;
@@ -43,7 +47,7 @@ public class MicrosoftLocalAuthenticator implements Authenticator<WithTotpUserCr
         ui.auth();
 
         if (ui.getException() != null) {
-            Debug.println(Level.WARNING, ui.getException().getMessage());
+            logger.log(Level.WARNING, ui.getException().getMessage());
         }
 
         return ui.getResult();

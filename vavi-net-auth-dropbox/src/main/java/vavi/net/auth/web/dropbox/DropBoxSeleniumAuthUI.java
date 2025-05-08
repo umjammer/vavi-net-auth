@@ -6,21 +6,22 @@
 
 package vavi.net.auth.web.dropbox;
 
+import java.io.Closeable;
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.logging.Level;
 
 import org.openqa.selenium.WebElement;
-
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.http.HttpServer;
-import vavi.util.Debug;
-
 import vavix.util.selenium.SeleniumUtil;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -30,12 +31,14 @@ import vavix.util.selenium.SeleniumUtil;
  * @version 0.00 2019/06/27 umjammer initial version <br>
  * @see SeleniumUtil
  */
-public class DropBoxSeleniumAuthUI implements AuthUI<String> {
+public class DropBoxSeleniumAuthUI implements AuthUI<String>, Closeable {
 
-    private String email;
-    private String password;
-    private String url;
-    private String redirectUrl;
+    private static final Logger logger = getLogger(DropBoxSeleniumAuthUI.class.getName());
+
+    private final String email;
+    private final String password;
+    private final String url;
+    private final String redirectUrl;
 
     /** */
     public DropBoxSeleniumAuthUI(UserCredential userCredential, OAuth2AppCredential appCredential) {
@@ -90,25 +93,25 @@ public class DropBoxSeleniumAuthUI implements AuthUI<String> {
                 su.sleep(300);
                 su.waitFor();
                 String location = su.getCurrentUrl();
-//Debug.println("location: " + location);
+//logger.log(Level.TRACE, "location: " + location);
                 if (location.contains("www.dropbox.com")) {
                     try {
                         WebElement element = null;
-//Debug.println("element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
+//logger.log(Level.TRACE, "element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
 //                        if (!tasks.contains("email") && (element = findElement(By.name("login_email"), 0)) != null) {
 //                            element.sendKeys(email);
 //                            tasks.add("email");
-//Debug.println("set " + tasks.peekLast());
+//logger.log(Level.TRACE, "set " + tasks.peekLast());
 //                            sleep();
 //                        }
 //                        if (!tasks.contains("password") && (element = findElement(By.name("login_password"))) != null) {
 //                            if (password != null) {
 //                                element.sendKeys(password);
 //                                tasks.add("password");
-//Debug.println("set " + tasks.peekLast());
+//logger.log(Level.TRACE, "set " + tasks.peekLast());
 //                                sleep();
 //                            } else {
-//Debug.println("no password");
+//logger.log(Level.TRACE, "no password");
 //                                continue;
 //                            }
 //                        }
@@ -117,15 +120,15 @@ public class DropBoxSeleniumAuthUI implements AuthUI<String> {
 //                            sleep();
 //                        }
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
-Debug.println(Level.WARNING, e.getMessage());
+logger.log(Level.WARNING, e.getMessage());
                     }
                 } else if (location.contains(redirectUrl)) {
                     code = location;
-Debug.println(Level.FINE, "code: " + code);
+logger.log(Level.DEBUG, "code: " + code);
                     login = true;
                 }
             } catch (Exception e) {
-e.printStackTrace();
+                logger.log(Level.ERROR, e.getMessage(), e);
                 dealException(e);
             }
         }
@@ -156,7 +159,7 @@ e.printStackTrace();
     }
 
     @Override
-    protected void finalize() {
+    public void close() {
         su.close();
     }
 }

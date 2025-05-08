@@ -7,14 +7,16 @@
 package vavi.net.auth.oauth2.facebook;
 
 import java.io.IOException;
-import java.util.logging.Level;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
-import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -26,8 +28,10 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "classpath:facebook.properties")
 public class FacebookOAuth2 implements OAuth2<UserCredential, String> {
 
+    private static final Logger logger = getLogger(FacebookOAuth2.class.getName());
+
     /** */
-    private OAuth2AppCredential appCredential;
+    private final OAuth2AppCredential appCredential;
 
     /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value =  "vavi.net.auth.oauth2.facebook.FacebookLocalAuthenticator")
@@ -38,9 +42,9 @@ public class FacebookOAuth2 implements OAuth2<UserCredential, String> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.FINE, "no box.properties in classpath, use default");
+logger.log(Level.DEBUG, "no box.properties in classpath, use default");
         }
-Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
+logger.log(Level.DEBUG, "authenticatorClassName: " + authenticatorClassName);
     }
 
     /** */

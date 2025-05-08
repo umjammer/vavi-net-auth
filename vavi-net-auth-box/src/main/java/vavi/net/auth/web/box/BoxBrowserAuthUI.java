@@ -7,20 +7,22 @@
 package vavi.net.auth.web.box;
 
 import java.awt.Desktop;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
 
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.UserCredential;
-import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.http.HttpServer;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -29,10 +31,12 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2023/04/07 umjammer initial version <br>
  */
-public class BoxBrowserAuthUI implements AuthUI<String> {
+public class BoxBrowserAuthUI implements AuthUI<String>, Closeable {
 
-    private String url;
-    private String redirectUrl;
+    private static final Logger logger = getLogger(BoxBrowserAuthUI.class.getName());
+
+    private final String url;
+    private final String redirectUrl;
 
     /** */
     public BoxBrowserAuthUI(OAuth2AppCredential appCredential, UserCredential userCredential) {
@@ -63,13 +67,13 @@ public class BoxBrowserAuthUI implements AuthUI<String> {
             httpServer = new HttpServer(host, port);
             httpServer.addRequestListener((req, res) -> {
                 String location = req.getRequestURI();
-Debug.println(Level.FINE, "uri: " + location);
+logger.log(Level.DEBUG, "uri: " + location);
                 res.setContentType("plain/text");
                 PrintWriter os = res.getWriter();
                 os.println("code: " + URLEncoder.encode(location.substring(location.indexOf("code=") + "code=".length(), location.length() - (location.charAt(location.length() - 1) == '&' ? 1 : 0)), "utf-8"));
                 os.flush();
                 code = this.redirectUrl + location;
-Debug.println(Level.FINE, "code: " + code);
+logger.log(Level.DEBUG, "code: " + code);
                 cdl.countDown();
             });
             httpServer.start();
@@ -92,7 +96,7 @@ Debug.println(Level.FINE, "code: " + code);
                 exception.addSuppressed(e);
             }
         }
-Debug.println(Level.FINE, "return: " + code);
+logger.log(Level.DEBUG, "return: " + code);
 
         return code;
     }
@@ -103,11 +107,11 @@ Debug.println(Level.FINE, "return: " + code);
     }
 
     @Override
-    protected void finalize() {
+    public void close() {
         try {
             httpServer.stop();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.ERROR, e.getMessage(), e);
         }
     }
 }

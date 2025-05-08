@@ -7,17 +7,18 @@
 package vavi.net.auth.oauth2.google;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Arrays;
-import java.util.logging.Level;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.WithTotpUserCredential;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -31,8 +32,10 @@ import vavi.util.Debug;
  */
 public class GoogleBasicOAuth2Authenticator implements Authenticator<WithTotpUserCredential, Credential> {
 
+    private static final Logger logger = getLogger(GoogleBasicOAuth2Authenticator.class.getName());
+
     /** google library */
-    private AuthorizationCodeInstalledApp app;
+    private final AuthorizationCodeInstalledApp app;
 
     /** local web server port */
     private static final int PORT = 8888;
@@ -60,7 +63,7 @@ public class GoogleBasicOAuth2Authenticator implements Authenticator<WithTotpUse
     public Credential authorize(WithTotpUserCredential userCredential) throws IOException {
         // Trigger user authorization request.
         Credential credential = app.authorize(userCredential.getId());
-Debug.println(Level.FINE, "refreshToken: " + (credential.getRefreshToken() != null) + ", expiresInSeconds: " + credential.getExpiresInSeconds());
+logger.log(Level.DEBUG, "refreshToken: " + (credential.getRefreshToken() != null) + ", expiresInSeconds: " + credential.getExpiresInSeconds());
         return credential;
     }
 }

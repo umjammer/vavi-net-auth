@@ -6,19 +6,20 @@
 
 package vavi.net.auth.web.google;
 
+import java.io.Closeable;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.logging.Level;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
-import vavi.util.Debug;
-
 import vavix.util.selenium.SeleniumUtil;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -28,13 +29,15 @@ import vavix.util.selenium.SeleniumUtil;
  * @version 0.00 2019/06/27 umjammer initial version <br>
  * @see SeleniumUtil
  */
-public class GoogleSeleniumAuthUI implements AuthUI<String> {
+public class GoogleSeleniumAuthUI implements AuthUI<String>, Closeable {
 
-    private String email;
-    private String password;
-    private String url;
-    private String redirectUrl;
-    private String totpSecret;
+    private static final Logger logger = getLogger(GoogleSeleniumAuthUI.class.getName());
+
+    private final String email;
+    private final String password;
+    private final String url;
+    private final String redirectUrl;
+    private final String totpSecret;
 
     /** */
     public GoogleSeleniumAuthUI(OAuth2AppCredential appCredential, WithTotpUserCredential userCredential) {
@@ -43,7 +46,7 @@ public class GoogleSeleniumAuthUI implements AuthUI<String> {
         this.url = appCredential.getOAuthAuthorizationUrl();
         this.redirectUrl = appCredential.getRedirectUrl();
         this.totpSecret = userCredential.getTotpSecret();
-Debug.println(Level.FINER, "totpSecret: " + totpSecret);
+logger.log(Level.TRACE, "totpSecret: " + totpSecret);
     }
 
     /** */
@@ -78,37 +81,37 @@ Debug.println(Level.FINER, "totpSecret: " + totpSecret);
                 su.sleep(300);
                 su.waitFor();
                 String location = su.getCurrentUrl();
-Debug.println(Level.FINE, "location: " + location);
+logger.log(Level.DEBUG, "location: " + location);
                 if (location.contains("accounts.google.com")) {
                     try {
                         WebElement element = null;
-//Debug.println(Level.FINE, "element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
+//logger.log(Level.TRACE, "element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
                         if (!tasks.contains("email") && (element = su.findElement(By.id("identifierId"))) != null) {
                             element.sendKeys(email);
                             tasks.add("email");
                             su.click(su.findElement(By.id("identifierNext")));
-Debug.println(Level.FINE, "set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                             su.sleep(300);
                         } else if (!tasks.contains("password") && (element = su.findElement(By.name("password"))) != null) {
                             if (password != null) {
                                 element.sendKeys(password);
                                 tasks.add("password");
                                 su.click(su.findElement(By.id("passwordNext")));
-Debug.println(Level.FINE, "set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                                 su.sleep(300);
                             } else {
-Debug.println(Level.FINE, "no password");
+logger.log(Level.DEBUG, "no password");
                                 continue;
                             }
 //                        } else if (!tasks.contains("totp") && (element = su.findElement(By.name("Email"))) != null) {
 //                            if (totpSecret != null) {
-//Debug.println(Level.FINE, "here");
+//logger.log(Level.TRACE, "here");
 //                                String pin = PinGenerator.computePin(totpSecret, null);
-//Debug.println(Level.FINE, "pin: " + pin);
+//logger.log(Level.TRACE, "pin: " + pin);
 //                                element.sendKeys(pin);
 //                                tasks.add("totp");
 //                            } else {
-//Debug.println(Level.FINE, "no pin");
+//logger.log(Level.TRACE, "no pin");
 //                                continue;
 //                            }
                         } else {
@@ -119,12 +122,12 @@ Debug.println(Level.FINE, "no password");
                             continue;
                         }
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
-Debug.println(Level.WARNING, e.getMessage());
+logger.log(Level.WARNING, e.getMessage());
                     }
                 } else if (location.contains(redirectUrl)) {
 //                    code = location.substring(location.indexOf("code=") + "code=".length(), location.indexOf("&"));
                     code = location;
-Debug.println(Level.FINE, "code: " + code);
+logger.log(Level.DEBUG, "code: " + code);
                     login = true;
                 }
             } catch (Exception e) {
@@ -149,7 +152,7 @@ e.printStackTrace();
     }
 
     @Override
-    protected void finalize() {
+    public void close() {
         su.close();
     }
 }

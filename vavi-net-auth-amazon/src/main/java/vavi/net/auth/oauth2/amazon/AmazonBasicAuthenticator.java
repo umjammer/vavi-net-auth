@@ -7,14 +7,16 @@
 package vavi.net.auth.oauth2.amazon;
 
 import java.io.IOException;
-import java.util.logging.Level;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.web.amazon.AmazonBrowserAuthUI;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -24,6 +26,8 @@ import vavi.util.Debug;
  * @version 0.00 2021/10/29 umjammer initial version <br>
  */
 public class AmazonBasicAuthenticator implements Authenticator<UserCredential, String> {
+
+    private static final Logger logger = getLogger(AmazonBasicAuthenticator.class.getName());
 
     /** */
     private final OAuth2AppCredential appCredential;
@@ -43,8 +47,8 @@ public class AmazonBasicAuthenticator implements Authenticator<UserCredential, S
         ui.auth();
 
         if (ui.getException() != null) {
-            Debug.printStackTrace(Level.FINE, ui.getException());
-            Debug.println(Level.WARNING, ui.getException().getMessage());
+            logger.log(Level.DEBUG, ui.getException());
+            logger.log(Level.WARNING, ui.getException().getMessage());
         }
 
         return ui.getResult();

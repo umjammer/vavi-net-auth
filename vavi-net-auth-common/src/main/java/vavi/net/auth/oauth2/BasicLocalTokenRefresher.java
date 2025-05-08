@@ -7,15 +7,16 @@
 package vavi.net.auth.oauth2;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 
 import vavi.net.auth.AppCredential;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -26,8 +27,10 @@ import vavi.util.Debug;
  */
 public class BasicLocalTokenRefresher extends BaseTokenRefresher<String> {
 
+    private static final Logger logger = getLogger(BasicLocalTokenRefresher.class.getName());
+
     /** for refreshToken */
-    private Path file;
+    private final Path file;
 
     /**
      * @param refresh you should call {@link #writeRefreshToken(String)} and return new refresh delay.
@@ -43,12 +46,12 @@ public class BasicLocalTokenRefresher extends BaseTokenRefresher<String> {
             Files.createDirectories(file.getParent());
         }
         Files.write(file, refreshToken.getBytes());
-Debug.println(Level.FINE, "refreshToken: " + refreshToken);
+logger.log(Level.DEBUG, "refreshToken: " + refreshToken);
     }
 
     @Override
     public String readRefreshToken() throws IOException {
-Debug.println(Level.FINE, "refreshToken: exists: " + Files.exists(file) + ", " + file);
+logger.log(Level.DEBUG, "refreshToken: exists: " + Files.exists(file) + ", " + file);
         String refreshToken = Files.exists(file) ? new String(Files.readAllBytes(file)) : null;
         return refreshToken;
     }

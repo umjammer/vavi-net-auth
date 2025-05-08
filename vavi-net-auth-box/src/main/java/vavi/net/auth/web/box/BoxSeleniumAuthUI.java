@@ -6,22 +6,23 @@
 
 package vavi.net.auth.web.box;
 
+import java.io.Closeable;
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.logging.Level;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.http.HttpServer;
-import vavi.util.Debug;
-
 import vavix.util.selenium.SeleniumUtil;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -37,12 +38,14 @@ import vavix.util.selenium.SeleniumUtil;
  * @version 0.00 2019/06/27 umjammer initial version <br>
  * @see SeleniumUtil
  */
-public class BoxSeleniumAuthUI implements AuthUI<String> {
+public class BoxSeleniumAuthUI implements AuthUI<String>, Closeable {
 
-    private String email;
-    private String password;
-    private String url;
-    private String redirectUrl;
+    private static final Logger logger = getLogger(BoxSeleniumAuthUI.class.getName());
+
+    private final String email;
+    private final String password;
+    private final String url;
+    private final String redirectUrl;
 
     /** */
     public BoxSeleniumAuthUI(OAuth2AppCredential appCredential, UserCredential userCredential) {
@@ -97,47 +100,47 @@ public class BoxSeleniumAuthUI implements AuthUI<String> {
                 su.sleep(300);
                 su.waitFor();
                 String location = su.getCurrentUrl();
-//Debug.println("location: " + location);
+//logger.log(Level.TRACE, "location: " + location);
                 if (location.contains("account.box.com")) {
                     try {
                         WebElement element = null;
                         if (!tasks.contains("email") && (element = su.findElement(By.name("login"), 0)) != null) {
                             element.sendKeys(email);
                             tasks.add("email");
-Debug.println("set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                             su.sleep(300);
                         }
                         if (!tasks.contains("password") && (element = su.findElement(By.name("password"))) != null) {
                             if (password != null) {
                                 element.sendKeys(password);
                                 tasks.add("password");
-Debug.println("set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                                 su.sleep(300);
                             } else {
-Debug.println("no password");
+logger.log(Level.DEBUG, "no password");
                                 continue;
                             }
                         }
                         if (tasks.contains("email") && tasks.contains("password") && !tasks.contains("login") && (element = su.findElement(By.className("login_submit"))) != null) {
                             su.click(element);
                             tasks.add("login");
-Debug.println("set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                             su.sleep(300);
                         }
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
-Debug.println(Level.WARNING, e.getMessage());
+logger.log(Level.WARNING, e.getMessage());
                     }
                 } else if (location.contains("app.box.com")) {
                     WebElement element = null;
                     if (!tasks.contains("consent") && (element = su.findElement(By.name("consent_accept"))) != null) {
                         su.click(element);
                         tasks.add("consent");
-Debug.println("set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                         su.sleep(300);
                     }
                 } else if (location.contains(redirectUrl)) {
                     code = location;
-Debug.println(Level.FINE, "code: " + code);
+logger.log(Level.DEBUG, "code: " + code);
                     login = true;
                 }
             } catch (Exception e) {
@@ -172,7 +175,7 @@ e.printStackTrace();
     }
 
     @Override
-    protected void finalize() {
+    public void close() {
         su.close();
     }
 }

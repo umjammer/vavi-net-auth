@@ -6,13 +6,14 @@
 
 package vavix.util.selenium;
 
-import java.util.logging.Level;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import vavi.util.Debug;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -31,6 +32,8 @@ import vavi.util.Debug;
  */
 public class ChromeWebDriverFactory implements WebDriverFactory {
 
+    private static final Logger logger = getLogger(ChromeWebDriverFactory.class.getName());
+
     public static final String COM_GOOGLE_CHROME_APP = "com.google.chrome.app";
     public static final String DEFAULT_COM_GOOGLE_CHROME_APP = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
@@ -46,11 +49,11 @@ public class ChromeWebDriverFactory implements WebDriverFactory {
 //            System.setProperty(WEBDRIVER_CHROME_DRIVER, pwd + "/bin/chromedriver");
             System.setProperty(WEBDRIVER_CHROME_DRIVER, "/opt/homebrew/bin/chromedriver");
         }
-Debug.println(Level.FINE, WEBDRIVER_CHROME_DRIVER + ": " + System.getProperty(WEBDRIVER_CHROME_DRIVER));
+logger.log(Level.DEBUG, WEBDRIVER_CHROME_DRIVER + ": " + System.getProperty(WEBDRIVER_CHROME_DRIVER));
         if (System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING) == null) {
             System.setProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING, Boolean.FALSE.toString());
         }
-Debug.println(Level.FINE, WEBDRIVER_CHROME_VERBOSE_LOGGING + ": " + System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING));
+logger.log(Level.DEBUG, WEBDRIVER_CHROME_VERBOSE_LOGGING + ": " + System.getProperty(WEBDRIVER_CHROME_VERBOSE_LOGGING));
     }
 
     @Override
@@ -59,7 +62,7 @@ Debug.println(Level.FINE, WEBDRIVER_CHROME_VERBOSE_LOGGING + ": " + System.getPr
 
         ChromeOptions chromeOptions = new ChromeOptions();
         String app = System.getProperty(COM_GOOGLE_CHROME_APP, DEFAULT_COM_GOOGLE_CHROME_APP);
-Debug.println(Level.FINE, COM_GOOGLE_CHROME_APP + ": " + System.getProperty(COM_GOOGLE_CHROME_APP));
+logger.log(Level.DEBUG, COM_GOOGLE_CHROME_APP + ": " + System.getProperty(COM_GOOGLE_CHROME_APP));
         chromeOptions.setBinary(app);
         // https://stackoverflow.com/a/75711246
         chromeOptions.addArguments("--remote-allow-origins=*");

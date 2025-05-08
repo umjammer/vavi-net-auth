@@ -7,12 +7,13 @@
 package vavi.net.auth.oauth2;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 
-import vavi.util.Debug;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -22,6 +23,8 @@ import vavi.util.Debug;
  * @version 0.00 2020/03/05 umjammer initial version <br>
  */
 public abstract class BaseTokenRefresher<T> implements TokenRefresher<T> {
+
+    private static final Logger logger = getLogger(BaseTokenRefresher.class.getName());
 
     /** */
     private ExecutorService refreshThread;
@@ -55,29 +58,29 @@ public abstract class BaseTokenRefresher<T> implements TokenRefresher<T> {
                 try { Thread.sleep(refreshDelay); } catch (InterruptedException ignored) {}
                 // continuously refresh thread
                 while (keepRefreshing) {
-Debug.println(Level.FINE, "refreshing session");
+logger.log(Level.DEBUG, "refreshing session");
                     try {
                         refresh.get(); // TODO update refresh delay
                         Thread.sleep(refreshDelay);
                     } catch (Exception e) {
-Debug.println(Level.WARNING, "failed to refresh session - attempting recovery");
+logger.log(Level.WARNING, "failed to refresh session - attempting recovery");
                         long retryTime = System.currentTimeMillis() + 1000 * 30;
                         while (System.currentTimeMillis() <= retryTime && keepRefreshing) {
                             try {
                                 refresh.get();
                             } catch (Exception e1) {
-Debug.println(Level.WARNING, "failed to refresh session - attempting retrying");
+logger.log(Level.WARNING, "failed to refresh session - attempting retrying");
                                 try { Thread.sleep(500); } catch (InterruptedException ignored) {}
                             }
                         }
-Debug.println(Level.SEVERE, "could not refresh session");
+logger.log(Level.ERROR, "could not refresh session");
                         e.printStackTrace();
                         // back off after error
                         try { Thread.sleep(10000); } catch (Exception ignored) {}
                     }
                 }
             });
-Debug.println(Level.FINE, "starting refresh thread");
+logger.log(Level.DEBUG, "starting refresh thread");
         }
     }
 
@@ -86,7 +89,7 @@ Debug.println(Level.FINE, "starting refresh thread");
         if (this.refreshThread != null) {
             keepRefreshing = false;
             refreshThread.shutdownNow();
-Debug.println(Level.FINE, "stopping refresh thread");
+logger.log(Level.DEBUG, "stopping refresh thread");
         }
     }
 
