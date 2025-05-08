@@ -7,14 +7,16 @@
 package vavi.net.auth.oauth2.box;
 
 import java.io.IOException;
-import java.util.logging.Level;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.web.box.BoxSeleniumAuthUI;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -28,6 +30,8 @@ import vavi.util.Debug;
  * @version 0.00 2016/02/29 umjammer initial version <br>
  */
 public class BoxLocalAuthenticator implements Authenticator<UserCredential, String> {
+
+    private static final Logger logger = getLogger(BoxLocalAuthenticator.class.getName());
 
     /** */
     private final OAuth2AppCredential appCredential;
@@ -45,7 +49,7 @@ public class BoxLocalAuthenticator implements Authenticator<UserCredential, Stri
         ui.auth();
 
         if (ui.getException() != null) {
-            Debug.println(Level.WARNING, ui.getException().getMessage());
+            logger.log(Level.WARNING, ui.getException().getMessage());
         }
 
         return ui.getResult();

@@ -7,20 +7,21 @@
 package vavi.net.auth.oauth2.amazon;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Calendar;
-import java.util.logging.Level;
 
 import org.yetiz.lib.acd.ACDSession;
 import org.yetiz.lib.acd.ACDToken;
 import org.yetiz.lib.acd.Configure;
-
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -32,8 +33,10 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "classpath:amazon.properties")
 public class AmazonOAuth2 implements OAuth2<UserCredential, ACDSession> {
 
+    private static final Logger logger = getLogger(AmazonOAuth2.class.getName());
+
     /** */
-    private OAuth2AppCredential appCredential;
+    private final OAuth2AppCredential appCredential;
 
     /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value =  "vavi.net.auth.oauth2.amazon.AmazonBasicAuthenticator")
@@ -49,10 +52,10 @@ public class AmazonOAuth2 implements OAuth2<UserCredential, ACDSession> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.WARNING, "no box.properties in classpath, use defaut");
+logger.log(Level.WARNING, "no box.properties in classpath, use defaut");
         }
-Debug.println("authenticatorClassName: " + authenticatorClassName);
-Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
+logger.log(Level.DEBUG, "authenticatorClassName: " + authenticatorClassName);
+logger.log(Level.DEBUG, "tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
     /** never start refresh thread */
@@ -80,7 +83,7 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
         configure.setRedirectUri(appCredential.getRedirectUrl());
         configure.setRefresher(this::refreshToken);
 
-        ACDSession session = null;
+        ACDSession session;
 
         String refreshToken = tokenRefresher.readRefreshToken();
         if (refreshToken != null) {
@@ -101,7 +104,7 @@ Debug.println("tokenRefresherClassName: " + tokenRefresherClassName);
         try {
             tokenRefresher.writeRefreshToken(token);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.ERROR, e.getMessage(), e);
         }
     }
 }

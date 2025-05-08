@@ -6,18 +6,18 @@
 
 package vavi.net.auth.web.amazon;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.logging.Level;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import vavi.net.auth.AuthUI;
-import vavi.util.Debug;
-
 import vavix.util.selenium.SeleniumUtil;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -30,9 +30,11 @@ import vavix.util.selenium.SeleniumUtil;
  */
 public class AmazonSeleniumAuthUI implements AuthUI<WebDriver> {
 
-    private String email;
-    private String password;
-    private String url;
+    private static final Logger logger = getLogger(AmazonSeleniumAuthUI.class.getName());
+
+    private final String email;
+    private final String password;
+    private final String url;
 
     /** */
     public AmazonSeleniumAuthUI(String email, String password, String url) {
@@ -69,11 +71,11 @@ public class AmazonSeleniumAuthUI implements AuthUI<WebDriver> {
                 su.sleep(300);
                 su.waitFor(10);
                 String location = su.getCurrentUrl();
-//Debug.println("location: " + location);
+//logger.log(Level.TRACE, "location: " + location);
                 if (location.contains("www.amazon.co.jp/ap/signin")) {
                     try {
                         WebElement element = null;
-//Debug.println("element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
+//logger.log(Level.TRACE, "element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
                         if (!tasks.contains("email") && (element = su.findElement(By.id("ap_email"))) != null) {
                             element.sendKeys(email);
                             tasks.add("email");
@@ -82,7 +84,7 @@ public class AmazonSeleniumAuthUI implements AuthUI<WebDriver> {
                                 element.sendKeys(password);
                                 tasks.add("password");
                             } else {
-Debug.println("no password");
+logger.log(Level.DEBUG, "no password");
                                 continue;
                             }
                         } else if (!tasks.contains("captcha") && (element = su.findElement(By.id("ap_password"))) != null) {
@@ -90,7 +92,7 @@ Debug.println("no password");
                                 element.sendKeys(password);
                                 tasks.add("captcha");
                             } else {
-Debug.println("no password");
+logger.log(Level.DEBUG, "no password");
                                 continue;
                             }
                         } else {
@@ -98,18 +100,18 @@ Debug.println("no password");
                         }
                         if ("email".equals(tasks.peekLast()) && (element = su.findElement(By.id("continue"))) != null) {
                             su.click(element);
-Debug.println("set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                             su.sleep(300);
                         }
                         if ("password".equals(tasks.peekLast()) && (element = su.findElement(By.id("signInSubmit"))) != null) {
                             su.click(element);
-Debug.println("set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                             su.sleep(300);
                         }
                     } catch (org.openqa.selenium.NoSuchElementException e) {
                         su.click(su.findElement(By.id("signInSubmit")));
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
-Debug.println(Level.WARNING, e.getMessage());
+logger.log(Level.WARNING, e.getMessage());
                     }
                 } else if (location.contains("www.amazon.co.jp") &&
                         !location.contains("www.amazon.co.jp/ap/signin")) {

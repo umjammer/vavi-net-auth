@@ -7,19 +7,20 @@
 package vavi.net.auth.oauth2.google;
 
 import java.io.IOException;
-import java.util.logging.Level;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-
 import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2;
-import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -31,6 +32,8 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "classpath:googledrive.properties")
 public class GoogleOAuth2 implements OAuth2<WithTotpUserCredential, Credential> {
 
+    private static final Logger logger = getLogger(GoogleOAuth2.class.getName());
+
     /** should have a constructor with args (GoogleAppCledential) */
     @Property(value = "vavi.net.auth.oauth2.google.GoogleBasicOAuth2Authenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.google.GoogleBasicOAuth2Authenticator";
@@ -40,9 +43,9 @@ public class GoogleOAuth2 implements OAuth2<WithTotpUserCredential, Credential> 
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.FINE, "no googledrive.properties in classpath, use default");
+logger.log(Level.DEBUG, "no googledrive.properties in classpath, use default");
         }
-Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
+logger.log(Level.DEBUG, "authenticatorClassName: " + authenticatorClassName);
     }
 
     /** */

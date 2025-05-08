@@ -6,23 +6,24 @@
 
 package vavi.net.auth.web.microsoft;
 
+import java.io.Closeable;
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.logging.Level;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.totp.PinGenerator;
 import vavi.net.http.HttpServer;
-import vavi.util.Debug;
-
 import vavix.util.selenium.SeleniumUtil;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -32,13 +33,15 @@ import vavix.util.selenium.SeleniumUtil;
  * @version 0.00 2019/06/27 umjammer initial version <br>
  * @see SeleniumUtil
  */
-public class MicrosoftSeleniumAuthUI implements AuthUI<String> {
+public class MicrosoftSeleniumAuthUI implements AuthUI<String>, Closeable {
 
-    private String email;
-    private String password;
-    private String url;
-    private String redirectUrl;
-    private String totpSecret;
+    private static final Logger logger = getLogger(MicrosoftSeleniumAuthUI.class.getName());
+
+    private final String email;
+    private final String password;
+    private final String url;
+    private final String redirectUrl;
+    private final String totpSecret;
 
     /** */
     public MicrosoftSeleniumAuthUI(OAuth2AppCredential appCredential, WithTotpUserCredential userCredential) {
@@ -47,7 +50,7 @@ public class MicrosoftSeleniumAuthUI implements AuthUI<String> {
         this.url = appCredential.getOAuthAuthorizationUrl();
         this.redirectUrl = appCredential.getRedirectUrl();
         this.totpSecret = userCredential.getTotpSecret();
-Debug.println("totpSecret: " + totpSecret);
+logger.log(Level.DEBUG, "totpSecret: " + totpSecret);
     }
 
     /** */
@@ -95,13 +98,13 @@ Debug.println("totpSecret: " + totpSecret);
                 su.sleep(300);
                 su.waitFor();
                 String location = su.getCurrentUrl();
-//Debug.println("location: " + location);
+//logger.log(Level.TRACE, "location: " + location);
                 if (location.contains("oauth20_authorize") ||
                         location.contains("microsoft") ||
                         location.contains("login.live.com")) {
                     try {
                         WebElement element = su.findElement(By.className("form-control"));
-//Debug.println("element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
+//logger.log(Level.TRACE, "element: name = " + element.getTagName() + ", class = " + element.getAttribute("class") + ", id = " + element.getAttribute("id") + ", type = " + element.getAttribute("type"));
                         if (!tasks.contains("email") && "email".equals(element.getAttribute("type"))) {
                             element.sendKeys(email);
                             tasks.add("email");
@@ -110,32 +113,32 @@ Debug.println("totpSecret: " + totpSecret);
                                 element.sendKeys(password);
                                 tasks.add("password");
                             } else {
-Debug.println("no password");
+logger.log(Level.DEBUG, "no password");
                                 continue;
                             }
                         } else if (!tasks.contains("totp") && "tel".equals(element.getAttribute("type"))) {
                             if (totpSecret != null) {
-Debug.println("here");
+logger.log(Level.DEBUG, "here");
                                 String pin = PinGenerator.computePin(totpSecret, null);
-Debug.println("pin: " + pin);
+logger.log(Level.DEBUG, "pin: " + pin);
                                 element.sendKeys(pin);
                                 tasks.add("totp");
                             } else {
-Debug.println("no pin");
+logger.log(Level.DEBUG, "no pin");
                                 continue;
                             }
                         } else {
                             continue;
                         }
                         su.click(su.findElement(By.className("btn-primary")));
-Debug.println("set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                         su.sleep(300);
                     } catch (org.openqa.selenium.NoSuchElementException e) {
                         WebElement element = su.findElement(By.className("btn-primary"));
                         if (!tasks.contains("accept") && "ucaccept".equals(element.getAttribute("name"))) {
                             su.click(element);
                             tasks.add("accept");
-Debug.println("set " + tasks.peekLast());
+logger.log(Level.DEBUG, "set " + tasks.peekLast());
                             su.sleep(300);
                         } else {
 e.printStackTrace();
@@ -146,12 +149,12 @@ e.printStackTrace();
                             }
                         }
                     } catch (org.openqa.selenium.StaleElementReferenceException e) {
-Debug.println(Level.WARNING, e.getMessage());
+logger.log(Level.WARNING, e.getMessage());
                     }
                 } else if (location.contains(redirectUrl)) {
 //                    code = location.substring(location.indexOf("code=") + "code=".length(), location.indexOf("&"));
                     code = location;
-Debug.println(Level.FINE, "code: " + code);
+logger.log(Level.DEBUG, "code: " + code);
                     login = true;
                 }
             } catch (Exception e) {
@@ -186,7 +189,7 @@ e.printStackTrace();
     }
 
     @Override
-    protected void finalize() {
+    public void close() {
         su.close();
     }
 }

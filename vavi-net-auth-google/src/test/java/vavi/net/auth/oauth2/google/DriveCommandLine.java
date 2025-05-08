@@ -62,7 +62,7 @@ public class DriveCommandLine {
                 .setFields("nextPageToken, files(id, name)")
                 .execute();
         List<File> files = result.getFiles();
-        if (files == null || files.size() == 0) {
+        if (files == null || files.isEmpty()) {
             System.out.println("No files found.");
         } else {
             System.out.println("Files:");

@@ -7,6 +7,8 @@
 package vavix.util.selenium;
 
 import java.io.Closeable;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +22,8 @@ import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -32,6 +35,8 @@ import vavi.util.Debug;
  * @version 0.00 2020/03/03 umjammer initial version <br>
  */
 public class SeleniumUtil implements Closeable {
+
+    private static final Logger logger = getLogger(SeleniumUtil.class.getName());
 
     /** */
     private WebDriver driver;
@@ -84,7 +89,7 @@ public class SeleniumUtil implements Closeable {
                 throw new IllegalStateException("browser might be closed");
             }
             String r = ((JavascriptExecutor) d).executeScript("return document.readyState;").toString();
-//Debug.println(r);
+//logger.log(Level.TRACE, r);
             return "complete".equals(r);
         });
     }
@@ -108,7 +113,7 @@ public class SeleniumUtil implements Closeable {
         try {
             return driver.findElement(by);
         } catch (org.openqa.selenium.NoSuchElementException e) {
-Debug.println("not found: " + by);
+logger.log(Level.DEBUG, "not found: " + by);
             return null;
         }
     }
@@ -118,7 +123,7 @@ Debug.println("not found: " + by);
         try {
             return driver.findElements(by).get(index);
         } catch (org.openqa.selenium.NoSuchElementException e) {
-Debug.println("not found: " + by);
+logger.log(Level.DEBUG, "not found: " + by);
             return null;
         }
     }
@@ -128,7 +133,7 @@ Debug.println("not found: " + by);
         try {
             return driver.findElements(by);
         } catch (org.openqa.selenium.NoSuchElementException e) {
-Debug.println("not found: " + by);
+logger.log(Level.DEBUG, "not found: " + by);
             return null;
         }
     }

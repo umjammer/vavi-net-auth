@@ -7,9 +7,10 @@
 package vavi.net.auth.oauth2.dropbox;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URI;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxAuthFinish;
@@ -25,16 +26,15 @@ import com.dropbox.core.DbxWebAuth.CsrfException;
 import com.dropbox.core.DbxWebAuth.NotApprovedException;
 import com.dropbox.core.DbxWebAuth.ProviderException;
 import com.dropbox.core.DbxWebAuth.Request;
-
 import vavi.net.auth.UserCredential;
-import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.OAuth2;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
 import vavi.net.http.HttpUtil;
-import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
+import static java.lang.System.getLogger;
 import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
@@ -48,6 +48,8 @@ import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
  */
 @PropsEntity(url = "classpath:dropbox.properties")
 public class DropBoxOAuth2 implements OAuth2<UserCredential, String> {
+
+    private static final Logger logger = getLogger(DropBoxOAuth2.class.getName());
 
     /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value = "vavi.net.auth.oauth2.dropbox.DropBoxLocalAuthenticator")
@@ -63,10 +65,10 @@ public class DropBoxOAuth2 implements OAuth2<UserCredential, String> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.FINE, "no dropbox.properties in classpath, use default");
+logger.log(Level.DEBUG, "no dropbox.properties in classpath, use default");
         }
-Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
-Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName);
+logger.log(Level.DEBUG, "authenticatorClassName: " + authenticatorClassName);
+logger.log(Level.DEBUG, "tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
     /** */

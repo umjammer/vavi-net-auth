@@ -6,14 +6,17 @@
 
 package vavi.net.auth.oauth2.amazon;
 
-import java.io.UnsupportedEncodingException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import vavi.net.auth.BaseLocalAppCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
-import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -34,6 +37,8 @@ import vavi.util.properties.annotation.PropsEntity;
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/acd.properties")
 public final class AmazonLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+
+    private static final Logger logger = getLogger(AmazonLocalAppCredential.class.getName());
 
     @Property(name = "acd.applicationName")
     private String applicationName;
@@ -77,14 +82,10 @@ public final class AmazonLocalAppCredential extends BaseLocalAppCredential imple
 
     @Override
     public String getOAuthAuthorizationUrl() {
-        try {
-            String url = String.format("https://www.amazon.com/auth/o2/create/codepair?client_id=%s&scope=%s&response_type=device_code&redirectUrl=%s",
-                          clientId, scope, URLEncoder.encode(redirectUrl, "UTF-8"));
-Debug.println(url);
-            return url;
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException(e);
-        }
+        String url = String.format("https://www.amazon.com/auth/o2/create/codepair?client_id=%s&scope=%s&response_type=device_code&redirectUrl=%s",
+                      clientId, scope, URLEncoder.encode(redirectUrl, StandardCharsets.UTF_8));
+logger.log(Level.DEBUG, url);
+        return url;
     }
 
     @Override

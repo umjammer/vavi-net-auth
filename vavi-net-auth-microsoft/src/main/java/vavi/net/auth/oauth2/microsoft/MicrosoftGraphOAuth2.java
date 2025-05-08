@@ -6,17 +6,19 @@
 
 package vavi.net.auth.oauth2.microsoft;
 
-import java.util.logging.Level;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import vavi.net.auth.AppCredential;
 import vavi.net.auth.WithTotpUserCredential;
-import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.BasicOAuth2;
 import vavi.net.auth.oauth2.OAuth2;
+import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.auth.oauth2.TokenRefresher;
-import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -32,6 +34,8 @@ import vavi.util.properties.annotation.PropsEntity;
 @PropsEntity(url = "classpath:onedrive.properties")
 public class MicrosoftGraphOAuth2 extends BasicOAuth2<WithTotpUserCredential> {
 
+    private static final Logger logger = getLogger(MicrosoftGraphOAuth2.class.getName());
+
     /** should be {@link vavi.net.auth.Authenticator} and have a constructor with args (String, String) */
     @Property(value = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.microsoft.MicrosoftLocalAuthenticator";
@@ -46,10 +50,10 @@ public class MicrosoftGraphOAuth2 extends BasicOAuth2<WithTotpUserCredential> {
         try {
             PropsEntity.Util.bind(this);
         } catch (Exception e) {
-Debug.println(Level.FINE, "no onedrive.properties in classpath, use default");
+logger.log(Level.DEBUG, "no onedrive.properties in classpath, use default");
         }
-Debug.println(Level.FINE, "authenticatorClassName: " + authenticatorClassName);
-Debug.println(Level.FINE, "tokenRefresherClassName: " + tokenRefresherClassName);
+logger.log(Level.DEBUG, "authenticatorClassName: " + authenticatorClassName);
+logger.log(Level.DEBUG, "tokenRefresherClassName: " + tokenRefresherClassName);
     }
 
     @Override

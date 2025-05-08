@@ -7,6 +7,8 @@
 package vavi.net.auth.cookie.chrome.mac;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +26,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.crypto.BadPaddingException;
@@ -37,8 +38,9 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import vavi.util.Debug;
 import vavix.rococoa.keychain.KeychainPasswordStore;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -51,7 +53,9 @@ import vavix.rococoa.keychain.KeychainPasswordStore;
  */
 public class MacChromeCookie implements vavi.net.auth.cookie.Cookie {
 
-    private Cipher cipher;
+    private static final Logger logger = getLogger(MacChromeCookie.class.getName());
+
+    private final Cipher cipher;
 
     private static final byte[] salt = "saltysalt".getBytes();
     private static final int length = 16;
@@ -134,14 +138,14 @@ public class MacChromeCookie implements vavi.net.auth.cookie.Cookie {
                     byte[] decrypted = cipher.doFinal(encryptedValue);
                     value = new String(decrypted, StandardCharsets.US_ASCII);
 //                } else {
-//Debug.println(Level.WARNING, "length: " + encryptedValue.length + "\n" + StringUtil.getDump(encryptedValue));
+//logger.log(Level.WARNING, "length: " + encryptedValue.length + "\n" + StringUtil.getDump(encryptedValue));
                 }
 
                 exptime = Math.max(exptime, 0);
-Debug.print(Level.FINE, Stream.of(_hostKey, "TRUE", path, secure, exptime, name, value).map(String::valueOf).collect(Collectors.joining("\t")));
+logger.log(Level.DEBUG, Stream.of(_hostKey, "TRUE", path, secure, exptime, name, value).map(String::valueOf).collect(Collectors.joining("\t")));
                 cookie.append(name).append("=").append(value).append("; ");
             }
-//Debug.print(Level.FINE, cookie);
+//logger.log(Level.TRACE, cookie);
 
             return Arrays.stream(cookie.toString().split("; "))
                     .map(pair -> pair.split("="))

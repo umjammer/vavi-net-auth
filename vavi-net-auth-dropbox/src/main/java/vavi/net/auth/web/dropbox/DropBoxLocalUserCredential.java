@@ -31,7 +31,7 @@ public final class DropBoxLocalUserCredential extends BaseLocalUserCredential {
      */
     public DropBoxLocalUserCredential(String email) {
         super(email);
-//Debug.println("password for " + id + ": " + password);
+//logger.log(Level.TRACE, "password for " + id + ": " + password);
     }
 
     /* */

@@ -7,8 +7,11 @@
 package vavi.net.auth.web.microsoft;
 
 import java.awt.Desktop;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -18,7 +21,8 @@ import vavi.net.auth.AuthUI;
 import vavi.net.auth.WithTotpUserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.http.HttpServer;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 /**
@@ -27,18 +31,20 @@ import vavi.util.Debug;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2021/10/29 umjammer initial version <br>
  */
-public class MicrosoftBrowserAuthUI implements AuthUI<String> {
+public class MicrosoftBrowserAuthUI implements AuthUI<String>, Closeable {
 
-    private String url;
-    private String redirectUrl;
-    private String totpSecret;
+    private static final Logger logger = getLogger(MicrosoftBrowserAuthUI.class.getName());
+
+    private final String url;
+    private final String redirectUrl;
+    private final String totpSecret;
 
     /** */
     public MicrosoftBrowserAuthUI(OAuth2AppCredential appCredential, WithTotpUserCredential userCredential) {
         this.url = appCredential.getOAuthAuthorizationUrl();
         this.redirectUrl = appCredential.getRedirectUrl();
         this.totpSecret = userCredential.getTotpSecret();
-Debug.println("totpSecret: " + totpSecret);
+logger.log(Level.DEBUG, "totpSecret: " + totpSecret);
     }
 
     /** */
@@ -64,7 +70,7 @@ Debug.println("totpSecret: " + totpSecret);
             httpServer = new HttpServer(host, port);
             httpServer.addRequestListener((req, res) -> {
                 String location = req.getRequestURI();
-Debug.println("uri: " + location);
+logger.log(Level.DEBUG, "uri: " + location);
                 res.setContentType("plain/text");
                 PrintWriter os = res.getWriter();
                 os.println("code: " + URLEncoder.encode(location.substring(location.indexOf("code=") + "code=".length(), location.lastIndexOf("&") > 0 ? location.lastIndexOf("&") : location.length()), "utf-8"));
@@ -94,7 +100,7 @@ Debug.println("uri: " + location);
                 exception.addSuppressed(e);
             }
         }
-Debug.println("return: " + code); // full url, starts with http://...
+logger.log(Level.DEBUG, "return: " + code); // full url, starts with http://...
 
         return code;
     }
@@ -105,11 +111,11 @@ Debug.println("return: " + code); // full url, starts with http://...
     }
 
     @Override
-    protected void finalize() {
+    public void close() {
         try {
             httpServer.stop();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.ERROR, e.getMessage(), e);
         }
     }
 }

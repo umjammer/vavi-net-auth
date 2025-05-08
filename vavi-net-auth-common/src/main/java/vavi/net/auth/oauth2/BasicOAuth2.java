@@ -9,8 +9,9 @@ package vavi.net.auth.oauth2;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URI;
-import java.util.logging.Level;
 
 import org.dmfs.httpessentials.client.HttpRequestExecutor;
 import org.dmfs.httpessentials.exceptions.ProtocolError;
@@ -33,12 +34,11 @@ import org.dmfs.rfc3986.encoding.Precoded;
 import org.dmfs.rfc3986.uris.LazyUri;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
-
 import vavi.net.auth.AppCredential;
 import vavi.net.auth.Authenticator;
 import vavi.net.auth.UserCredential;
-import vavi.util.Debug;
 
+import static java.lang.System.getLogger;
 import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
 
 
@@ -49,6 +49,8 @@ import static vavi.net.auth.oauth2.OAuth2AppCredential.wrap;
  * @version 0.00 2019/07/04 umjammer initial version <br>
  */
 public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C, String>, Closeable {
+
+    private static final Logger logger = getLogger(BasicOAuth2.class.getName());
 
     /** http client for oauth */
     private static HttpRequestExecutor oauthExecutor = new HttpUrlConnectionExecutor();
@@ -107,8 +109,8 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
             OAuth2AccessToken token;
             OAuth2AccessToken refreshToken = readRefreshToken();
             if (!refreshToken.hasRefreshToken()) {
-Debug.println(Level.FINE, "no refreshToken: timeout? or first time");
-Debug.println(Level.FINE, "scope: " + appCredential.getScope());
+logger.log(Level.DEBUG, "no refreshToken: timeout? or first time");
+logger.log(Level.DEBUG, "scope: " + appCredential.getScope());
                 OAuth2InteractiveGrant grant = new AuthorizationCodeGrant(oauth, new StringScope(appCredential.getScope()));
 
                 // Get the authorization URL and open it in a WebView
@@ -118,12 +120,12 @@ Debug.println(Level.FINE, "scope: " + appCredential.getScope());
                 // After the redirect, feed the URL to the grant to retrieve the access token
                 // redirect url include code and state parameters
                 String redirectUrl = (String) OAuth2.getAuthenticator(getAuthenticatorClassName(), OAuth2AppCredential.class, wrap(appCredential, authorizationUrl.toString())).authorize(userCredential);
-Debug.println(Level.FINE, "redirectUrl: " + redirectUrl);
+logger.log(Level.DEBUG, "redirectUrl: " + redirectUrl);
                 token = grant.withRedirect(new LazyUri(new Precoded(redirectUrl))).accessToken(oauthExecutor);
-Debug.println(Level.FINE, "scope: " + token.scope());
+logger.log(Level.DEBUG, "scope: " + token.scope());
 
             } else {
-Debug.println(Level.FINE, "use old refreshToken");
+logger.log(Level.DEBUG, "use old refreshToken");
                 // TODO catch not grant error and loop again
                 token = new TokenRefreshGrant(oauth, refreshToken).accessToken(oauthExecutor);
             }
@@ -142,7 +144,7 @@ Debug.println(Level.FINE, "use old refreshToken");
     protected long refresh() {
         try {
             OAuth2AccessToken token = new TokenRefreshGrant(oauth, readRefreshToken()).accessToken(oauthExecutor);
-Debug.println(Level.FINE, "refresh");
+logger.log(Level.DEBUG, "refresh");
             refresher.writeRefreshToken(token.refreshToken().toString());
             return token.expirationDate().getTimestamp();
         } catch (ProtocolError | ProtocolException | IOException e) {
