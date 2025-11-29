@@ -41,7 +41,10 @@ public class BoxLocalAuthenticator implements Authenticator<UserCredential, Stri
         this.appCredential = appCredential;
     }
 
-    /* @see Authenticator#get(java.lang.String) */
+    /**
+     * @return authentication code only
+     * @see "Authenticator#get"
+     */
     @Override
     public String authorize(UserCredential userCredential) throws IOException {
 

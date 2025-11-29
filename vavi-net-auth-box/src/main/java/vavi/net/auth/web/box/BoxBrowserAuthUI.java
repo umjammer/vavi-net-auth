@@ -15,12 +15,14 @@ import java.lang.System.Logger.Level;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 
 import vavi.net.auth.AuthUI;
 import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.OAuth2AppCredential;
 import vavi.net.http.HttpServer;
+import vavix.util.DelayedWorker;
 
 import static java.lang.System.getLogger;
 
@@ -44,7 +46,7 @@ public class BoxBrowserAuthUI implements AuthUI<String>, Closeable {
         this.redirectUrl = appCredential.getRedirectUrl();
     }
 
-    /** */
+    /** authentication code only */
     private transient String code;
     /** */
     private volatile Exception exception;
@@ -70,9 +72,10 @@ public class BoxBrowserAuthUI implements AuthUI<String>, Closeable {
 logger.log(Level.DEBUG, "uri: " + location);
                 res.setContentType("plain/text");
                 PrintWriter os = res.getWriter();
-                os.println("code: " + URLEncoder.encode(location.substring(location.indexOf("code=") + "code=".length(), location.length() - (location.charAt(location.length() - 1) == '&' ? 1 : 0)), "utf-8"));
+                code = location.substring(location.indexOf("code=") + "code=".length(), location.length() - (location.charAt(location.length() - 1) == '&' ? 1 : 0));
+                os.println("code: " + URLEncoder.encode(code, StandardCharsets.UTF_8));
                 os.flush();
-                code = this.redirectUrl + location;
+                os.close();
 logger.log(Level.DEBUG, "code: " + code);
                 cdl.countDown();
             });
@@ -88,8 +91,8 @@ logger.log(Level.DEBUG, "code: " + code);
     public String getResult() {
         try {
             cdl.await();
-            httpServer.stop();
-        } catch (IOException | InterruptedException e) {
+            DelayedWorker.later(10000, this::stopServer);
+        } catch (InterruptedException e) {
             if (exception == null) {
                 exception = e;
             } else {
@@ -99,6 +102,15 @@ logger.log(Level.DEBUG, "code: " + code);
 logger.log(Level.DEBUG, "return: " + code);
 
         return code;
+    }
+
+    private void stopServer() {
+        try {
+            httpServer.stop();
+logger.log(Level.TRACE, "internal server stopped");
+        } catch (IOException e) {
+logger.log(Level.ERROR, e.getMessage(), e);
+        }
     }
 
     @Override

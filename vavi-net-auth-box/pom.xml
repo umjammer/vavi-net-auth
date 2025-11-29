@@ -60,7 +60,7 @@
     <dependency>
       <groupId>com.box</groupId> <!-- box -->
       <artifactId>box-java-sdk</artifactId>
-      <version>4.12.0</version>
+      <version>10.2.0</version>
     </dependency>
 
     <dependency>
