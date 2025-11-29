@@ -9,25 +9,26 @@ package vavi.net.auth.oauth2.box;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import com.box.sdk.BoxAPIConnection;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIf;
+import com.box.sdkgen.client.BoxClient;
 import vavi.net.auth.web.box.BoxLocalUserCredential;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
+
 
 /**
- * Test1.
+ * TestCase.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2022-11-14 nsano initial version <br>
  */
 @EnabledIf("localPropertiesExists")
 @PropsEntity(url = "file:local.properties")
-public class Test1 {
+public class TestCase {
 
     static boolean localPropertiesExists() {
         return Files.exists(Paths.get("local.properties"));
@@ -38,7 +39,9 @@ public class Test1 {
 
     @BeforeEach
     void setup() throws Exception {
-        PropsEntity.Util.bind(this);
+        if (localPropertiesExists()) {
+            PropsEntity.Util.bind(this);
+        }
     }
 
     @Test
@@ -47,7 +50,7 @@ public class Test1 {
         BoxLocalAppCredential appCredential = new BoxLocalAppCredential();
 
         // if you got an error, remove refresh token at ~/.vavifuse/box/you@box.com
-        BoxAPIConnection connection = new BoxOAuth2(appCredential).authorize(userCredential);
-Debug.println(connection.getBaseURL());
+        BoxClient client = new BoxOAuth2(appCredential).authorize(userCredential);
+Debug.println(client.getAuthorization().getNetworkSession().getBaseUrls());
     }
 }

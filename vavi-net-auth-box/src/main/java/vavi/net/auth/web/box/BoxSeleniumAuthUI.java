@@ -55,7 +55,7 @@ public class BoxSeleniumAuthUI implements AuthUI<String>, Closeable {
         this.redirectUrl = appCredential.getRedirectUrl();
     }
 
-    /** */
+    /** authentication code only */
     private transient String code;
     /** */
     private volatile Exception exception;
@@ -139,12 +139,12 @@ logger.log(Level.DEBUG, "set " + tasks.peekLast());
                         su.sleep(300);
                     }
                 } else if (location.contains(redirectUrl)) {
-                    code = location;
+                    code = location.substring(location.indexOf("code=") + "code=".length(), location.length() - (location.charAt(location.length() - 1) == '&' ? 1 : 0));
 logger.log(Level.DEBUG, "code: " + code);
                     login = true;
                 }
             } catch (Exception e) {
-e.printStackTrace();
+                logger.log(Level.ERROR, e.getMessage(), e);
                 dealException(e);
             }
         }

@@ -37,7 +37,10 @@ public class BoxBasicAuthenticator implements Authenticator<UserCredential, Stri
         this.appCredential = appCredential;
     }
 
-    /* @see Authenticator#get(java.lang.String) */
+    /**
+     * @return authentication code only
+     * @see "Authenticator#get"
+     */
     @Override
     public String authorize(UserCredential userCredential) throws IOException {
 
@@ -45,6 +48,7 @@ public class BoxBasicAuthenticator implements Authenticator<UserCredential, Stri
         ui.auth();
 
         if (ui.getException() != null) {
+            logger.log(Level.TRACE, ui.getException().getMessage(), ui.getException());
             logger.log(Level.WARNING, ui.getException().getMessage());
         }
 
