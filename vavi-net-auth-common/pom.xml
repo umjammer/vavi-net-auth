@@ -33,19 +33,19 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.1.14</version>
+      <version>1.1.16</version>
     </dependency>
 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>4.25.0</version>
+      <version>4.38.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-chrome-driver</artifactId>
-      <version>4.25.0</version>
+      <version>4.38.0</version>
     </dependency>
 
     <dependency>
@@ -79,12 +79,12 @@
     <dependency>
       <groupId>com.github.umjammer</groupId> <!-- vavi / com.github.umjammer -->
       <artifactId>vavi-crypto-sandbox</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.6</version>
     </dependency>
     <dependency>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
-      <version>3.46.1.2</version>
+      <version>3.51.0.0</version>
       <scope>runtime</scope>
     </dependency>
 
