@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -53,7 +54,7 @@ public class DriveCommandLine {
         GoogleTokenResponse response = flow.newTokenRequest(code).setRedirectUri(appCredential.getRedirectUrl()).execute();
         GoogleCredential credential = new GoogleCredential().setFromTokenResponse(response);
 
-        // 新規認証APIクライアントを作成
+        // Create a new authentication API client
         Drive service = new Drive.Builder(httpTransport, jsonFactory, credential).setApplicationName(appCredential.getApplicationName()).build();
 
         //
@@ -71,18 +72,17 @@ public class DriveCommandLine {
             }
         }
 
-        // ファイルを挿入
-/*
-        File body = new File();
-        body.setTitle("My document");
-        body.setDescription("A test document");
-        body.setMimeType("text/plain");
+        // Insert File
 
-        java.io.File fileContent = new java.io.File("サンプルurl/document.txt");
-        FileContent mediaContent = new FileContent("text/plain", fileContent);
-
-        File file = service.files().insert(body, mediaContent).execute();
-        System.out.println("File ID: " + file.getId());
-*/
+//        File body = new File();
+//        body.setTitle("My document");
+//        body.setDescription("A test document");
+//        body.setMimeType("text/plain");
+//
+//        File fileContent = new File("サンプルurl/document.txt");
+//        FileContent mediaContent = new FileContent("text/plain", fileContent);
+//
+//        File file = service.files().insert(body, mediaContent).execute();
+//        System.out.println("File ID: " + file.getId());
     }
 }

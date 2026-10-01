@@ -19,7 +19,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 
-import vavi.beans.InstanciationBinder;
+import vavi.beans.InstantiationBinder;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -51,7 +51,7 @@ import vavi.util.properties.annotation.PropsEntity;
 public class GoogleLocalOAuth2AppCredential extends GoogleBaseOAuth2AppCredential {
 
     @Property(name = "vavi.net.auth.oauth2.google.DataStoreFactoryFactory",
-              binder = InstanciationBinder.class,
+              binder = InstantiationBinder.class,
               useSystem = true)
     private DataStoreFactoryFactory dataStoreFactoryFactory = new DefaultDataStoreFactoryFactory();
 
