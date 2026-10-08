@@ -14,7 +14,7 @@ import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLEncoder;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 
@@ -70,14 +70,27 @@ public class BoxBrowserAuthUI implements AuthUI<String>, Closeable {
             httpServer.addRequestListener((req, res) -> {
                 String location = req.getRequestURI();
 logger.log(Level.DEBUG, "uri: " + location);
-                res.setContentType("plain/text");
+                // status is 0 unless set, browsers reject "HTTP/1.1 0" as an invalid response
+                if (!location.contains("code=") && !location.contains("error=")) {
+                    res.setStatus(404); // e.g. favicon.ico, must not overwrite the code
+                    return;
+                }
+                res.setStatus(200);
+                res.setContentType("text/plain; charset=utf-8");
+                res.setHeader("Connection", "close");
                 PrintWriter os = res.getWriter();
-                code = location.substring(location.indexOf("code=") + "code=".length(), location.length() - (location.charAt(location.length() - 1) == '&' ? 1 : 0));
-                os.println("code: " + URLEncoder.encode(code, StandardCharsets.UTF_8));
+                if (location.contains("code=")) {
+                    os.println("authorized, you can close this window.");
+                } else {
+                    os.println("authorization failed: " + URLDecoder.decode(location.substring(location.indexOf("?") + 1), StandardCharsets.UTF_8));
+                }
                 os.flush();
                 os.close();
+                if (code == null) {
+                    code = location.substring(location.indexOf("code=") + "code=".length(), location.length() - (location.charAt(location.length() - 1) == '&' ? 1 : 0));
 logger.log(Level.DEBUG, "code: " + code);
-                cdl.countDown();
+                    cdl.countDown();
+                }
             });
             httpServer.start();
 
