@@ -93,11 +93,22 @@
       <artifactId>vavi-commons-net</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>com.github.umjammer</groupId> <!-- amazon drive: com.github.umjammer / org.yetiz -->
+    <dependency> <!-- amazon drive -->
+      <groupId>com.github.umjammer</groupId> <!-- org.yetiz / com.github.umjammer -->
       <artifactId>ACD-JAPI</artifactId>
       <version>1.1.7v</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.asynchttpclient</groupId>
+          <artifactId>async-http-client</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+<dependency>
+  <groupId>org.asynchttpclient</groupId>
+  <artifactId>async-http-client</artifactId>
+  <version>3.0.14</version>
+</dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>

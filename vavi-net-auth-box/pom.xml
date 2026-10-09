@@ -60,8 +60,28 @@
     <dependency>
       <groupId>com.box</groupId> <!-- box -->
       <artifactId>box-java-sdk</artifactId>
-      <version>10.2.0</version>
+      <version>10.19.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-core</artifactId>
+  <version>2.22.3</version>
+</dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-databind</artifactId>
+  <version>2.22.3</version>
+</dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
