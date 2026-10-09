@@ -7,7 +7,7 @@
 package vavi.net.auth.oauth2.microsoft;
 
 import vavi.net.auth.BaseLocalAppCredential;
-import vavi.net.auth.oauth2.OAuth2AppCredential;
+import vavi.net.auth.oauth2.WithClientCertificate;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 
@@ -21,16 +21,22 @@ import vavi.util.properties.annotation.PropsEntity;
  * <li> microsoft.graph.applicationName
  * <li> microsoft.graph.clientId
  * <li> microsoft.graph.clientSecret
+ * <li> microsoft.graph.clientCertificate (optional, instead of clientSecret)
+ * <li> microsoft.graph.clientCertificatePassword (optional)
  * <li> microsoft.graph.redirectUrl
  * <li> microsoft.graph.scopes
  * </ul>
+ * <p>
+ * A client secret expires within 24 months, a certificate does not. Set "clientCertificate" to a PKCS#12
+ * keystore and upload its certificate to the app registration ("Certificates & secrets" &gt; "Certificates")
+ * to authenticate with it instead.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/06/19 umjammer initial version <br>
  * @see "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade"
  */
 @PropsEntity(url = "file://${user.home}/.vavifuse/onedrive.properties")
-public final class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredential implements OAuth2AppCredential {
+public final class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredential implements WithClientCertificate {
 
     @Property(name = "microsoft.graph.applicationName")
     private String applicationName;
@@ -38,6 +44,10 @@ public final class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredenti
     private transient String clientId;
     @Property(name = "microsoft.graph.clientSecret")
     private transient String clientSecret;
+    @Property(name = "microsoft.graph.clientCertificate")
+    private String clientCertificate;
+    @Property(name = "microsoft.graph.clientCertificatePassword")
+    private transient String clientCertificatePassword;
     @Property(name = "microsoft.graph.redirectUrl")
     private String redirectUrl;
     @Property(name = "microsoft.graph.scopes")
@@ -61,6 +71,16 @@ public final class MicrosoftGraphLocalAppCredential extends BaseLocalAppCredenti
     @Override
     public String getClientSecret() {
         return clientSecret;
+    }
+
+    @Override
+    public String getClientCertificate() {
+        return clientCertificate;
+    }
+
+    @Override
+    public String getClientCertificatePassword() {
+        return clientCertificatePassword;
     }
 
     @Override

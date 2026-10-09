@@ -68,7 +68,7 @@ logger.log(Level.DEBUG, "totpSecret: " + totpSecret);
             String host = redirectUrl.getHost();
             int port = redirectUrl.getPort();
 
-            HttpServer httpServer = new HttpServer(host, port);
+            httpServer = new HttpServer(host, port);
             httpServer.start();
 
             openUI(url);

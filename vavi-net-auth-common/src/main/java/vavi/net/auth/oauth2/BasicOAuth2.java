@@ -27,6 +27,7 @@ import org.dmfs.oauth2.client.OAuth2Client;
 import org.dmfs.oauth2.client.OAuth2ClientCredentials;
 import org.dmfs.oauth2.client.OAuth2InteractiveGrant;
 import org.dmfs.oauth2.client.OAuth2Scope;
+import org.dmfs.oauth2.client.errors.TokenRequestError;
 import org.dmfs.oauth2.client.grants.AuthorizationCodeGrant;
 import org.dmfs.oauth2.client.grants.TokenRefreshGrant;
 import org.dmfs.oauth2.client.scope.StringScope;
@@ -53,7 +54,7 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
     private static final Logger logger = getLogger(BasicOAuth2.class.getName());
 
     /** http client for oauth */
-    private static HttpRequestExecutor oauthExecutor = new HttpUrlConnectionExecutor();
+    private static HttpRequestExecutor oauthExecutor = new TokenErrorExecutor(new HttpUrlConnectionExecutor());
 
     /** */
     private OAuth2Client oauth;
@@ -80,21 +81,37 @@ public abstract class BasicOAuth2<C extends UserCredential> implements OAuth2<C,
         this.appCredential = appCredential;
         this.startTokenRefresher = startTokenRefresher;
 
+        URI tokenUrl = URI.create(appCredential.getOAuthTokenUrl());
+
         // Create OAuth2 provider
         OAuth2AuthorizationProvider provider = new BasicOAuth2AuthorizationProvider(
             URI.create(appCredential.getOAuthAuthorizationUrl()),
-            URI.create(appCredential.getOAuthTokenUrl()),
+            tokenUrl,
             new Duration(1, 0, 3600) /* default expiration time in case the server doesn't return any */);
 
         // Create OAuth2 client credentials
-        OAuth2ClientCredentials credentials = new BasicOAuth2ClientCredentials(
-            appCredential.getClientId(), appCredential.getClientSecret());
+        OAuth2ClientCredentials credentials = clientCredentials(appCredential, tokenUrl);
 
         // Create OAuth2 client
         oauth = new BasicOAuth2Client(
             provider,
             credentials,
             new LazyUri(new Precoded(appCredential.getRedirectUrl())));
+    }
+
+    /** a certificate never expires by itself, prefer it when the app credential has one */
+    private static OAuth2ClientCredentials clientCredentials(OAuth2AppCredential appCredential, URI tokenUrl) {
+        if (appCredential instanceof WithClientCertificate withCertificate &&
+                withCertificate.getClientCertificate() != null && !withCertificate.getClientCertificate().isEmpty()) {
+            try {
+logger.log(Level.DEBUG, "client authentication: certificate: " + withCertificate.getClientCertificate());
+                return new CertificateOAuth2ClientCredentials(withCertificate, tokenUrl);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+logger.log(Level.DEBUG, "client authentication: client secret");
+        return new BasicOAuth2ClientCredentials(appCredential.getClientId(), appCredential.getClientSecret());
     }
 
     /**
@@ -136,8 +153,16 @@ logger.log(Level.DEBUG, "use old refreshToken");
 
             return token.accessToken().toString();
         } catch (ProtocolError | ProtocolException e) {
-            throw new IllegalStateException(e);
+            throw new IllegalStateException(message(e), e);
         }
+    }
+
+    /** {@link TokenRequestError#getMessage()} is the bare error code, the description tells why it failed */
+    private static String message(Exception e) {
+        if (e instanceof TokenRequestError error) {
+            return error.error() + ": " + error.description();
+        }
+        return e.getMessage();
     }
 
     /** called by {@link TokenRefresher} */
@@ -148,7 +173,7 @@ logger.log(Level.DEBUG, "refresh");
             refresher.writeRefreshToken(token.refreshToken().toString());
             return token.expirationDate().getTimestamp();
         } catch (ProtocolError | ProtocolException | IOException e) {
-            throw new IllegalStateException(e);
+            throw new IllegalStateException(message(e), e);
         }
     }
 

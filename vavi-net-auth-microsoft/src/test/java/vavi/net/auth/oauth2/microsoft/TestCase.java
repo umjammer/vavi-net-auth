@@ -19,14 +19,14 @@ import vavi.util.properties.annotation.PropsEntity;
 
 
 /**
- * Test1.
+ * TestCase.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2022-11-14 nsano initial version <br>
  */
 @EnabledIf("localPropertiesExists")
 @PropsEntity(url = "file:local.properties")
-public class Test1 {
+public class TestCase {
 
     static boolean localPropertiesExists() {
         return Files.exists(Paths.get("local.properties"));
@@ -44,6 +44,9 @@ public class Test1 {
      * when failed...
      * <li>refresh token is expired (rm ~/.vavifuse/msgraph/email@address)</li>
      * <li>check secret is expired (<a href="https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade">azure.com</a>)</li>
+     * <li>a secret expires within 24 months, set "microsoft.graph.clientCertificate" in
+     *     "~/.vavifuse/onedrive.properties" to authenticate with a certificate instead
+     *     ({@link vavi.net.auth.oauth2.WithClientCertificate})</li>
      */
     @Test
     void test1() throws Exception {
